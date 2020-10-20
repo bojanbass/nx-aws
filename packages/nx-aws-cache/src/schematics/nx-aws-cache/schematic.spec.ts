@@ -15,7 +15,7 @@ describe('nx-aws-cache schematic', () => {
       awsBucket: 'bucket-name/cache-folder',
     },
     testRunner = new SchematicTestRunner(
-      '@nx-aws/nx-aws-cache',
+      '@nx-aws-plugin/nx-aws-cache',
       join(__dirname, '../../../collection.json'),
     );
 

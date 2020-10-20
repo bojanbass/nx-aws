@@ -47,7 +47,7 @@ function updateWorkspacePackage() {
   console.log(
     `Updating @nrwl/workspace to 8.12.10 to make the workspace compatible with Storage Cache.`,
   );
-  
+
   if (isYarn()) {
     console.log(`yarn add --dev @nrwl/workspace@8.12.10`);
 
@@ -67,7 +67,7 @@ function updateNxJson(ops: NxAwsCacheSchematicSchema) {
   updateJsonFile('nx.json', (json) => {
     json.tasksRunnerOptions = {
       default: {
-        runner: '@nx-aws/nx-aws-cache',
+        runner: '@nx-aws-plugin/nx-aws-cache',
         options: {
           ...(ops.awsAccessKeyId ? { awsAccessKeyId: ops.awsAccessKeyId } : {}),
           ...(ops.awsSecretAccessKey ? { awsSecretAccessKey: ops.awsSecretAccessKey } : {}),

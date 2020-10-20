@@ -2,7 +2,7 @@
 
 nx-aws is a set of plugins for NRWL NX (a set of Extensible Dev Tools for Monorepos).
 
-# @nx-aws/nx-aws-cache
+# @nx-aws-plugin/nx-aws-cache
 
 A tool for using AWS S3 as a distributed computational cache for Nx.
 
@@ -11,15 +11,15 @@ A tool for using AWS S3 as a distributed computational cache for Nx.
 Install the package by running:
 
 ```bash
-yarn add @nx-aws/nx-aws-cache
-npm i @nx-aws/nx-aws-cache
+yarn add @nx-aws-plugin/nx-aws-cache
+npm i @nx-aws-plugin/nx-aws-cache
 ```
 
 Then run the init schematic by running:
 
 ```bash
-yarn nx generate @nx-aws/nx-aws-cache:init
-npm run nx generate @nx-aws/nx-aws-cache:init
+yarn nx generate @nx-aws-plugin/nx-aws-cache:init
+npm run nx generate @nx-aws-plugin/nx-aws-cache:init
 ```
 
 This will make the necessary changes to nx.json in your workspace to use nx-aws-cache runner.
@@ -34,14 +34,14 @@ There are two ways to set-up AWS options:
 {
   "tasksRunnerOptions": {
   "default": {
-    "runner": "@nx-aws/nx-aws-cache",
+    "runner": "@nx-aws-plugin/nx-aws-cache",
     "options": {
       ...
       "awsAccessKeyId": "[secret]",
       "awsSecretAccessKey": "[secret]",
       "awsRegion": "eu-central-1",
       "awsBucket": "bucket-name/cache-folder"
-    } 
+    }
   }
 }
 ```
@@ -58,6 +58,7 @@ NX_AWS_BUCKET=bucket-name/cache-folder
 Additionally, AWS authentication can be set-up using default environment variables or using shared credentials, based on [AWS documentation](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
 
 ### Using environment variables
+
 ```bash
 AWS_ACCESS_KEY_ID=[secret]
 AWS_SECRET_ACCESS_KEY=[secret]
@@ -88,3 +89,7 @@ Run `yarn nx affected:test` to execute the unit tests affected by a change.
 Run `yarn nx e2e nx-aws-cache` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
 
 Run `yarn nx affected:e2e` to execute the end-to-end tests affected by a change.
+
+## Credits
+
+This repository is based on a similar NX plugin using Azure Storage [@nx-azure/storage-cache](https://github.com/microsoft/nx-azure) which was inspired by Nx Cloud Plugin by [Nrwl](https://github.com/nrwl/nx). 

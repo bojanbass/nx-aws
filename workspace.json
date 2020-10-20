@@ -53,7 +53,7 @@
           "builder": "@nrwl/nx-plugin:e2e",
           "options": {
             "target": "nx-aws-cache:build",
-            "npmPackageName": "@nx-aws/nx-aws-cache",
+            "npmPackageName": "@nx-aws-plugin/nx-aws-cache",
             "pluginOutputPath": "dist/packages/nx-aws-cache",
             "jestConfig": "e2e/nx-aws-cache-e2e/jest.config.js"
           }
