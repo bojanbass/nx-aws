@@ -2,6 +2,12 @@
   "name": "nx-aws",
   "version": "0.0.0",
   "license": "MIT",
+  "author": "Bojan Bratuz",
+  "engines": {
+    "node": ">=10.22.0",
+    "npm": ">=6.14.6",
+    "yarn": ">=1.19.2"
+  },
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
@@ -26,9 +32,10 @@
     "help": "nx help"
   },
   "dependencies": {
-    "aws-sdk": "^2.771.0",
-    "rxjs": "^6.6.3",
-    "tar": "^6.0.5"
+    "aws-sdk": "2.771.0",
+    "dotenv": "8.2.0",
+    "rxjs": "6.6.3",
+    "tar": "6.0.5"
   },
   "devDependencies": {
     "@nrwl/cli": "10.3.0",
@@ -37,17 +44,17 @@
     "@nrwl/nx-plugin": "10.3.0",
     "@nrwl/workspace": "10.3.0",
     "@types/jest": "26.0.8",
-    "@types/node": "~8.9.4",
+    "@types/node": "14.11.11",
+    "@types/tar": "4.0.3",
     "@typescript-eslint/eslint-plugin": "4.3.0",
     "@typescript-eslint/parser": "4.3.0",
-    "dotenv": "6.2.0",
     "eslint": "7.10.0",
     "eslint-config-prettier": "6.0.0",
     "jest": "26.2.2",
     "prettier": "2.0.4",
     "ts-jest": "26.4.0",
-    "ts-node": "~7.0.0",
-    "tslint": "~6.0.0",
-    "typescript": "~4.0.3"
+    "ts-node": "7.0.0",
+    "tslint": "6.0.0",
+    "typescript": "4.0.3"
   }
 }
