@@ -8,6 +8,10 @@
     "npm": ">=6.14.6",
     "yarn": ">=1.19.2"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bojanbass/nx-aws"
+  },
   "scripts": {
     "nx": "nx",
     "start": "nx serve",

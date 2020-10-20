@@ -1,28 +1,28 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
   "id": "NxAwsCache",
-  "title": "",
+  "title": "Add AWS S3 Cache configuration to NX workspace",
   "type": "object",
   "properties": {
-    "name": {
+    "awsAccessKeyId": {
       "type": "string",
-      "description": "",
-      "$default": {
-        "$source": "argv",
-        "index": 0
-      },
-      "x-prompt": "What name would you like to use?"
+      "description": "AWS Access Key ID.",
+      "x-prompt": "AWS Access Key ID (optional - can be defined using Environment variables)"
+    },    
+    "awsSecretAccessKey": {
+      "type": "string",
+      "description": "AWS Secret Access Key.",
+      "x-prompt": "AWS Secret Access Key (optional - can be defined using Environment variables)"
     },
-    "tags": {
+    "awsRegion": {
       "type": "string",
-      "description": "Add tags to the project (used for linting)",
-      "alias": "t"
+      "description": "AWS Region",
+      "x-prompt": "AWS Region (optional - can be defined using Environment variables)"
     },
-    "directory": {
+    "awsBucket": {
       "type": "string",
-      "description": "A directory where the project is placed",
-      "alias": "d"
+      "description": "AWS S3 Bucket, where the cached Nx outputs will be stored",
+      "x-prompt": "AWS Bucket (optional - can be defined using Environment variables)"
     }
-  },
-  "required": ["name"]
+  }
 }

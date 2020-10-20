@@ -28,7 +28,7 @@
             "packageJson": "packages/nx-aws-cache/package.json",
             "main": "packages/nx-aws-cache/src/index.ts",
             "assets": [
-              "packages/nx-aws-cache/*.md",
+              "README.md",
               {
                 "input": "./packages/nx-aws-cache/src",
                 "glob": "**/*.!(ts)",
@@ -37,11 +37,6 @@
               {
                 "input": "./packages/nx-aws-cache",
                 "glob": "collection.json",
-                "output": "."
-              },
-              {
-                "input": "./packages/nx-aws-cache",
-                "glob": "builders.json",
                 "output": "."
               }
             ]

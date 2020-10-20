@@ -3,7 +3,7 @@
   "name": "nx-aws-cache",
   "version": "0.0.1",
   "schematics": {
-    "nx-aws-cache": {
+    "init": {
       "factory": "./src/schematics/nx-aws-cache/schematic",
       "schema": "./src/schematics/nx-aws-cache/schema.json",
       "description": "Initialize nx-aws-cache plugin"

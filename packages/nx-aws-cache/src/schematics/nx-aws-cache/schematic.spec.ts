@@ -8,7 +8,12 @@ import { NxAwsCacheSchematicSchema } from './schema';
 describe('nx-aws-cache schematic', () => {
   let appTree: Tree;
 
-  const options: NxAwsCacheSchematicSchema = { name: 'test' },
+  const options: NxAwsCacheSchematicSchema = {
+      awsAccessKeyId: 'test',
+      awsSecretAccessKey: 'test',
+      awsRegion: 'eu-central-1',
+      awsBucket: 'bucket-name/cache-folder',
+    },
     testRunner = new SchematicTestRunner(
       '@nx-aws/nx-aws-cache',
       join(__dirname, '../../../collection.json'),
@@ -20,7 +25,7 @@ describe('nx-aws-cache schematic', () => {
 
   it('should run successfully', async () => {
     await expect(
-      testRunner.runSchematicAsync('nx-aws-cache', options, appTree).toPromise(),
+      testRunner.runSchematicAsync('init', options, appTree).toPromise(),
     ).resolves.not.toThrowError();
   });
 });
