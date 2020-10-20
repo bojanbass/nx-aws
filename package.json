@@ -3,6 +3,17 @@
   "version": "0.0.0",
   "license": "MIT",
   "author": "Bojan Bratuz",
+  "keywords": [
+    "AWS",
+    "S3",
+    "Tasks",
+    "Runner",
+    "Cache",
+    "Workspace",
+    "Nrwl",
+    "Nx",
+    "Monorepo"
+  ],
   "engines": {
     "node": ">=10.22.0",
     "npm": ">=6.14.6",
