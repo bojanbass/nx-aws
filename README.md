@@ -1,90 +1,90 @@
-# NxAws
+# nx-aws
 
-This project was generated using [Nx](https://nx.dev).
+nx-aws is a set of plugins for NRWL NX (a set of Extensible Dev Tools for Monorepos).
 
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+# @nx-aws/nx-aws-cache
 
-🔎 **Nx is a set of Extensible Dev Tools for Monorepos.**
+A tool for using AWS S3 as a distributed computational cache for Nx.
 
-## Adding capabilities to your workspace
+## Setup
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+Install the package by running:
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+```bash
+yarn add @nx-aws/nx-aws-cache
+npm i @nx-aws/nx-aws-cache
+```
 
-Below are our core plugins:
+Then run the init schematic by running:
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+```bash
+yarn nx generate @nx-aws/nx-aws-cache:init
+npm run nx generate @nx-aws/nx-aws-cache:init
+```
 
-There are also many [community plugins](https://nx.dev/nx-community) you could add.
+This will make the necessary changes to nx.json in your workspace to use nx-aws-cache runner.
 
-## Generate an application
+## AWS settings
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+There are two ways to set-up AWS options:
 
-> You can use any of the plugins above to generate applications as well.
+### Using nx.json file (NOT recommended)
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+```json
+{
+  "tasksRunnerOptions": {
+  "default": {
+    "runner": "@nx-aws/nx-aws-cache",
+    "options": {
+      ...
+      "awsAccessKeyId": "[secret]",
+      "awsSecretAccessKey": "[secret]",
+      "awsRegion": "eu-central-1",
+      "awsBucket": "bucket-name/cache-folder"
+    } 
+  }
+}
+```
 
-## Generate a library
+### Using environment variables (**recommended**)
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+```bash
+NX_AWS_ACCESS_KEY_ID=[secret]
+NX_AWS_SECRET_ACCESS_KEY=[secret]
+NX_AWS_REGION=eu-central-1
+NX_AWS_BUCKET=bucket-name/cache-folder
+```
 
-> You can also use any of the plugins above to generate libraries as well.
+Additionally, AWS authentication can be set-up using default environment variables or using shared credentials, based on [AWS documentation](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
 
-Libraries are sharable across libraries and applications. They can be imported from `@nx-aws/mylib`.
+### Using environment variables
+```bash
+AWS_ACCESS_KEY_ID=[secret]
+AWS_SECRET_ACCESS_KEY=[secret]
+```
 
-## Development server
+### Using shared credentials file (`~/.aws/credentials`)
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+```
+[default]
+aws_access_key_id = [secret]
+aws_secret_access_key = [secret]
+```
 
-## Code scaffolding
-
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+> Environment variables can be set using `.env` file - check [dotenv documentation](https://www.npmjs.com/package/dotenv).
 
 ## Build
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `yarn nx build nx-aws-cache` to build the plugin. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 ## Running unit tests
 
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+Run `yarn nx test nx-aws-cache` to execute the unit tests via [Jest](https://jestjs.io).
 
-Run `nx affected:test` to execute the unit tests affected by a change.
+Run `yarn nx affected:test` to execute the unit tests affected by a change.
 
 ## Running end-to-end tests
 
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+Run `yarn nx e2e nx-aws-cache` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
 
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-## ☁ Nx Cloud
-
-### Computation Memoization in the Cloud
-
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+Run `yarn nx affected:e2e` to execute the end-to-end tests affected by a change.
