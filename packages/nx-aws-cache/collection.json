@@ -6,7 +6,7 @@
     "nx-aws-cache": {
       "factory": "./src/schematics/nx-aws-cache/schematic",
       "schema": "./src/schematics/nx-aws-cache/schema.json",
-      "description": "nx-aws-cache schematic"
+      "description": "Initialize nx-aws-cache plugin"
     }
   }
 }
