@@ -7,9 +7,11 @@
     "project": "./tsconfig.*?.json"
   },
   "ignorePatterns": ["**/*"],
-  "plugins": ["@typescript-eslint", "@nrwl/nx"],
+  "plugins": ["@typescript-eslint", "@nrwl/nx", "import"],
   "extends": [
-    "eslint:recommended",
+    "eslint:all",
+    "plugin:import/errors",
+    "plugin:import/warnings",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier",
@@ -25,11 +27,27 @@
       {
         "enforceBuildableLibDependency": true,
         "allow": [],
-        "depConstraints": [
-          { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
-        ]
+        "depConstraints": [{ "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }]
       }
-    ]
+    ],
+    "class-methods-use-this": "off",
+    "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
+    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+    "max-statements": ["error", 20],
+    "no-magic-numbers": ["error", { "ignore": [-1, 0, 1] }],
+    "no-ternary": "off",
+    "sort-imports": "off",
+    "sort-keys": "off",
+    "sort-vars": "off",
+    "function-call-argument-newline": "off",
+    "init-declarations": "off",
+    "import/no-internal-modules": [
+      "error",
+      {
+        "allow": ["@nrwl/workspace/**", "@angular-devkit/**"]
+      }
+    ],
+    "import/no-unresolved": "off"
   },
   "overrides": [
     {

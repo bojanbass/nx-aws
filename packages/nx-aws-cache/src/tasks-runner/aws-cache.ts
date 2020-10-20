@@ -1,3 +1,5 @@
+/* eslint-disable import/no-internal-modules */
+
 import { createReadStream, createWriteStream, writeFile } from 'fs';
 import { join } from 'path';
 import { pipeline } from 'stream';
@@ -33,8 +35,8 @@ export class AwsCache implements RemoteCache {
   }
 
   public static checkConfig(options: AwsNxCacheOptions): void {
-    const missingOptions: Array<string> = [];
-    const externalOptions = new S3().config.credentials;
+    const missingOptions: Array<string> = [],
+      externalOptions = new S3().config.credentials;
 
     if (!options.awsBucket) {
       missingOptions.push('NX_AWS_BUCKET | awsBucket');
@@ -85,9 +87,9 @@ export class AwsCache implements RemoteCache {
     }
   }
 
-  public async store(hash: string, cacheDirectory: string): Promise<boolean> {
+  public store(hash: string, cacheDirectory: string): Promise<boolean> {
     if (this.messages.error) {
-      return false;
+      return Promise.resolve(false);
     }
 
     const resultPromise = this.createAndUploadFile(hash, cacheDirectory);
@@ -147,12 +149,12 @@ export class AwsCache implements RemoteCache {
   }
 
   private async uploadFile(hash: string, tgzFilePath: string): Promise<void> {
-    const tgzFileName = this.getTgzFileName(hash);
-    const params: PutObjectRequest = {
-      Bucket: this.bucket,
-      Key: tgzFileName,
-      Body: createReadStream(tgzFilePath),
-    };
+    const tgzFileName = this.getTgzFileName(hash),
+      params: PutObjectRequest = {
+        Bucket: this.bucket,
+        Key: tgzFileName,
+        Body: createReadStream(tgzFilePath),
+      };
 
     try {
       this.logger.debug(`Storage Cache: Uploading ${hash}`);
@@ -164,15 +166,15 @@ export class AwsCache implements RemoteCache {
   }
 
   private async downloadFile(hash: string, tgzFilePath: string): Promise<void> {
-    const pipelinePromise = promisify(pipeline);
-    const tgzFileName = this.getTgzFileName(hash);
-    const writeFileToLocalDir = createWriteStream(tgzFilePath);
-    const readAwsFile = this.s3
-      .getObject({
-        Bucket: this.bucket,
-        Key: tgzFileName,
-      })
-      .createReadStream();
+    const pipelinePromise = promisify(pipeline),
+      tgzFileName = this.getTgzFileName(hash),
+      writeFileToLocalDir = createWriteStream(tgzFilePath),
+      readAwsFile = this.s3
+        .getObject({
+          Bucket: this.bucket,
+          Key: tgzFileName,
+        })
+        .createReadStream();
 
     try {
       await pipelinePromise(readAwsFile, writeFileToLocalDir);
@@ -182,11 +184,11 @@ export class AwsCache implements RemoteCache {
   }
 
   private async checkIfCacheExists(hash: string): Promise<boolean> {
-    const tgzFileName = this.getTgzFileName(hash);
-    const params = {
-      Bucket: this.bucket,
-      Key: tgzFileName,
-    };
+    const tgzFileName = this.getTgzFileName(hash),
+      params = {
+        Bucket: this.bucket,
+        Key: tgzFileName,
+      };
 
     try {
       await this.s3.headObject(params).promise();

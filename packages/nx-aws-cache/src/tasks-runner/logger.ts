@@ -8,7 +8,7 @@ export class Logger {
     }
 
     output.addNewline();
-    //tslint:disable-next-line:no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (output as any).writeOutputTitle({
       label: chalk.reset.inverse.bold.keyword('grey')(' AWS-CLOUD '),
       title: chalk.keyword('grey')(message),
@@ -18,7 +18,7 @@ export class Logger {
 
   public error(message: string): void {
     output.addNewline();
-    //tslint:disable-next-line:no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (output as any).writeOutputTitle({
       label: chalk.reset.inverse.bold.red(' AWS-CLOUD '),
       title: chalk.bold.red(message),
@@ -28,7 +28,7 @@ export class Logger {
 
   public warn(message: string): void {
     output.addNewline();
-    //tslint:disable-next-line:no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (output as any).writeOutputTitle({
       label: chalk.reset.inverse.bold.yellow(' AWS-CLOUD '),
       title: chalk.bold.yellow(message),
@@ -38,7 +38,7 @@ export class Logger {
 
   public success(message: string): void {
     output.addNewline();
-    //tslint:disable-next-line:no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (output as any).writeOutputTitle({
       label: chalk.reset.inverse.bold.green(' AWS-CLOUD '),
       title: chalk.bold.green(message),
@@ -48,7 +48,7 @@ export class Logger {
 
   public note(message: string): void {
     output.addNewline();
-    //tslint:disable-next-line:no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (output as any).writeOutputTitle({
       label: chalk.reset.inverse.bold.keyword('orange')(' AWS-CLOUD '),
       title: chalk.keyword('orange')(message),

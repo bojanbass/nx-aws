@@ -30,18 +30,12 @@ interface NormalizedSchema extends NxAwsCacheSchematicSchema {
   parsedTags: string[];
 }
 
-function normalizeOptions(
-  options: NxAwsCacheSchematicSchema
-): NormalizedSchema {
-  const name = toFileName(options.name);
-  const projectDirectory = options.directory
-    ? `${toFileName(options.directory)}/${name}`
-    : name;
-  const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
-  const projectRoot = `${projectRootDir(projectType)}/${projectDirectory}`;
-  const parsedTags = options.tags
-    ? options.tags.split(',').map((s) => s.trim())
-    : [];
+function normalizeOptions(options: NxAwsCacheSchematicSchema): NormalizedSchema {
+  const name = toFileName(options.name),
+    projectDirectory = options.directory ? `${toFileName(options.directory)}/${name}` : name,
+    projectName = projectDirectory.replace(/\//gu, '-'),
+    projectRoot = `${projectRootDir(projectType)}/${projectDirectory}`,
+    parsedTags = options.tags ? options.tags.split(',').map((tag) => tag.trim()) : [];
 
   return {
     ...options,
@@ -61,11 +55,11 @@ function addFiles(options: NormalizedSchema): Rule {
         offsetFromRoot: offsetFromRoot(options.projectRoot),
       }),
       move(options.projectRoot),
-    ])
+    ]),
   );
 }
 
-export default function (options: NxAwsCacheSchematicSchema): Rule {
+function main(options: NxAwsCacheSchematicSchema): Rule {
   const normalizedOptions = normalizeOptions(options);
   return chain([
     updateWorkspace((workspace) => {
@@ -87,3 +81,5 @@ export default function (options: NxAwsCacheSchematicSchema): Rule {
     addFiles(normalizedOptions),
   ]);
 }
+
+export default main;

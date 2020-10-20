@@ -7,12 +7,12 @@ import { NxAwsCacheSchematicSchema } from './schema';
 
 describe('nx-aws-cache schematic', () => {
   let appTree: Tree;
-  const options: NxAwsCacheSchematicSchema = { name: 'test' };
 
-  const testRunner = new SchematicTestRunner(
-    '@nx-aws/nx-aws-cache',
-    join(__dirname, '../../../collection.json')
-  );
+  const options: NxAwsCacheSchematicSchema = { name: 'test' },
+    testRunner = new SchematicTestRunner(
+      '@nx-aws/nx-aws-cache',
+      join(__dirname, '../../../collection.json'),
+    );
 
   beforeEach(() => {
     appTree = createEmptyWorkspace(Tree.empty());
@@ -20,7 +20,7 @@ describe('nx-aws-cache schematic', () => {
 
   it('should run successfully', async () => {
     await expect(
-      testRunner.runSchematicAsync('nx-aws-cache', options, appTree).toPromise()
+      testRunner.runSchematicAsync('nx-aws-cache', options, appTree).toPromise(),
     ).resolves.not.toThrowError();
   });
 });

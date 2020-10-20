@@ -1,3 +1,5 @@
+/* eslint-disable no-magic-numbers */
+
 import { config as dotEnvConfig } from 'dotenv';
 dotEnvConfig();
 
@@ -16,30 +18,29 @@ export const tasksRunner = (
   context: Parameters<typeof defaultTaskRunner>[2],
 ): ReturnType<typeof defaultTaskRunner> => {
   const awsOptions: AwsNxCacheOptions = {
-    awsAccessKeyId: options.awsAccessKeyId ?? process.env.NX_AWS_ACCESS_KEY_ID,
-    awsSecretAccessKey: options.awsSecretAccessKey ?? process.env.NX_AWS_SECRET_ACCESS_KEY,
-    awsRegion: options.awsRegion ?? process.env.NX_AWS_REGION,
-    awsBucket: options.awsBucket ?? process.env.NX_AWS_BUCKET,
-  };
-
-  const logger = new Logger();
+      awsAccessKeyId: options.awsAccessKeyId ?? process.env.NX_AWS_ACCESS_KEY_ID,
+      awsBucket: options.awsBucket ?? process.env.NX_AWS_BUCKET,
+      awsRegion: options.awsRegion ?? process.env.NX_AWS_REGION,
+      awsSecretAccessKey: options.awsSecretAccessKey ?? process.env.NX_AWS_SECRET_ACCESS_KEY,
+    },
+    logger = new Logger();
 
   try {
     AwsCache.checkConfig(awsOptions);
 
     logger.note('USING REMOTE CACHE');
 
-    const messages = new MessageReporter(logger);
-    const remoteCache = new AwsCache(awsOptions, messages);
-    const runnerWrapper = new Subject<AffectedEvent>();
-    const runner$ = defaultTaskRunner(
-      tasks,
-      {
-        ...options,
-        remoteCache,
-      },
-      context,
-    );
+    const messages = new MessageReporter(logger),
+      remoteCache = new AwsCache(awsOptions, messages),
+      runnerWrapper = new Subject<AffectedEvent>(),
+      runner$ = defaultTaskRunner(
+        tasks,
+        {
+          ...options,
+          remoteCache,
+        },
+        context,
+      );
 
     runner$.subscribe({
       next: (value) => runnerWrapper.next(value),
