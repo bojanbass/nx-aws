@@ -18,7 +18,8 @@
           "options": {
             "jestConfig": "packages/nx-aws-cache/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": ["coverage/packages/nx-aws-cache"]
         },
         "build": {
           "builder": "@nrwl/node:package",
@@ -40,7 +41,8 @@
                 "output": "."
               }
             ]
-          }
+          },
+          "outputs": ["{options.outputPath}"]
         }
       }
     },

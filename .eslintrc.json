@@ -1,60 +1,78 @@
 {
   "root": true,
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module",
-    "project": "./tsconfig.*?.json"
-  },
   "ignorePatterns": ["**/*"],
-  "plugins": ["@typescript-eslint", "@nrwl/nx", "import"],
-  "extends": [
-    "eslint:all",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "prettier/@typescript-eslint"
-  ],
-  "rules": {
-    "@typescript-eslint/explicit-member-accessibility": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/no-parameter-properties": "off",
-    "@nrwl/nx/enforce-module-boundaries": [
-      "error",
-      {
-        "enforceBuildableLibDependency": true,
-        "allow": [],
-        "depConstraints": [{ "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }]
-      }
-    ],
-    "class-methods-use-this": "off",
-    "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
-    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
-    "max-statements": ["error", 20],
-    "no-magic-numbers": ["error", { "ignore": [-1, 0, 1] }],
-    "no-ternary": "off",
-    "sort-imports": "off",
-    "sort-keys": "off",
-    "sort-vars": "off",
-    "function-call-argument-newline": "off",
-    "init-declarations": "off",
-    "import/no-internal-modules": [
-      "error",
-      {
-        "allow": ["@nrwl/workspace/**", "@angular-devkit/**"]
-      }
-    ],
-    "import/no-unresolved": "off"
-  },
+  "plugins": ["@nrwl/nx"],
   "overrides": [
     {
-      "files": ["*.tsx"],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "extends": ["eslint:all", "plugin:import/errors", "plugin:import/warnings"],
+      "parserOptions": {
+        "project": "./tsconfig.*?.json"
+      },
+      "plugins": ["import"],
       "rules": {
-        "@typescript-eslint/no-unused-vars": "off"
+        "@nrwl/nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
+            ]
+          }
+        ],
+        "class-methods-use-this": "off",
+        "func-style": [
+          "error",
+          "declaration",
+          {
+            "allowArrowFunctions": true
+          }
+        ],
+        "lines-between-class-members": [
+          "error",
+          "always",
+          {
+            "exceptAfterSingleLine": true
+          }
+        ],
+        "max-statements": ["error", 20],
+        "no-magic-numbers": [
+          "error",
+          {
+            "ignore": [-1, 0, 1]
+          }
+        ],
+        "no-ternary": "off",
+        "sort-imports": "off",
+        "sort-keys": "off",
+        "sort-vars": "off",
+        "function-call-argument-newline": "off",
+        "init-declarations": "off",
+        "import/no-internal-modules": [
+          "error",
+          {
+            "allow": ["@nrwl/workspace/**", "@angular-devkit/**"]
+          }
+        ],
+        "import/no-unresolved": "off"
       }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nrwl/nx/typescript"],
+      "parserOptions": {
+        "project": "./tsconfig.*?.json"
+      },
+      "rules": {}
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nrwl/nx/javascript"],
+      "rules": {}
     }
   ]
 }
