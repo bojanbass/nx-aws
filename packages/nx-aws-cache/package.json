@@ -1,6 +1,6 @@
 {
-  "name": "@nx-aws-plugin/nx-aws-cache",
-  "version": "0.0.4",
+  "name": "@kor/nx-aws-cache",
+  "version": "1.0.0",
   "description": "AWS S3 Cache plugin for Nx",
   "keywords": [
     "AWS",
@@ -15,11 +15,18 @@
   ],
   "license": "MIT",
   "author": "Bojan Bratuz",
+  "contributors": [
+    "Bojan Bratuz",
+    "Sam Vloeberghs <sam@kwerri.be> (https://samvloeberghs.be)"
+  ],
+  "maintainers": [
+    "Sam Vloeberghs <sam@kwerri.be> (https://samvloeberghs.be)"
+  ],
   "main": "src/index.js",
   "schematics": "./collection.json",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bojanbass/nx-aws"
+    "url": "https://github.com/KOR-Financial/nx-aws"
   },
-  "homepage": "https://github.com/bojanbass/nx-aws"
+  "homepage": "https://github.com/KOR-Financial/nx-aws"
 }

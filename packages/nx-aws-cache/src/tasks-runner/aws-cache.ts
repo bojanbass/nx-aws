@@ -1,12 +1,11 @@
 /* eslint-disable import/no-internal-modules */
 
-import { createReadStream, createWriteStream, writeFile } from 'fs';
+import { writeFile } from 'fs';
 import { join } from 'path';
-import { pipeline } from 'stream';
 import { promisify } from 'util';
+import { exec } from 'child_process';
 
-import { config as awsConfig, S3 } from 'aws-sdk';
-import { PutObjectRequest } from 'aws-sdk/clients/s3';
+import { config as awsConfig } from 'aws-sdk';
 import { RemoteCache } from '@nrwl/workspace/src/tasks-runner/default-tasks-runner';
 import { create, extract } from 'tar';
 
@@ -16,7 +15,6 @@ import { MessageReporter } from './message-reporter';
 
 export class AwsCache implements RemoteCache {
   private readonly bucket: string;
-  private readonly s3: S3;
   private readonly logger = new Logger();
   private uploadQueue: Array<Promise<boolean>> = [];
 
@@ -26,28 +24,13 @@ export class AwsCache implements RemoteCache {
     if (options.awsRegion) {
       awsConfig.update({ region: options.awsRegion });
     }
-
-    this.s3 = new S3({
-      apiVersion: 'latest',
-      ...(options.awsSecretAccessKey ? { secretAccessKey: options.awsSecretAccessKey } : {}),
-      ...(options.awsAccessKeyId ? { accessKeyId: options.awsAccessKeyId } : {}),
-    });
   }
 
   public static checkConfig(options: AwsNxCacheOptions): void {
-    const missingOptions: Array<string> = [],
-      externalOptions = new S3().config.credentials;
+    const missingOptions: Array<string> = [];
 
     if (!options.awsBucket) {
       missingOptions.push('NX_AWS_BUCKET | awsBucket');
-    }
-
-    if (!options.awsAccessKeyId && externalOptions === null) {
-      missingOptions.push('AWS_ACCESS_KEY_ID | NX_AWS_ACCESS_KEY_ID | awsAccessKeyId');
-    }
-
-    if (!options.awsSecretAccessKey && externalOptions === null) {
-      missingOptions.push('AWS_SECRET_ACCESS_KEY | NX_AWS_SECRET_ACCESS_KEY | awsSecretAccessKey');
     }
 
     if (missingOptions.length > 0) {
@@ -121,16 +104,16 @@ export class AwsCache implements RemoteCache {
   private async createTgzFile(
     tgzFilePath: string,
     hash: string,
-    cacheDirectory: string,
+    cacheDirectory: string
   ): Promise<void> {
     try {
       await create(
         {
           gzip: true,
           file: tgzFilePath,
-          cwd: cacheDirectory,
+          cwd: cacheDirectory
         },
-        [hash],
+        [hash]
       );
     } catch (err) {
       throw new Error(`Error creating tar.gz file - ${err}`);
@@ -141,7 +124,7 @@ export class AwsCache implements RemoteCache {
     try {
       await extract({
         file: tgzFilePath,
-        cwd: cacheDirectory,
+        cwd: cacheDirectory
       });
     } catch (err) {
       throw new Error(`Error extracting tar.gz file - ${err}`);
@@ -149,16 +132,11 @@ export class AwsCache implements RemoteCache {
   }
 
   private async uploadFile(hash: string, tgzFilePath: string): Promise<void> {
-    const tgzFileName = this.getTgzFileName(hash),
-      params: PutObjectRequest = {
-        Bucket: this.bucket,
-        Key: tgzFileName,
-        Body: createReadStream(tgzFilePath),
-      };
+    const tgzFileName = this.getTgzFileName(hash);
 
     try {
       this.logger.debug(`Storage Cache: Uploading ${hash}`);
-      await this.s3.upload(params).promise();
+      await this.upload(tgzFileName, tgzFilePath);
       this.logger.debug(`Storage Cache: Stored ${hash}`);
     } catch (err) {
       throw new Error(`Storage Cache: Upload error - ${err}`);
@@ -166,36 +144,23 @@ export class AwsCache implements RemoteCache {
   }
 
   private async downloadFile(hash: string, tgzFilePath: string): Promise<void> {
-    const pipelinePromise = promisify(pipeline),
-      tgzFileName = this.getTgzFileName(hash),
-      writeFileToLocalDir = createWriteStream(tgzFilePath),
-      readAwsFile = this.s3
-        .getObject({
-          Bucket: this.bucket,
-          Key: tgzFileName,
-        })
-        .createReadStream();
+    const tgzFileName = this.getTgzFileName(hash);
 
     try {
-      await pipelinePromise(readAwsFile, writeFileToLocalDir);
+      await this.getObject(tgzFileName, tgzFilePath);
     } catch (err) {
       throw new Error(`Storage Cache: Download error - ${err}`);
     }
   }
 
   private async checkIfCacheExists(hash: string): Promise<boolean> {
-    const tgzFileName = this.getTgzFileName(hash),
-      params = {
-        Bucket: this.bucket,
-        Key: tgzFileName,
-      };
+    const tgzFileName = this.getTgzFileName(hash);
 
     try {
-      await this.s3.headObject(params).promise();
-
+      await this.headObject(tgzFileName);
       return true;
     } catch (err) {
-      if (err.code === 'NotFound') {
+      if (err === 'NotFound') {
         return false;
       }
 
@@ -220,4 +185,63 @@ export class AwsCache implements RemoteCache {
   private getCommitFileName(hash: string): string {
     return `${hash}.commit`;
   }
+
+  // CUSTOM WRAPPER FUNCTIONS AROUND THE CLI
+
+  private headObject(key: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      exec(`aws s3api head-object --bucket ${this.bucket} --key ${key}`,
+        (error: any, stdout: any, stderr: any) => {
+          if (error !== null) {
+            if (stderr.includes('404') || stderr.includes('Not Found')) {
+              // eslint-disable-next-line prefer-promise-reject-errors
+              reject('NotFound');
+              return;
+            }
+            // eslint-disable-next-line no-console
+            console.log('stderr', stderr);
+            // eslint-disable-next-line no-console
+            reject(error.toString());
+          }
+          resolve(stdout);
+        });
+    });
+  }
+
+  private getObject(key: string, filePath: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      exec(`aws s3api get-object --bucket ${this.bucket} --key ${key} ${filePath}`,
+        (error: any, stdout: any, stderr: any) => {
+          if (error !== null) {
+            if (stderr.includes('404') || stderr.includes('Not Found')) {
+              // eslint-disable-next-line prefer-promise-reject-errors
+              reject('NotFound');
+              return;
+            }
+            // eslint-disable-next-line no-console
+            console.log('stderr', stderr);
+            reject(error.toString());
+          }
+          resolve(stdout);
+        });
+    });
+  }
+
+  private upload(key: string, filePath: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      exec(`aws s3api put-object --bucket ${this.bucket} --key ${key} --body ${filePath}`,
+        (error: any, stdout: any, stderr: any) => {
+          // eslint-disable-next-line no-console
+          if (error !== null) {
+            // eslint-disable-next-line no-console
+            console.log('stderr', stderr);
+            // eslint-disable-next-line prefer-promise-reject-errors
+            reject(error.toString());
+            return;
+          }
+          resolve(stdout);
+        });
+    });
+  }
+
 }

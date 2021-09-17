@@ -3,6 +3,13 @@
   "version": "0.0.0",
   "license": "MIT",
   "author": "Bojan Bratuz",
+  "maintainers": [
+    "Sam Vloeberghs <sam@kwerri.be> (https://samvloeberghs.be)"
+  ],
+  "contributors": [
+    "Bojan Bratuz",
+    "Sam Vloeberghs <sam@kwerri.be> (https://samvloeberghs.be)"
+  ],
   "keywords": [
     "AWS",
     "S3",
@@ -21,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bojanbass/nx-aws"
+    "url": "https://github.com/KOR-Financial/nx-aws"
   },
   "scripts": {
     "nx": "nx",
