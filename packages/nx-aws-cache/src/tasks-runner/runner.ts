@@ -5,7 +5,7 @@ dotEnvConfig();
 
 import defaultTaskRunner from '@nrwl/workspace/tasks-runners/default';
 import { AffectedEvent } from '@nrwl/workspace/src/tasks-runner/tasks-runner';
-import { Subject } from 'rxjs';
+import { from, Subject } from 'rxjs';
 
 import { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
 import { AwsCache } from './aws-cache';
@@ -42,7 +42,7 @@ export const tasksRunner = (
         context,
       );
 
-    runner$.subscribe({
+    from(runner$).subscribe({
       next: (value) => runnerWrapper.next(value),
       error: (err) => runnerWrapper.error(err),
       complete: async () => {
