@@ -1,5 +1,3 @@
-/* eslint-disable no-magic-numbers */
-
 import { config as dotEnvConfig } from 'dotenv';
 dotEnvConfig();
 
@@ -12,27 +10,37 @@ import { AwsCache } from './aws-cache';
 import { Logger } from './logger';
 import { MessageReporter } from './message-reporter';
 
+function getOptions(options: AwsNxCacheOptions) {
+  return {
+    awsAccessKeyId: process.env.NX_AWS_ACCESS_KEY_ID,
+    awsBucket: options.awsBucket ?? process.env.NX_AWS_BUCKET,
+    awsRegion: options.awsRegion ?? process.env.NX_AWS_REGION,
+    awsSecretAccessKey: process.env.NX_AWS_SECRET_ACCESS_KEY,
+    awsProfile: options.awsProfile ?? process.env.NX_AWS_PROFILE,
+  };
+}
+
 export const tasksRunner = (
   tasks: Parameters<typeof defaultTaskRunner>[0],
   options: Parameters<typeof defaultTaskRunner>[1] & AwsNxCacheOptions,
+  // eslint-disable-next-line no-magic-numbers
   context: Parameters<typeof defaultTaskRunner>[2],
 ): ReturnType<typeof defaultTaskRunner> => {
-  const awsOptions: AwsNxCacheOptions = {
-      awsAccessKeyId: options.awsAccessKeyId ?? process.env.NX_AWS_ACCESS_KEY_ID,
-      awsBucket: options.awsBucket ?? process.env.NX_AWS_BUCKET,
-      awsRegion: options.awsRegion ?? process.env.NX_AWS_REGION,
-      awsSecretAccessKey: options.awsSecretAccessKey ?? process.env.NX_AWS_SECRET_ACCESS_KEY,
-    },
-    logger = new Logger();
+  const awsOptions: AwsNxCacheOptions = getOptions(options);
+  const logger = new Logger();
 
   try {
-    AwsCache.checkConfig(awsOptions);
+    if (process.env.NX_AWS_DISABLE === 'true') {
+      logger.note('USING LOCAL CACHE (NX_AWS_DISABLE is set to true)');
+
+      return defaultTaskRunner(tasks, options, context);
+    }
 
     logger.note('USING REMOTE CACHE');
 
-    const messages = new MessageReporter(logger),
-      remoteCache = new AwsCache(awsOptions, messages),
-      runnerWrapper = new Subject<AffectedEvent>(),
+    const messages = new MessageReporter(logger);
+    const remoteCache = new AwsCache(awsOptions, messages);
+    const runnerWrapper = new Subject<AffectedEvent>(),
       runner$ = defaultTaskRunner(
         tasks,
         {
@@ -54,7 +62,7 @@ export const tasksRunner = (
 
     return runnerWrapper;
   } catch (err) {
-    logger.warn(err.message);
+    logger.warn((err as Error).message);
     logger.note('USING LOCAL CACHE');
 
     return defaultTaskRunner(tasks, options, context);

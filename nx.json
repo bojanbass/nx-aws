@@ -1,14 +1,9 @@
 {
   "npmScope": "nx-aws",
-  "affected": {
-    "defaultBase": "master"
-  },
+  "affected": { "defaultBase": "master" },
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
@@ -17,24 +12,12 @@
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
-      }
+      "options": { "cacheableOperations": ["build", "test", "lint", "e2e"] }
     }
   },
   "projects": {
-    "nx-aws-cache": {
-      "tags": []
-    },
-    "nx-aws-cache-e2e": {
-      "tags": [],
-      "implicitDependencies": [
-        "nx-aws-cache"
-      ]
-    }
+    "nx-aws-cache": { "tags": [] },
+    "nx-aws-cache-e2e": { "tags": [], "implicitDependencies": ["nx-aws-cache"] }
   },
-  "workspaceLayout": {
-    "appsDir": "e2e",
-    "libsDir": "packages"
-  }
+  "workspaceLayout": { "appsDir": "e2e", "libsDir": "packages" }
 }

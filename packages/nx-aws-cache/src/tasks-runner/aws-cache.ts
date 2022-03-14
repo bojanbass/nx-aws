@@ -1,12 +1,18 @@
-/* eslint-disable import/no-internal-modules */
-
 import { createReadStream, createWriteStream, writeFile } from 'fs';
 import { join } from 'path';
-import { pipeline } from 'stream';
+import { pipeline, Readable } from 'stream';
 import { promisify } from 'util';
 
-import { config as awsConfig, S3 } from 'aws-sdk';
-import { PutObjectRequest } from 'aws-sdk/clients/s3';
+import {
+  S3Client,
+  GetObjectCommand,
+  PutObjectCommand,
+  HeadObjectCommand,
+  S3ClientConfig,
+} from '@aws-sdk/client-s3';
+import { fromIni } from '@aws-sdk/credential-provider-ini';
+import { fromEnv, ENV_KEY, ENV_SECRET } from '@aws-sdk/credential-provider-env';
+import { CredentialsProviderError } from '@aws-sdk/property-provider';
 import { RemoteCache } from '@nrwl/workspace/src/tasks-runner/default-tasks-runner';
 import { create, extract } from 'tar';
 
@@ -16,38 +22,40 @@ import { MessageReporter } from './message-reporter';
 
 export class AwsCache implements RemoteCache {
   private readonly bucket: string;
-  private readonly s3: S3;
+  private readonly s3: S3Client;
   private readonly logger = new Logger();
   private uploadQueue: Array<Promise<boolean>> = [];
 
   public constructor(options: AwsNxCacheOptions, private messages: MessageReporter) {
     this.bucket = options.awsBucket as string;
 
+    const clientConfig: S3ClientConfig = {};
+
     if (options.awsRegion) {
-      awsConfig.update({ region: options.awsRegion });
+      clientConfig.region = options.awsRegion;
     }
 
-    this.s3 = new S3({
-      apiVersion: 'latest',
-      ...(options.awsSecretAccessKey ? { secretAccessKey: options.awsSecretAccessKey } : {}),
-      ...(options.awsAccessKeyId ? { accessKeyId: options.awsAccessKeyId } : {}),
-    });
+    if (options.awsAccessKeyId && options.awsSecretAccessKey) {
+      clientConfig.credentials = {
+        accessKeyId: options.awsAccessKeyId,
+        secretAccessKey: options.awsSecretAccessKey,
+      };
+    } else if (process.env[ENV_KEY] && process.env[ENV_SECRET]) {
+      clientConfig.credentials = fromEnv();
+    } else {
+      clientConfig.credentials = fromIni({
+        ...(options.awsProfile ? { profile: options.awsProfile } : {}),
+      });
+    }
+
+    this.s3 = new S3Client(clientConfig);
   }
 
-  public static checkConfig(options: AwsNxCacheOptions): void {
-    const missingOptions: Array<string> = [],
-      externalOptions = new S3().config.credentials;
+  public checkConfig(options: AwsNxCacheOptions): void {
+    const missingOptions: Array<string> = [];
 
     if (!options.awsBucket) {
       missingOptions.push('NX_AWS_BUCKET | awsBucket');
-    }
-
-    if (!options.awsAccessKeyId && externalOptions === null) {
-      missingOptions.push('AWS_ACCESS_KEY_ID | NX_AWS_ACCESS_KEY_ID | awsAccessKeyId');
-    }
-
-    if (!options.awsSecretAccessKey && externalOptions === null) {
-      missingOptions.push('AWS_SECRET_ACCESS_KEY | NX_AWS_SECRET_ACCESS_KEY | awsSecretAccessKey');
     }
 
     if (missingOptions.length > 0) {
@@ -55,7 +63,16 @@ export class AwsCache implements RemoteCache {
     }
   }
 
+  // eslint-disable-next-line max-statements
   public async retrieve(hash: string, cacheDirectory: string): Promise<boolean> {
+    try {
+      await this.s3.config.credentials();
+    } catch (err) {
+      this.messages.error = err as Error;
+
+      return false;
+    }
+
     if (this.messages.error) {
       return false;
     }
@@ -79,7 +96,7 @@ export class AwsCache implements RemoteCache {
 
       return true;
     } catch (err) {
-      this.messages.error = err;
+      this.messages.error = err as Error;
 
       this.logger.debug(`Storage Cache: Cache error ${hash}`);
 
@@ -112,7 +129,7 @@ export class AwsCache implements RemoteCache {
 
       return true;
     } catch (err) {
-      this.messages.error = err;
+      this.messages.error = err as Error;
 
       return false;
     }
@@ -149,16 +166,18 @@ export class AwsCache implements RemoteCache {
   }
 
   private async uploadFile(hash: string, tgzFilePath: string): Promise<void> {
-    const tgzFileName = this.getTgzFileName(hash),
-      params: PutObjectRequest = {
-        Bucket: this.bucket,
-        Key: tgzFileName,
-        Body: createReadStream(tgzFilePath),
-      };
+    const tgzFileName = this.getTgzFileName(hash);
+    const params: PutObjectCommand = new PutObjectCommand({
+      Bucket: this.bucket,
+      Key: tgzFileName,
+      Body: createReadStream(tgzFilePath),
+    });
 
     try {
       this.logger.debug(`Storage Cache: Uploading ${hash}`);
-      await this.s3.upload(params).promise();
+
+      await this.s3.send(params);
+
       this.logger.debug(`Storage Cache: Stored ${hash}`);
     } catch (err) {
       throw new Error(`Storage Cache: Upload error - ${err}`);
@@ -169,15 +188,16 @@ export class AwsCache implements RemoteCache {
     const pipelinePromise = promisify(pipeline),
       tgzFileName = this.getTgzFileName(hash),
       writeFileToLocalDir = createWriteStream(tgzFilePath),
-      readAwsFile = this.s3
-        .getObject({
-          Bucket: this.bucket,
-          Key: tgzFileName,
-        })
-        .createReadStream();
+      params = new GetObjectCommand({
+        Bucket: this.bucket,
+        Key: tgzFileName,
+      });
 
     try {
-      await pipelinePromise(readAwsFile, writeFileToLocalDir);
+      const commandOutput = await this.s3.send(params);
+      const fileStream = commandOutput.Body as Readable;
+
+      await pipelinePromise(fileStream, writeFileToLocalDir);
     } catch (err) {
       throw new Error(`Storage Cache: Download error - ${err}`);
     }
@@ -185,17 +205,19 @@ export class AwsCache implements RemoteCache {
 
   private async checkIfCacheExists(hash: string): Promise<boolean> {
     const tgzFileName = this.getTgzFileName(hash),
-      params = {
+      params: HeadObjectCommand = new HeadObjectCommand({
         Bucket: this.bucket,
         Key: tgzFileName,
-      };
+      });
 
     try {
-      await this.s3.headObject(params).promise();
+      await this.s3.send(params);
 
       return true;
     } catch (err) {
-      if (err.code === 'NotFound') {
+      if ((err as Error).name === 'NotFound') {
+        return false;
+      } else if (err instanceof CredentialsProviderError) {
         return false;
       }
 

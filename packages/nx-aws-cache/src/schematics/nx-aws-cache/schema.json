@@ -4,16 +4,6 @@
   "title": "Add AWS S3 Cache configuration to NX workspace",
   "type": "object",
   "properties": {
-    "awsAccessKeyId": {
-      "type": "string",
-      "description": "AWS Access Key ID.",
-      "x-prompt": "AWS Access Key ID (optional - can be defined using Environment variables)"
-    },
-    "awsSecretAccessKey": {
-      "type": "string",
-      "description": "AWS Secret Access Key.",
-      "x-prompt": "AWS Secret Access Key (optional - can be defined using Environment variables)"
-    },
     "awsRegion": {
       "type": "string",
       "description": "AWS Region",

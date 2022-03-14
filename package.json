@@ -47,7 +47,8 @@
     "workspace-generator": "nx workspace-generator"
   },
   "dependencies": {
-    "aws-sdk": "2.771.0",
+    "@aws-sdk/client-s3": "3.54.0",
+    "@aws-sdk/credential-providers": "3.54.0",
     "dotenv": "8.2.0",
     "rxjs": "6.6.3",
     "tar": "6.0.5"
@@ -62,8 +63,8 @@
     "@types/jest": "26.0.8",
     "@types/node": "14.11.11",
     "@types/tar": "4.0.3",
-    "@typescript-eslint/eslint-plugin": "4.3.0",
-    "@typescript-eslint/parser": "4.3.0",
+    "@typescript-eslint/eslint-plugin": "4.16.0",
+    "@typescript-eslint/parser": "4.16.0",
     "eslint": "7.10.0",
     "eslint-config-prettier": "6.0.0",
     "eslint-plugin-import": "^2.22.1",
@@ -72,6 +73,6 @@
     "ts-jest": "26.4.0",
     "ts-node": "9.1.1",
     "tslint": "6.1.3",
-    "typescript": "4.0.3"
+    "typescript": "4.1.2"
   }
 }

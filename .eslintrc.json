@@ -50,6 +50,7 @@
         "sort-imports": "off",
         "sort-keys": "off",
         "sort-vars": "off",
+        "one-var": "off",
         "function-call-argument-newline": "off",
         "init-declarations": "off",
         "import/no-internal-modules": [
