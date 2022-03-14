@@ -20,9 +20,9 @@ jobs:
           main-branch-name: 'master'
       - uses: actions/setup-node@v2
       - run: yarn install --frozen-lockfile
-      - run: npx nx affected --target=build
-      - run: npx nx affected --target=lint
-      - run: npx nx affected --target=test
+      - run: yarn affected --target=build
+      - run: yarn affected --target=lint
+      - run: yarn affected --target=test
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
@@ -37,6 +37,6 @@ jobs:
           main-branch-name: 'master'
       - uses: actions/setup-node@v2
       - run: yarn install --frozen-lockfile
-      - run: npx nx affected --target=build
-      - run: npx nx affected --target=lint
-      - run: npx nx affected --target=test
+      - run: yarn affected --target=build
+      - run: yarn affected --target=lint
+      - run: yarn affected --target=test
