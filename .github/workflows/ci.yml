@@ -17,7 +17,7 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
         with:
-          main-branch-name: 'origin/master'
+          main-branch-name: 'master'
       - uses: actions/setup-node@v2
       - run: yarn install --frozen-lockfile
       - run: yarn affected --target=build
@@ -34,7 +34,7 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
         with:
-          main-branch-name: 'origin/master'
+          main-branch-name: 'master'
       - uses: actions/setup-node@v2
       - run: yarn install --frozen-lockfile
       - run: yarn affected --target=build
