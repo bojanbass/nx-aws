@@ -19,6 +19,8 @@ jobs:
         with:
           main-branch-name: 'master'
       - uses: actions/setup-node@v2
+        with:
+          node-version: '16'     
       - run: yarn install --frozen-lockfile
       - run: yarn affected --target=build
       - run: yarn affected --target=lint
@@ -37,7 +39,9 @@ jobs:
         with:
           main-branch-name: 'master'
       - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
       - run: yarn install --frozen-lockfile
-      - run: yarn affected --target=build --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
-      - run: yarn affected --target=lint --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
-      - run: yarn affected --target=test --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
+      - run: yarn affected:build --base=${{ steps.setSHAs.outputs.base }}  --head=${{ steps.setSHAs.outputs.head }}
+      - run: yarn affected:lint --base=${{ steps.setSHAs.outputs.base }}  --head=${{ steps.setSHAs.outputs.head }}
+      - run: yarn affected:test --base=${{ steps.setSHAs.outputs.base }}  --head=${{ steps.setSHAs.outputs.head }}
