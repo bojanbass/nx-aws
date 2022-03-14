@@ -46,6 +46,9 @@
     "help": "nx help",
     "workspace-generator": "nx workspace-generator"
   },
+  "peerDependencies": {
+    "@nrwl/workspace": ">=9.2.2"
+  },
   "dependencies": {
     "@aws-sdk/client-s3": "3.54.0",
     "@aws-sdk/credential-providers": "3.54.0",
