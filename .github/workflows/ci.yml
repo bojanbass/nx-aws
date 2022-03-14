@@ -18,13 +18,11 @@ jobs:
         uses: nrwl/nx-set-shas@v2
         with:
           main-branch-name: 'master'
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '14'
-      - run: npm install
-      - run: npx nx affected --target=build --parallel=3
-      - run: npx nx affected --target=lint --parallel=2
-      - run: npx nx affected --target=test --parallel=2
+      - uses: actions/setup-node@v2
+      - run: yarn install --frozen-lockfile
+      - run: npx nx affected --target=build
+      - run: npx nx affected --target=lint
+      - run: npx nx affected --target=test
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
@@ -37,10 +35,8 @@ jobs:
         uses: nrwl/nx-set-shas@v2
         with:
           main-branch-name: 'master'
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '14'
-      - run: npm install
-      - run: npx nx affected --target=build --parallel=3
-      - run: npx nx affected --target=lint --parallel=2
-      - run: npx nx affected --target=test --parallel=2
+      - uses: actions/setup-node@v2
+      - run: yarn install --frozen-lockfile
+      - run: npx nx affected --target=build
+      - run: npx nx affected --target=lint
+      - run: npx nx affected --target=test
