@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "NxAwsCache",
+  "$id": "NxAwsCache",
   "title": "Add AWS S3 Cache configuration to NX workspace",
   "type": "object",
   "properties": {
