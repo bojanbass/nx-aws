@@ -1,7 +1,6 @@
 {
-  "$schema": "../../node_modules/@angular-devkit/schematics/collection-schema.json",
   "name": "nx-aws-cache",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "schematics": {
     "init": {
       "factory": "./src/schematics/nx-aws-cache/schematic",
