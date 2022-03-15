@@ -25,6 +25,8 @@ jobs:
       - run: yarn affected --target=build
       - run: yarn affected --target=lint
       - run: yarn affected --target=test
+      - run: yarn affected --target=e2e
+  
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
@@ -42,9 +44,7 @@ jobs:
         with:
           node-version: '16'
       - run: yarn install --frozen-lockfile
-      - name: build
-        run: yarn affected:build
-      - name: lint
-        run: yarn affected:lint
-      - name: test
-        run: yarn affected:test
+      - run: yarn affected --target=build
+      - run: yarn affected --target=lint
+      - run: yarn affected --target=test
+      - run: yarn affected --target=e2e
