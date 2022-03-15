@@ -27,6 +27,7 @@
     "nx": "nx",
     "start": "nx serve",
     "build": "nx build",
+    "build:actions": "yarn tsc --project ./.github/actions/tsconfig.json",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
@@ -59,6 +60,8 @@
     "tar": "6.0.5"
   },
   "devDependencies": {
+    "@actions/core": "1.6.0",
+    "@actions/github": "5.0.0",
     "@nrwl/cli": "12.5.0",
     "@nrwl/eslint-plugin-nx": "12.5.0",
     "@nrwl/jest": "12.5.0",
