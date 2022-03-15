@@ -60,7 +60,7 @@ export const tasksRunner = (
       },
     });
 
-    return runnerWrapper.toPromise();
+    return runnerWrapper;
   } catch (err) {
     logger.warn((err as Error).message);
     logger.note('USING LOCAL CACHE');
