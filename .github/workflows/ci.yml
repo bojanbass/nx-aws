@@ -25,8 +25,7 @@ jobs:
       - run: yarn affected --target=build
       - run: yarn affected --target=lint
       - run: yarn affected --target=test
-      - run: yarn affected --target=e2e
-  
+
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
@@ -47,4 +46,3 @@ jobs:
       - run: yarn affected --target=build
       - run: yarn affected --target=lint
       - run: yarn affected --target=test
-      - run: yarn affected --target=e2e
