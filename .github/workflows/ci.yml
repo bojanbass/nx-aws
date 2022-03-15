@@ -42,6 +42,11 @@ jobs:
         with:
           node-version: '16'
       - run: yarn install --frozen-lockfile
-      - run: yarn affected:build --head="${{ steps.setSHAs.outputs.head }}" --base="${{ steps.setSHAs.outputs.base }}"
-      - run: yarn affected:lint --base="${{ steps.setSHAs.outputs.base }}" --head="${{ steps.setSHAs.outputs.head }}"
-      - run: yarn affected:test --base="${{ steps.setSHAs.outputs.base }}" --head="${{ steps.setSHAs.outputs.head }}"
+      - name: build
+        run: |
+          yarn affected:build --head=${{ steps.setSHAs.outputs.head }} \
+            --base=${{ steps.setSHAs.outputs.base }}
+      - name: lint
+        run: yarn affected:lint --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
+      - name: test
+        run: yarn affected:test --base="${{ steps.setSHAs.outputs.base }}" --head="${{ steps.setSHAs.outputs.head }}"
