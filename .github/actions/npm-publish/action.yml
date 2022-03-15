@@ -22,7 +22,7 @@ runs:
       working-directory: ${{ inputs.SRC_FOLDER }}
       env:
         VERSION: ${{ inputs.RELEASE_VERSION }}
-      run: yarn version --no-git-tag-version --new-version=$VERSION
+      run: npm version --no-git-tag-version --allow-same-version $VERSION
     - if: ${{ inputs.RELEASE_TYPE == 'release' }}
       working-directory: ${{ inputs.SRC_FOLDER }}
       shell: sh
