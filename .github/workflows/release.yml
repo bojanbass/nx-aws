@@ -35,7 +35,7 @@ jobs:
         run: yarn build nx-aws-cache
       - uses: ./.github/actions/npm-publish
         with:
-          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           RELEASE_VERSION: ${{ needs.repoMeta.outputs.tag-name }}
-          RELEASE_TYPE: ${{ needs.repoMeta.outputs.release-type }}   
+          RELEASE_TYPE: ${{ needs.repoMeta.outputs.release-type }}
           SRC_FOLDER: dist/packages/nx-aws-cache
