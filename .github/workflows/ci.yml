@@ -44,8 +44,7 @@ jobs:
       - run: yarn install --frozen-lockfile
       - name: build
         run: |
-          yarn affected:build --head=${{ steps.setSHAs.outputs.head }} \
-            --base=${{ steps.setSHAs.outputs.base }}
+          yarn affected:build --head=${{ steps.setSHAs.outputs.head }} --base=${{ steps.setSHAs.outputs.base }}
       - name: lint
         run: yarn affected:lint --base=${{ steps.setSHAs.outputs.base }} --head=${{ steps.setSHAs.outputs.head }}
       - name: test
