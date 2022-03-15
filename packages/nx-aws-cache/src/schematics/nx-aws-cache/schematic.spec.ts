@@ -9,10 +9,8 @@ describe('nx-aws-cache schematic', () => {
   let appTree: Tree;
 
   const options: NxAwsCacheSchematicSchema = {
-      awsAccessKeyId: 'test',
-      awsSecretAccessKey: 'test',
       awsRegion: 'eu-central-1',
-      awsBucket: 'bucket-name/cache-folder',
+      awsBucket: 'bucket-name',
     },
     testRunner = new SchematicTestRunner(
       '@nx-aws-plugin/nx-aws-cache',

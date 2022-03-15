@@ -28,7 +28,7 @@ This will make the necessary changes to nx.json in your workspace to use nx-aws-
 
 There are two ways to set-up AWS options:
 
-### Using nx.json file (NOT recommended)
+### Using nx.json
 
 ```json
 {
@@ -37,42 +37,44 @@ There are two ways to set-up AWS options:
     "runner": "@nx-aws-plugin/nx-aws-cache",
     "options": {
       ...
-      "awsAccessKeyId": "[secret]",
-      "awsSecretAccessKey": "[secret]",
       "awsRegion": "eu-central-1",
-      "awsBucket": "bucket-name/cache-folder"
+      "awsBucket": "bucket-name",
+      "awsProfile": "profile-1"
     }
   }
 }
 ```
 
-### Using environment variables (**recommended**)
-
-```bash
-NX_AWS_ACCESS_KEY_ID=[secret]
-NX_AWS_SECRET_ACCESS_KEY=[secret]
-NX_AWS_REGION=eu-central-1
-NX_AWS_BUCKET=bucket-name/cache-folder
-```
-
-Additionally, AWS authentication can be set-up using default environment variables or using shared credentials, based on [AWS documentation](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html)
-
 ### Using environment variables
 
 ```bash
-AWS_ACCESS_KEY_ID=[secret]
-AWS_SECRET_ACCESS_KEY=[secret]
+NX_AWS_REGION=eu-central-1
+NX_AWS_BUCKET=bucket-name
+NX_AWS_PROFILE=profile-1
 ```
-
-### Using shared credentials file (`~/.aws/credentials`)
-
-```
-[default]
-aws_access_key_id = [secret]
-aws_secret_access_key = [secret]
-```
-
 > Environment variables can be set using `.env` file - check [dotenv documentation](https://www.npmjs.com/package/dotenv).
+
+## Authentication
+
+### Default
+
+AWS authentication can be set-up using default environment variables or using shared credentials, based on [AWS documentation](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/setting-credentials-node.html). 
+
+### SSO login
+
+To authenticate with SSO via CLI run
+
+`aws sso login`
+
+AWS SDK v3 is used under the hood with a support for [SSO login](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html).
+
+### Custom environment variables
+
+Custom environment variables can be set for an alternate way of authentication
+```bash
+NX_AWS_ACCESS_KEY_ID=[secret]
+NX_AWS_SECRET_ACCESS_KEY=[secret]
+```
 
 ## Build
 

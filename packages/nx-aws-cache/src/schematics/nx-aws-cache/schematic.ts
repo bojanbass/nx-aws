@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Rule } from '@angular-devkit/schematics';
 import { updateJsonFile } from '@nrwl/workspace';
 import { execSync } from 'child_process';
@@ -17,17 +18,19 @@ function isCompatibleVersion() {
     version = version.substr(1);
   }
 
-  const [major, minor] = version.split('.'),
-    majorNumber = Number.parseInt(major, 10);
+  const [major, minor] = version.split('.');
+  const majorNumber = Number.parseInt(major, 10);
 
   if (isNaN(majorNumber)) {
     return true;
   }
 
+  // eslint-disable-next-line no-magic-numbers
   if (majorNumber >= 9) {
     return true;
   }
 
+  // eslint-disable-next-line no-magic-numbers
   if (Number.parseInt(minor, 10) >= 12) {
     return true;
   }
@@ -69,8 +72,6 @@ function updateNxJson(ops: NxAwsCacheSchematicSchema) {
       default: {
         runner: '@nx-aws-plugin/nx-aws-cache',
         options: {
-          ...(ops.awsAccessKeyId ? { awsAccessKeyId: ops.awsAccessKeyId } : {}),
-          ...(ops.awsSecretAccessKey ? { awsSecretAccessKey: ops.awsSecretAccessKey } : {}),
           ...(ops.awsBucket ? { awsBucket: ops.awsBucket } : {}),
           ...(ops.awsRegion ? { awsRegion: ops.awsRegion } : {}),
           cacheableOperations: ['build', 'test', 'lint', 'e2e'],
@@ -80,8 +81,9 @@ function updateNxJson(ops: NxAwsCacheSchematicSchema) {
   });
 }
 
+// eslint-disable-next-line func-names
 export default function (options: NxAwsCacheSchematicSchema): Rule {
-  return async () => {
+  return () => {
     if (!isCompatibleVersion()) {
       updateWorkspacePackage();
     }

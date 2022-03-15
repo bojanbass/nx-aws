@@ -1,9 +1,7 @@
-import { AWSError } from 'aws-sdk';
-
 import { Logger } from './logger';
 
 export class MessageReporter {
-  public error: Error | AWSError | null = null;
+  public error: Error | null = null;
 
   private logger: Logger;
 
