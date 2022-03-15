@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Populate metadata
         id: repo-meta
-        uses: .github/actions/get-metadata
+        uses: ./.github/actions/get-metadata
 
   publish:
     if: ${{ needs.repoMeta.outputs.release-type }}
@@ -29,7 +29,7 @@ jobs:
         uses: ./.github/actions/npm-setup
       - name: Build package
         run: yarn build nx-aws-cache
-      - uses: .github/actions/npm-publish
+      - uses: ./.github/actions/npm-publish
         with:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           RELEASE_VERSION: ${{ needs.repoMeta.outputs.tag-name }}
