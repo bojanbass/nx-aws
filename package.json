@@ -1,6 +1,6 @@
 {
   "name": "nx-aws",
-  "version": "0.0.0",
+  "version": "1.1.1",
   "license": "MIT",
   "author": "Bojan Bratuz",
   "keywords": [
@@ -47,9 +47,9 @@
     "workspace-generator": "nx workspace-generator"
   },
   "peerDependencies": {
-    "@nrwl/workspace": ">=9.2.2",
     "@angular-devkit/core": ">=11.0.1",
-    "@angular-devkit/schematics": ">=11.0.1"
+    "@angular-devkit/schematics": ">=11.0.1",
+    "@nrwl/workspace": ">=9.2.2"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.54.0",
