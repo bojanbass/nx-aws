@@ -27,6 +27,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ needs.repoMeta.outputs.release-type }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Setup NodeJS and NPM modules
         uses: ./.github/actions/npm-setup
       - name: Build package
