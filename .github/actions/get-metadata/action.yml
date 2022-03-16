@@ -1,0 +1,10 @@
+name: 'get-event-information'
+description: 'Generating information used to create and publish images'
+outputs:
+  tag-name:
+    description: 'Tag name/version of the image'
+  release-type:
+    description: 'Release or prerelease'
+runs:
+  using: 'node16'
+  main: 'index.js'

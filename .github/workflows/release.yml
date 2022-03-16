@@ -1,0 +1,41 @@
+name: NPM Release
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  repoMeta:
+    name: Prepare workflow
+    runs-on: ubuntu-latest
+    outputs:
+      release-type: ${{ steps.repo-meta.outputs.release-type }}
+      tag-name: ${{ steps.repo-meta.outputs.tag-name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup NodeJS and NPM modules
+        uses: ./.github/actions/npm-setup
+      - name: Populate metadata
+        id: repo-meta
+        uses: ./.github/actions/get-metadata
+
+  publish:
+    if: ${{ needs.repoMeta.outputs.release-type }}
+    needs: [repoMeta]
+    name: Build and release package
+    runs-on: ubuntu-latest
+    environment: ${{ needs.repoMeta.outputs.release-type }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup NodeJS and NPM modules
+        uses: ./.github/actions/npm-setup
+      - name: Build package
+        run: yarn build nx-aws-cache
+      - uses: ./.github/actions/npm-publish
+        with:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          RELEASE_VERSION: ${{ needs.repoMeta.outputs.tag-name }}
+          RELEASE_TYPE: ${{ needs.repoMeta.outputs.release-type }}
+          SRC_FOLDER: dist/packages/nx-aws-cache

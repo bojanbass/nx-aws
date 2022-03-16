@@ -18,10 +18,8 @@ jobs:
         uses: nrwl/nx-set-shas@v2
         with:
           main-branch-name: 'master'
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - run: yarn install --frozen-lockfile
+      - name: Setup NodeJS and NPM modules
+        uses: ./.github/actions/npm-setup
       - run: yarn affected --target=build
       - run: yarn affected --target=lint
       - run: yarn affected --target=test
@@ -39,10 +37,8 @@ jobs:
         uses: nrwl/nx-set-shas@v2
         with:
           main-branch-name: 'master'
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - run: yarn install --frozen-lockfile
+      - name: Setup NodeJS and NPM modules
+        uses: ./.github/actions/npm-setup
       - run: yarn affected --target=build
       - run: yarn affected --target=lint
       - run: yarn affected --target=test
