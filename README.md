@@ -54,6 +54,13 @@ NX_AWS_PROFILE=profile-1
 ```
 > Environment variables can be set using `.env` file - check [dotenv documentation](https://www.npmjs.com/package/dotenv).
 
+## Disabling S3 cache
+
+Remote cache can be disabled in favor of local cache only using an environment variable
+```bash
+NX_AWS_DISABLE=true
+```
+
 ## Authentication
 
 ### Default
