@@ -61,6 +61,10 @@ export const tasksRunner = (
       },
     });
 
+    if (typeof runner$?.subscribe === 'function') {
+      return runnerWrapper;
+    }
+
     return runnerWrapper.toPromise();
   } catch (err) {
     logger.warn((err as Error).message);
