@@ -20,12 +20,13 @@ function getOptions(options: AwsNxCacheOptions) {
   };
 }
 
+// eslint-disable-next-line max-lines-per-function
 export const tasksRunner = (
   tasks: Parameters<typeof defaultTaskRunner>[0],
   options: Parameters<typeof defaultTaskRunner>[1] & AwsNxCacheOptions,
   // eslint-disable-next-line no-magic-numbers
   context: Parameters<typeof defaultTaskRunner>[2],
-): ReturnType<typeof defaultTaskRunner> => {
+) => {
   const awsOptions: AwsNxCacheOptions = getOptions(options);
   const logger = new Logger();
 
@@ -60,7 +61,7 @@ export const tasksRunner = (
       },
     });
 
-    return runnerWrapper;
+    return runnerWrapper.toPromise();
   } catch (err) {
     logger.warn((err as Error).message);
     logger.note('USING LOCAL CACHE');
