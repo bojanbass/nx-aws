@@ -17,6 +17,7 @@ function getOptions(options: AwsNxCacheOptions) {
     awsRegion: options.awsRegion ?? process.env.NX_AWS_REGION,
     awsSecretAccessKey: process.env.NX_AWS_SECRET_ACCESS_KEY,
     awsProfile: options.awsProfile ?? process.env.NX_AWS_PROFILE,
+    awsEndpoint: options.awsProfile ?? process.env.NX_AWS_ENDPOINT,
   };
 }
 
