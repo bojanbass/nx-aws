@@ -35,6 +35,10 @@ export class AwsCache implements RemoteCache {
       clientConfig.region = options.awsRegion;
     }
 
+    if (options.awsEndpoint) {
+      clientConfig.endpoint = options.awsEndpoint
+    }
+
     if (options.awsAccessKeyId && options.awsSecretAccessKey) {
       clientConfig.credentials = {
         accessKeyId: options.awsAccessKeyId,

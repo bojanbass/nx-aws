@@ -39,7 +39,8 @@ There are two ways to set-up AWS options:
       ...
       "awsRegion": "eu-central-1",
       "awsBucket": "bucket-name",
-      "awsProfile": "profile-1"
+      "awsProfile": "profile-1",
+      "awsEndpoint": "custom.de-eu.myhost.com",
     }
   }
 }
@@ -51,6 +52,7 @@ There are two ways to set-up AWS options:
 NX_AWS_REGION=eu-central-1
 NX_AWS_BUCKET=bucket-name
 NX_AWS_PROFILE=profile-1
+NX_AWS_ENDPOINT=[URL] # default s3.[region].amazonaws.com
 ```
 > Environment variables can be set using `.env` file - check [dotenv documentation](https://www.npmjs.com/package/dotenv).
 
