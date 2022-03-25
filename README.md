@@ -40,7 +40,7 @@ There are two ways to set-up AWS options:
       "awsRegion": "eu-central-1",
       "awsBucket": "bucket-name",
       "awsProfile": "profile-1",
-      "awsEndpoint": "custom.de-eu.myhost.com",
+      "awsEndpoint": "http://custom.de-eu.myhost.com",
     }
   }
 }
