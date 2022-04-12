@@ -57,7 +57,7 @@
     "@aws-sdk/credential-providers": "3.54.0",
     "dotenv": "8.2.0",
     "rxjs": "6.6.3",
-    "tar": "6.0.5"
+    "tar": "6.1.9"
   },
   "devDependencies": {
     "@actions/core": "1.6.0",
