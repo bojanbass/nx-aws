@@ -16,19 +16,11 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
+      "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "test", "lint", "e2e"]
+        "cacheableOperations": ["build", "test", "lint", "e2e"],
+        "parallel": 1
       }
-    }
-  },
-  "projects": {
-    "nx-aws-cache": {
-      "tags": []
-    },
-    "nx-aws-cache-e2e": {
-      "tags": [],
-      "implicitDependencies": ["nx-aws-cache"]
     }
   },
   "workspaceLayout": {
@@ -42,5 +34,9 @@
         "projects": "dependencies"
       }
     ]
-  }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/workspace"
+  },
+  "defaultProject": "nx-aws-cache"
 }
