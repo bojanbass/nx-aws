@@ -2,7 +2,7 @@ import { config as dotEnvConfig } from 'dotenv';
 dotEnvConfig();
 
 import defaultTaskRunner from '@nrwl/workspace/tasks-runners/default';
-import { AffectedEvent } from '@nrwl/workspace/src/tasks-runner/tasks-runner';
+import { AffectedEvent, TaskStatus } from '@nrwl/workspace/src/tasks-runner/tasks-runner';
 import { from, Subject } from 'rxjs';
 
 import { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
@@ -42,7 +42,7 @@ export const tasksRunner = (
 
     const messages = new MessageReporter(logger);
     const remoteCache = new AwsCache(awsOptions, messages);
-    const runnerWrapper = new Subject<AffectedEvent>(),
+    const runnerWrapper = new Subject<AffectedEvent | { [id: string]: TaskStatus; }>(),
       runner$ = defaultTaskRunner(
         tasks,
         {
@@ -62,7 +62,7 @@ export const tasksRunner = (
       },
     });
 
-    if (typeof runner$?.subscribe === 'function') {
+    if (typeof (runner$ as Subject<AffectedEvent>)?.subscribe === 'function') {
       return runnerWrapper;
     }
 

@@ -3,13 +3,7 @@ import { join } from 'path';
 import { pipeline, Readable } from 'stream';
 import { promisify } from 'util';
 
-import {
-  S3Client,
-  GetObjectCommand,
-  PutObjectCommand,
-  HeadObjectCommand,
-  S3ClientConfig,
-} from '@aws-sdk/client-s3';
+import * as clientS3 from '@aws-sdk/client-s3';
 import { fromIni } from '@aws-sdk/credential-provider-ini';
 import { fromEnv, ENV_KEY, ENV_SECRET } from '@aws-sdk/credential-provider-env';
 import { CredentialsProviderError } from '@aws-sdk/property-provider';
@@ -22,14 +16,14 @@ import { MessageReporter } from './message-reporter';
 
 export class AwsCache implements RemoteCache {
   private readonly bucket: string;
-  private readonly s3: S3Client;
+  private readonly s3: clientS3.S3Client;
   private readonly logger = new Logger();
   private uploadQueue: Array<Promise<boolean>> = [];
 
   public constructor(options: AwsNxCacheOptions, private messages: MessageReporter) {
     this.bucket = options.awsBucket as string;
 
-    const clientConfig: S3ClientConfig = {};
+    const clientConfig: clientS3.S3ClientConfig = {};
 
     if (options.awsRegion) {
       clientConfig.region = options.awsRegion;
@@ -52,7 +46,7 @@ export class AwsCache implements RemoteCache {
       });
     }
 
-    this.s3 = new S3Client(clientConfig);
+    this.s3 = new clientS3.S3Client(clientConfig);
   }
 
   public checkConfig(options: AwsNxCacheOptions): void {
@@ -171,7 +165,7 @@ export class AwsCache implements RemoteCache {
 
   private async uploadFile(hash: string, tgzFilePath: string): Promise<void> {
     const tgzFileName = this.getTgzFileName(hash);
-    const params: PutObjectCommand = new PutObjectCommand({
+    const params: clientS3.PutObjectCommand = new clientS3.PutObjectCommand({
       Bucket: this.bucket,
       Key: tgzFileName,
       Body: createReadStream(tgzFilePath),
@@ -192,7 +186,7 @@ export class AwsCache implements RemoteCache {
     const pipelinePromise = promisify(pipeline),
       tgzFileName = this.getTgzFileName(hash),
       writeFileToLocalDir = createWriteStream(tgzFilePath),
-      params = new GetObjectCommand({
+      params = new clientS3.GetObjectCommand({
         Bucket: this.bucket,
         Key: tgzFileName,
       });
@@ -209,7 +203,7 @@ export class AwsCache implements RemoteCache {
 
   private async checkIfCacheExists(hash: string): Promise<boolean> {
     const tgzFileName = this.getTgzFileName(hash),
-      params: HeadObjectCommand = new HeadObjectCommand({
+      params: clientS3.HeadObjectCommand = new clientS3.HeadObjectCommand({
         Bucket: this.bucket,
         Key: tgzFileName,
       });
