@@ -44,7 +44,8 @@
           },
           "outputs": ["{options.outputPath}"]
         }
-      }
+      },
+      "tags": []
     },
     "nx-aws-cache-e2e": {
       "projectType": "application",
@@ -60,10 +61,9 @@
             "jestConfig": "e2e/nx-aws-cache-e2e/jest.config.js"
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["nx-aws-cache"]
     }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/workspace"
   }
 }
