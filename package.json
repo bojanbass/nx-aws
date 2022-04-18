@@ -71,7 +71,7 @@
     "@nrwl/nx-plugin": "13.10.2",
     "@nrwl/workspace": "13.10.2",
     "@types/jest": "27.0.2",
-    "@types/node": "14.14.33",
+    "@types/node": "17.0.25",
     "@types/tar": "4.0.3",
     "@typescript-eslint/eslint-plugin": "5.18.0",
     "@typescript-eslint/parser": "5.18.0",
