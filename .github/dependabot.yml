@@ -10,5 +10,22 @@ updates:
     ignore:
       # @nrwl deps should always be updated by running `npx nx migrate @nrwl/workspace`
       - dependency-name: '@nrwl/*'
+      - dependency-name: 'nx'
+      # NX managed packages should not be updated manually
+      - dependency-name: '@types/jest'
+      - dependency-name: '@types/node'
+
+      - dependency-name: '@typescript-eslint/eslint-plugin'
+      - dependency-name: '@typescript-eslint/parser'
+      - dependency-name: 'eslint'
+      - dependency-name: 'eslint-config-prettier'
+      - dependency-name: 'eslint-plugin-import'
+      - dependency-name: 'jest'
+      - dependency-name: 'prettier'
+      - dependency-name: 'ts-jest'
+      - dependency-name: 'ts-node'
+      - dependency-name: 'tslib'
+      - dependency-name: 'ts-node'
+      - dependency-name: 'typescript'
     schedule:
       interval: 'daily'
