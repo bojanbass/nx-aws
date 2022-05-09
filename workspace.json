@@ -16,7 +16,7 @@
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "packages/nx-aws-cache/jest.config.js",
+            "jestConfig": "packages/nx-aws-cache/jest.config.ts",
             "passWithNoTests": true
           },
           "outputs": ["coverage/packages/nx-aws-cache"]

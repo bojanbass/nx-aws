@@ -30,7 +30,7 @@ export class AwsCache implements RemoteCache {
     }
 
     if (options.awsEndpoint) {
-      clientConfig.endpoint = options.awsEndpoint
+      clientConfig.endpoint = options.awsEndpoint;
     }
 
     if (options.awsAccessKeyId && options.awsSecretAccessKey) {

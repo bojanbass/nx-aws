@@ -42,7 +42,7 @@ export const tasksRunner = (
 
     const messages = new MessageReporter(logger);
     const remoteCache = new AwsCache(awsOptions, messages);
-    const runnerWrapper = new Subject<AffectedEvent | { [id: string]: TaskStatus; }>(),
+    const runnerWrapper = new Subject<AffectedEvent | { [id: string]: TaskStatus }>(),
       runner$ = defaultTaskRunner(
         tasks,
         {

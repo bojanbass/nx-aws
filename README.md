@@ -54,11 +54,13 @@ NX_AWS_BUCKET=bucket-name
 NX_AWS_PROFILE=profile-1
 NX_AWS_ENDPOINT=[URL] # default s3.[region].amazonaws.com
 ```
+
 > Environment variables can be set using `.env` file - check [dotenv documentation](https://www.npmjs.com/package/dotenv).
 
 ## Disabling S3 cache
 
 Remote cache can be disabled in favor of local cache only using an environment variable
+
 ```bash
 NX_AWS_DISABLE=true
 ```
@@ -67,7 +69,7 @@ NX_AWS_DISABLE=true
 
 ### Default
 
-AWS authentication can be set-up using default environment variables or using shared credentials, based on [AWS documentation](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/setting-credentials-node.html). 
+AWS authentication can be set-up using default environment variables or using shared credentials, based on [AWS documentation](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/setting-credentials-node.html).
 
 ### SSO login
 
@@ -80,6 +82,7 @@ AWS SDK v3 is used under the hood with a support for [SSO login](https://docs.aw
 ### Custom environment variables
 
 Custom environment variables can be set for an alternate way of authentication
+
 ```bash
 NX_AWS_ACCESS_KEY_ID=[secret]
 NX_AWS_SECRET_ACCESS_KEY=[secret]
@@ -103,4 +106,4 @@ Run `yarn nx affected:e2e` to execute the end-to-end tests affected by a change.
 
 ## Credits
 
-This repository is based on a similar NX plugin using Azure Storage [@nx-azure/storage-cache](https://github.com/microsoft/nx-azure) which was inspired by Nx Cloud Plugin by [Nrwl](https://github.com/nrwl/nx). 
+This repository is based on a similar NX plugin using Azure Storage [@nx-azure/storage-cache](https://github.com/microsoft/nx-azure) which was inspired by Nx Cloud Plugin by [Nrwl](https://github.com/nrwl/nx).

@@ -10,16 +10,17 @@
       "devDependencies": "*"
     },
     "tsconfig.base.json": "*",
-    "tslint.json": "*",
+
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
         "cacheableOperations": ["build", "test", "lint", "e2e"],
-        "parallel": 1
+        "parallel": 1,
+        "accessToken": "NGIxYzhjYjMtYTBjNC00MDk3LTg0NGMtZDZhNDliZTc3MTMzfHJlYWQtd3JpdGU="
       }
     }
   },
