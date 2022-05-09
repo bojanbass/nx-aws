@@ -14,7 +14,6 @@ updates:
       # NX managed packages should not be updated manually
       - dependency-name: '@types/jest'
       - dependency-name: '@types/node'
-
       - dependency-name: '@typescript-eslint/eslint-plugin'
       - dependency-name: '@typescript-eslint/parser'
       - dependency-name: 'eslint'
@@ -25,7 +24,6 @@ updates:
       - dependency-name: 'ts-jest'
       - dependency-name: 'ts-node'
       - dependency-name: 'tslib'
-      - dependency-name: 'ts-node'
       - dependency-name: 'typescript'
     schedule:
       interval: 'daily'
