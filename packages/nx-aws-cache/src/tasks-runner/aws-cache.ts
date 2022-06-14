@@ -38,7 +38,9 @@ export class AwsCache implements RemoteCache {
         secretAccessKey: options.awsSecretAccessKey,
       };
     } else {
-      clientConfig.credentials = fromNodeProviderChain(options.awsProfile ? { profile: options.awsProfile } : {});
+      clientConfig.credentials = fromNodeProviderChain(
+        options.awsProfile ? { profile: options.awsProfile } : {},
+      );
     }
 
     this.s3 = new clientS3.S3Client(clientConfig);
