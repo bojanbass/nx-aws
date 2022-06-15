@@ -4,8 +4,7 @@ import { pipeline, Readable } from 'stream';
 import { promisify } from 'util';
 
 import * as clientS3 from '@aws-sdk/client-s3';
-import { fromIni } from '@aws-sdk/credential-provider-ini';
-import { fromEnv, ENV_KEY, ENV_SECRET } from '@aws-sdk/credential-provider-env';
+import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
 import { CredentialsProviderError } from '@aws-sdk/property-provider';
 import { RemoteCache } from '@nrwl/workspace/src/tasks-runner/default-tasks-runner';
 import { create, extract } from 'tar';
@@ -38,12 +37,10 @@ export class AwsCache implements RemoteCache {
         accessKeyId: options.awsAccessKeyId,
         secretAccessKey: options.awsSecretAccessKey,
       };
-    } else if (process.env[ENV_KEY] && process.env[ENV_SECRET]) {
-      clientConfig.credentials = fromEnv();
     } else {
-      clientConfig.credentials = fromIni({
-        ...(options.awsProfile ? { profile: options.awsProfile } : {}),
-      });
+      clientConfig.credentials = fromNodeProviderChain(
+        options.awsProfile ? { profile: options.awsProfile } : {},
+      );
     }
 
     this.s3 = new clientS3.S3Client(clientConfig);
