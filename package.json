@@ -57,7 +57,7 @@
     "@aws-sdk/client-s3": "3.142.0",
     "@aws-sdk/credential-providers": "3.142.0",
     "dotenv": "16.0.1",
-    "rxjs": "6.6.3",
+    "rxjs": "7.5.7",
     "tar": "6.1.11"
   },
   "devDependencies": {
