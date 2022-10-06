@@ -63,7 +63,7 @@
   "devDependencies": {
     "@actions/core": "1.9.0",
     "@actions/github": "5.0.3",
-    "@angular-devkit/architect": "0.1303.3",
+    "@angular-devkit/architect": "0.1402.5",
     "@angular-devkit/schematics": "13.3.3",
     "@nrwl/cli": "14.1.4",
     "@nrwl/eslint-plugin-nx": "14.1.4",
