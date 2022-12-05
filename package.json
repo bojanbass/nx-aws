@@ -54,7 +54,7 @@
     "@nrwl/workspace": ">=9.2.2"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.142.0",
+    "@aws-sdk/client-s3": "3.223.0",
     "@aws-sdk/credential-providers": "3.142.0",
     "dotenv": "16.0.1",
     "rxjs": "6.6.3",
