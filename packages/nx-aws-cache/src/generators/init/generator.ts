@@ -6,7 +6,7 @@ import { InitGeneratorSchema } from './schema';
 
 function isCompatibleVersion() {
   const json = JSON.parse(readFileSync('package.json').toString());
-  let version = json.dependencies['@nrwl/workspace'] || json.devDependencies['@nrwl/workspace'];
+  let version = json.dependencies?.['@nrwl/workspace'] ?? json.devDependencies?.['@nrwl/workspace'];
 
   if (!version) {
     throw new Error(`You must use Nx >= 8.0 to enable Storage Cache`);
