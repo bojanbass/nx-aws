@@ -35,9 +35,6 @@
       }
     ]
   },
-  "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  },
   "defaultProject": "nx-aws-cache",
   "$schema": "./node_modules/nx/schemas/nx-schema.json"
 }
