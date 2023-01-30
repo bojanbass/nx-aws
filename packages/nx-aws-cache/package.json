@@ -21,5 +21,10 @@
     "type": "git",
     "url": "https://github.com/bojanbass/nx-aws"
   },
-  "homepage": "https://github.com/bojanbass/nx-aws"
+  "homepage": "https://github.com/bojanbass/nx-aws",
+  "peerDependencies": {
+    "@nrwl/workspace": ">=14.0.0",
+    "@nrwl/devkit": ">=14.0.0",
+    "nx": ">=14.0.0"
+  }
 }
