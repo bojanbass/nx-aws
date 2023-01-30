@@ -1,47 +1,66 @@
 {
+  "name": "nx-aws-cache",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/nx-aws-cache/src",
   "projectType": "library",
-  "generators": {},
   "targets": {
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["packages/nx-aws-cache/**/*.ts"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "options": {
-        "jestConfig": "packages/nx-aws-cache/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "outputs": ["{workspaceRoot}/coverage/packages/nx-aws-cache"]
-    },
     "build": {
       "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/nx-aws-cache",
-        "tsConfig": "packages/nx-aws-cache/tsconfig.lib.json",
-        "packageJson": "packages/nx-aws-cache/package.json",
         "main": "packages/nx-aws-cache/src/index.ts",
-        "updateBuildableProjectDepsInPackageJson": true,
-        "buildableProjectDepsInPackageJsonType": "dependencies",
+        "tsConfig": "packages/nx-aws-cache/tsconfig.lib.json",
         "assets": [
-          "README.md",
+          "packages/nx-aws-cache/*.md",
           {
             "input": "./packages/nx-aws-cache/src",
-            "glob": "**/*.!(ts)",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./packages/nx-aws-cache/src",
+            "glob": "**/*.d.ts",
             "output": "./src"
           },
           {
             "input": "./packages/nx-aws-cache",
-            "glob": "collection.json",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./packages/nx-aws-cache",
+            "glob": "executors.json",
             "output": "."
           }
         ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/nx-aws-cache/**/*.ts",
+          "packages/nx-aws-cache/generators.json",
+          "packages/nx-aws-cache/executors.json",
+          "packages/nx-aws-cache/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/nx-aws-cache/jest.config.ts",
+        "passWithNoTests": true
       },
-      "outputs": ["{options.outputPath}"]
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
     }
   },
   "tags": []

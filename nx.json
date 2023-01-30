@@ -17,7 +17,6 @@
     "appsDir": "e2e",
     "libsDir": "packages"
   },
-  "defaultProject": "nx-aws-cache",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
@@ -41,5 +40,6 @@
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/jest.config.[jt]s"
     ]
-  }
+  },
+  "defaultProject": "nx-aws-cache"
 }

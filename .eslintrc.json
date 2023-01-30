@@ -56,7 +56,7 @@
         "import/no-internal-modules": [
           "error",
           {
-            "allow": ["@nrwl/workspace/**", "@angular-devkit/**", "@nrwl/devkit/**"]
+            "allow": ["@nrwl/workspace/**", "@nrwl/devkit/**"]
           }
         ],
         "import/no-unresolved": "off"
@@ -73,6 +73,11 @@
     {
       "files": ["*.js", "*.jsx"],
       "extends": ["plugin:@nrwl/nx/javascript"],
+      "rules": {}
+    },
+    {
+      "files": "*.json",
+      "parser": "jsonc-eslint-parser",
       "rules": {}
     }
   ]

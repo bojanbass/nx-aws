@@ -1,7 +1,8 @@
-import { installPackagesTask, logger, Tree, updateJson } from '@nrwl/devkit';
-import { execSync } from 'child_process';
-import { readFileSync, statSync } from 'fs';
-import { NxAwsCacheSchematicSchema } from './schema';
+import { formatFiles, logger, Tree, updateJson } from '@nrwl/devkit';
+import { execSync } from 'node:child_process';
+import { readFileSync, statSync } from 'node:fs';
+
+import { InitGeneratorSchema } from './schema';
 
 function isCompatibleVersion() {
   const json = JSON.parse(readFileSync('package.json').toString());
@@ -63,14 +64,14 @@ function updateWorkspacePackage() {
   }
 }
 
-function updateNxJson(tree: Tree, ops: NxAwsCacheSchematicSchema): void {
+function updateNxJson(tree: Tree, options: InitGeneratorSchema): void {
   updateJson(tree, 'nx.json', (jsonContent) => {
     jsonContent.tasksRunnerOptions = {
       default: {
         runner: '@nx-aws-plugin/nx-aws-cache',
         options: {
-          ...(ops.awsBucket ? { awsBucket: ops.awsBucket } : {}),
-          ...(ops.awsRegion ? { awsRegion: ops.awsRegion } : {}),
+          ...(options.awsBucket ? { awsBucket: options.awsBucket } : {}),
+          ...(options.awsRegion ? { awsRegion: options.awsRegion } : {}),
           cacheableOperations: ['build', 'test', 'lint', 'e2e'],
         },
       },
@@ -81,14 +82,12 @@ function updateNxJson(tree: Tree, ops: NxAwsCacheSchematicSchema): void {
 }
 
 // eslint-disable-next-line func-names
-export default function (tree: Tree, options: NxAwsCacheSchematicSchema): () => void {
+export default async function (tree: Tree, options: InitGeneratorSchema) {
   if (!isCompatibleVersion()) {
     updateWorkspacePackage();
   }
 
   updateNxJson(tree, options);
 
-  return () => {
-    installPackagesTask(tree);
-  };
+  await formatFiles(tree);
 }

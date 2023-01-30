@@ -1,15 +1,15 @@
 /* eslint-disable */
 export default {
   displayName: 'nx-aws-cache',
-
+  preset: '../../jest.preset.js',
   globals: {
-    'ts-jest': { tsconfig: '<rootDir>/tsconfig.spec.json' },
+    'ts-jest': {
+      tsconfig: '<rootDir>/tsconfig.spec.json',
+    },
   },
   transform: {
-    '^.+\\.[tj]sx?$': 'ts-jest',
+    '^.+\\.[tj]s$': 'ts-jest',
   },
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
+  moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/packages/nx-aws-cache',
-  testEnvironment: 'node',
-  preset: '../../jest.preset.js',
 };

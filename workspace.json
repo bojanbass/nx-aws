@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "projects": {
     "nx-aws-cache": "packages/nx-aws-cache",
     "nx-aws-cache-e2e": "e2e/nx-aws-cache-e2e"
