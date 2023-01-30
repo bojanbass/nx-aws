@@ -12,7 +12,7 @@
         "main": "packages/nx-aws-cache/src/index.ts",
         "tsConfig": "packages/nx-aws-cache/tsconfig.lib.json",
         "assets": [
-          "packages/nx-aws-cache/*.md",
+          "README.md",
           {
             "input": "./packages/nx-aws-cache/src",
             "glob": "**/!(*.ts)",
@@ -26,11 +26,6 @@
           {
             "input": "./packages/nx-aws-cache",
             "glob": "generators.json",
-            "output": "."
-          },
-          {
-            "input": "./packages/nx-aws-cache",
-            "glob": "executors.json",
             "output": "."
           }
         ]
