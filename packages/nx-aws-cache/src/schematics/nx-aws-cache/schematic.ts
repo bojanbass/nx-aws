@@ -1,9 +1,6 @@
-/* eslint-disable no-console */
-import { Rule } from '@angular-devkit/schematics';
-import { updateJsonFile } from '@nrwl/workspace';
+import { installPackagesTask, logger, Tree, updateJson } from '@nrwl/devkit';
 import { execSync } from 'child_process';
 import { readFileSync, statSync } from 'fs';
-import { noop } from 'rxjs';
 import { NxAwsCacheSchematicSchema } from './schema';
 
 function isCompatibleVersion() {
@@ -47,18 +44,18 @@ function isYarn() {
 }
 
 function updateWorkspacePackage() {
-  console.log(
+  logger.log(
     `Updating @nrwl/workspace to 8.12.10 to make the workspace compatible with Storage Cache.`,
   );
 
   if (isYarn()) {
-    console.log(`yarn add --dev @nrwl/workspace@8.12.10`);
+    logger.log(`yarn add --dev @nrwl/workspace@8.12.10`);
 
     execSync(`yarn add --dev @nrwl/workspace@8.12.10`, {
       stdio: ['inherit', 'inherit', 'inherit'],
     });
   } else {
-    console.log(`npm i --save-dev @nrwl/workspace@8.12.10`);
+    logger.log(`npm i --save-dev @nrwl/workspace@8.12.10`);
 
     execSync(`npm i --save-dev @nrwl/workspace@8.12.10`, {
       stdio: ['inherit', 'inherit', 'inherit'],
@@ -66,9 +63,9 @@ function updateWorkspacePackage() {
   }
 }
 
-function updateNxJson(ops: NxAwsCacheSchematicSchema) {
-  updateJsonFile('nx.json', (json) => {
-    json.tasksRunnerOptions = {
+function updateNxJson(tree: Tree, ops: NxAwsCacheSchematicSchema): void {
+  updateJson(tree, 'nx.json', (jsonContent) => {
+    jsonContent.tasksRunnerOptions = {
       default: {
         runner: '@nx-aws-plugin/nx-aws-cache',
         options: {
@@ -78,17 +75,20 @@ function updateNxJson(ops: NxAwsCacheSchematicSchema) {
         },
       },
     };
+
+    return jsonContent;
   });
 }
 
 // eslint-disable-next-line func-names
-export default function (options: NxAwsCacheSchematicSchema): Rule {
-  return () => {
-    if (!isCompatibleVersion()) {
-      updateWorkspacePackage();
-    }
+export default function (tree: Tree, options: NxAwsCacheSchematicSchema): () => void {
+  if (!isCompatibleVersion()) {
+    updateWorkspacePackage();
+  }
 
-    updateNxJson(options);
-    return noop();
+  updateNxJson(tree, options);
+
+  return () => {
+    installPackagesTask(tree);
   };
 }

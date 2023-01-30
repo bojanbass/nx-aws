@@ -56,7 +56,7 @@
         "import/no-internal-modules": [
           "error",
           {
-            "allow": ["@nrwl/workspace/**", "@angular-devkit/**"]
+            "allow": ["@nrwl/workspace/**", "@angular-devkit/**", "@nrwl/devkit/**"]
           }
         ],
         "import/no-unresolved": "off"

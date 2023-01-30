@@ -50,9 +50,7 @@
     "workspace-generator": "nx workspace-generator"
   },
   "peerDependencies": {
-    "@angular-devkit/core": ">=11.0.1",
-    "@angular-devkit/schematics": ">=11.0.1",
-    "@nrwl/workspace": ">=9.2.2"
+    "@nrwl/workspace": ">=14.0.0"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.142.0",
@@ -64,9 +62,8 @@
   "devDependencies": {
     "@actions/core": "1.10.0",
     "@actions/github": "5.1.1",
-    "@angular-devkit/architect": "0.1303.3",
-    "@angular-devkit/schematics": "13.3.3",
     "@nrwl/cli": "15.6.3",
+    "@nrwl/devkit": "15.6.3",
     "@nrwl/eslint-plugin-nx": "15.6.3",
     "@nrwl/jest": "15.6.3",
     "@nrwl/nx-cloud": "15.0.2",
