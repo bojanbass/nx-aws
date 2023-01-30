@@ -1,71 +1,8 @@
 {
-  "version": 1,
+  "version": 2,
   "projects": {
-    "nx-aws-cache": {
-      "root": "packages/nx-aws-cache",
-      "sourceRoot": "packages/nx-aws-cache/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["packages/nx-aws-cache/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "packages/nx-aws-cache/jest.config.ts",
-            "passWithNoTests": true
-          },
-          "outputs": ["coverage/packages/nx-aws-cache"]
-        },
-        "build": {
-          "builder": "@nrwl/js:tsc",
-          "options": {
-            "outputPath": "dist/packages/nx-aws-cache",
-            "tsConfig": "packages/nx-aws-cache/tsconfig.lib.json",
-            "packageJson": "packages/nx-aws-cache/package.json",
-            "main": "packages/nx-aws-cache/src/index.ts",
-            "updateBuildableProjectDepsInPackageJson": true,
-            "buildableProjectDepsInPackageJsonType": "dependencies",
-            "assets": [
-              "README.md",
-              {
-                "input": "./packages/nx-aws-cache/src",
-                "glob": "**/*.!(ts)",
-                "output": "./src"
-              },
-              {
-                "input": "./packages/nx-aws-cache",
-                "glob": "collection.json",
-                "output": "."
-              }
-            ]
-          },
-          "outputs": ["{options.outputPath}"]
-        }
-      },
-      "tags": []
-    },
-    "nx-aws-cache-e2e": {
-      "projectType": "application",
-      "root": "e2e/nx-aws-cache-e2e",
-      "sourceRoot": "e2e/nx-aws-cache-e2e/src",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/nx-plugin:e2e",
-          "options": {
-            "target": "nx-aws-cache:build",
-            "npmPackageName": "@nx-aws-plugin/nx-aws-cache",
-            "pluginOutputPath": "dist/packages/nx-aws-cache",
-            "jestConfig": "e2e/nx-aws-cache-e2e/jest.config.js"
-          }
-        }
-      },
-      "tags": [],
-      "implicitDependencies": ["nx-aws-cache"]
-    }
-  }
+    "nx-aws-cache": "packages/nx-aws-cache",
+    "nx-aws-cache-e2e": "e2e/nx-aws-cache-e2e"
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }
