@@ -67,5 +67,6 @@
       "tags": [],
       "implicitDependencies": ["nx-aws-cache"]
     }
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

@@ -10,7 +10,6 @@
       "devDependencies": "*"
     },
     "tsconfig.base.json": "*",
-
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
@@ -39,5 +38,6 @@
   "cli": {
     "defaultCollection": "@nrwl/workspace"
   },
-  "defaultProject": "nx-aws-cache"
+  "defaultProject": "nx-aws-cache",
+  "$schema": "./node_modules/nx/schemas/nx-schema.json"
 }
