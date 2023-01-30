@@ -19,7 +19,7 @@
             "jestConfig": "packages/nx-aws-cache/jest.config.ts",
             "passWithNoTests": true
           },
-          "outputs": ["coverage/packages/nx-aws-cache"]
+          "outputs": ["{workspaceRoot}/coverage/packages/nx-aws-cache"]
         },
         "build": {
           "builder": "@nrwl/js:tsc",
