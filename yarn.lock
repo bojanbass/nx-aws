@@ -5,24 +5,25 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@actions/core@npm:1.9.0":
-  version: 1.9.0
-  resolution: "@actions/core@npm:1.9.0"
+"@actions/core@npm:1.10.0":
+  version: 1.10.0
+  resolution: "@actions/core@npm:1.10.0"
   dependencies:
     "@actions/http-client": ^2.0.1
-  checksum: 801dde1da9012a0c7d40a3e4cc55dc0756892c3e5476cfdc4fc54eb9f0fa8e5c4936d152d723a5b0b999694af401e53e03dd62335b24ad3bbb1931d122aa6288
+    uuid: ^8.3.2
+  checksum: 0a75621e007ab20d887434cdd165f0b9036f14c22252a2faed33543d8b9d04ec95d823e69ca636a25245574e4585d73e1e9e47a845339553c664f9f2c9614669
   languageName: node
   linkType: hard
 
-"@actions/github@npm:5.0.3":
-  version: 5.0.3
-  resolution: "@actions/github@npm:5.0.3"
+"@actions/github@npm:5.1.1":
+  version: 5.1.1
+  resolution: "@actions/github@npm:5.1.1"
   dependencies:
     "@actions/http-client": ^2.0.1
     "@octokit/core": ^3.6.0
     "@octokit/plugin-paginate-rest": ^2.17.0
     "@octokit/plugin-rest-endpoint-methods": ^5.13.0
-  checksum: 1d8e8c5c351dd069a96b1ec39c8f609a2bbcb135d69bb8d9bb5c00752bdff81ec6d67ca90eb77dedc657cd630af484538f881c16eb5b008fd3ee5f430d0c38d2
+  checksum: 2210bd7f8e1e8b407b7df74a259523dc4c63f4ad3a6bfcc0d7867b6e9c3499bd3e25d7de7a9a1bbd0de3be441a8832d5c0b5c0cff3036cd477378c0ec5502434
   languageName: node
   linkType: hard
 
@@ -6747,8 +6748,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "nx-aws@workspace:."
   dependencies:
-    "@actions/core": 1.9.0
-    "@actions/github": 5.0.3
+    "@actions/core": 1.10.0
+    "@actions/github": 5.1.1
     "@angular-devkit/architect": 0.1303.3
     "@angular-devkit/schematics": 13.3.3
     "@aws-sdk/client-s3": 3.142.0
