@@ -1,0 +1,18 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "e2e/nx-aws-cache-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/nx-plugin:e2e",
+      "options": {
+        "target": "nx-aws-cache:build",
+        "npmPackageName": "@nx-aws-plugin/nx-aws-cache",
+        "pluginOutputPath": "dist/packages/nx-aws-cache",
+        "jestConfig": "e2e/nx-aws-cache-e2e/jest.config.js"
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["nx-aws-cache"]
+}
