@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.262.0",
-    "@aws-sdk/credential-providers": "3.259.0",
+    "@aws-sdk/credential-providers": "3.263.0",
     "@swc/helpers": "~0.4.11",
     "dotenv": "16.0.3",
     "tar": "6.1.13"
