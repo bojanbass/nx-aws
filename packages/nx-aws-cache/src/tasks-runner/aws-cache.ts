@@ -166,6 +166,7 @@ export class AwsCache implements RemoteCache {
       Bucket: this.bucket,
       Key: tgzFileName,
       Body: createReadStream(tgzFilePath),
+      ServerSideEncryption: 'aws:kms'
     });
 
     try {
