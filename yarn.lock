@@ -3393,15 +3393,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cli@npm:15.6.3":
-  version: 15.6.3
-  resolution: "@nrwl/cli@npm:15.6.3"
-  dependencies:
-    nx: 15.6.3
-  checksum: 66219cbf0a99d7cc4bb8bcf1c56f42e088e825b862d0df44710c4aa2466ce3d2c7286e0d208327e8325e5e370c3a0bad205df52ac311774f9d7a960e8a41c7c5
-  languageName: node
-  linkType: hard
-
 "@nrwl/devkit@npm:16.2.2":
   version: 16.2.2
   resolution: "@nrwl/devkit@npm:16.2.2"
@@ -3462,17 +3453,6 @@ __metadata:
   dependencies:
     "@nx/plugin": 16.2.2
   checksum: 8de5f73a9812511ee2ef2a00f42bf029342d13e70c48f11ef4b8a348c4c37daec306a36c09bdba1c385270ee66d6147c6b9a4fce0b978c63b6a23a149a6509d4
-  languageName: node
-  linkType: hard
-
-"@nrwl/tao@npm:15.6.3":
-  version: 15.6.3
-  resolution: "@nrwl/tao@npm:15.6.3"
-  dependencies:
-    nx: 15.6.3
-  bin:
-    tao: index.js
-  checksum: ff56f21c7a2063a7719ed192e7997121dae42135bbff504f4847af86bede9db34fbd6c5d9573cd5368d594c44dd68c4e8d9ab5d57b346113e86015b2f4db47bc
   languageName: node
   linkType: hard
 
@@ -8036,14 +8016,12 @@ __metadata:
     "@actions/github": 5.1.1
     "@aws-sdk/client-s3": 3.262.0
     "@aws-sdk/credential-providers": 3.263.0
-    "@nrwl/cli": 15.6.3
-    "@nrwl/devkit": 16.2.2
-    "@nrwl/eslint-plugin-nx": 16.2.2
-    "@nrwl/jest": 16.2.2
-    "@nrwl/js": 16.2.2
-    "@nrwl/nx-cloud": 16.0.5
-    "@nrwl/nx-plugin": 16.2.2
-    "@nrwl/workspace": 16.2.2
+    "@nx/devkit": 16.2.2
+    "@nx/eslint-plugin": 16.2.2
+    "@nx/jest": 16.2.2
+    "@nx/js": 16.2.2
+    "@nx/plugin": 16.2.2
+    "@nx/workspace": 16.2.2
     "@swc/helpers": 0.5.1
     "@types/fs-extra": ^11.0.1
     "@types/jest": 29.4.4
@@ -8059,6 +8037,7 @@ __metadata:
     jest-environment-jsdom: 29.4.3
     jsonc-eslint-parser: ^2.1.0
     nx: 16.2.2
+    nx-cloud: 16.0.5
     prettier: 2.8.3
     tar: 6.1.13
     ts-jest: 29.1.0
@@ -8066,7 +8045,7 @@ __metadata:
     tslib: 2.3.1
     typescript: 5.0.4
   peerDependencies:
-    "@nrwl/workspace": ">=14.0.0"
+    "@nx/workspace": ">=14.0.0"
   languageName: unknown
   linkType: soft
 
@@ -8087,59 +8066,6 @@ __metadata:
   bin:
     nx-cloud: bin/nx-cloud.js
   checksum: 56455af6c74a3a472a09c11bd837fc6e2d594d58fdbf1fc9012a61a7b516a76f09b4fabdb87de3dd967d939da04c3784e9ca7e8bff4409e1c9069a68bdc54423
-  languageName: node
-  linkType: hard
-
-"nx@npm:15.6.3":
-  version: 15.6.3
-  resolution: "nx@npm:15.6.3"
-  dependencies:
-    "@nrwl/cli": 15.6.3
-    "@nrwl/tao": 15.6.3
-    "@parcel/watcher": 2.0.4
-    "@yarnpkg/lockfile": ^1.1.0
-    "@yarnpkg/parsers": ^3.0.0-rc.18
-    "@zkochan/js-yaml": 0.0.6
-    axios: ^1.0.0
-    chalk: ^4.1.0
-    cli-cursor: 3.1.0
-    cli-spinners: 2.6.1
-    cliui: ^7.0.2
-    dotenv: ~10.0.0
-    enquirer: ~2.3.6
-    fast-glob: 3.2.7
-    figures: 3.2.0
-    flat: ^5.0.2
-    fs-extra: ^11.1.0
-    glob: 7.1.4
-    ignore: ^5.0.4
-    js-yaml: 4.1.0
-    jsonc-parser: 3.2.0
-    lines-and-columns: ~2.0.3
-    minimatch: 3.0.5
-    npm-run-path: ^4.0.1
-    open: ^8.4.0
-    semver: 7.3.4
-    string-width: ^4.2.3
-    strong-log-transformer: ^2.1.0
-    tar-stream: ~2.2.0
-    tmp: ~0.2.1
-    tsconfig-paths: ^4.1.2
-    tslib: ^2.3.0
-    v8-compile-cache: 2.3.0
-    yargs: ^17.6.2
-    yargs-parser: 21.1.1
-  peerDependencies:
-    "@swc-node/register": ^1.4.2
-    "@swc/core": ^1.2.173
-  peerDependenciesMeta:
-    "@swc-node/register":
-      optional: true
-    "@swc/core":
-      optional: true
-  bin:
-    nx: bin/nx.js
-  checksum: 09fe9a8f75a0e8e656930c1eaa9ab1eb39f4ffb9e964e7f3381920bf71cf75f8b3c0e0845b303c30e5818eb1c1eac9aa728e6f1d94d59743298b4bdf8f4d70ab
   languageName: node
   linkType: hard
 

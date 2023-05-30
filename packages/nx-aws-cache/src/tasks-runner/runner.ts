@@ -1,8 +1,8 @@
 import { config as dotEnvConfig } from 'dotenv';
 dotEnvConfig();
 
-import { TaskStatus } from '@nrwl/workspace/src/tasks-runner/tasks-runner';
-import { defaultTasksRunner } from '@nrwl/devkit';
+import { TaskStatus } from '@nx/workspace/src/tasks-runner/tasks-runner';
+import { defaultTasksRunner } from '@nx/devkit';
 
 import { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
 import { AwsCache } from './aws-cache';

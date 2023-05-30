@@ -6,7 +6,7 @@ import { promisify } from 'util';
 import * as clientS3 from '@aws-sdk/client-s3';
 import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
 import { CredentialsProviderError } from '@aws-sdk/property-provider';
-import { RemoteCache } from '@nrwl/workspace/src/tasks-runner/default-tasks-runner';
+import { RemoteCache } from '@nx/workspace/src/tasks-runner/default-tasks-runner';
 import { create, extract } from 'tar';
 
 import { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';

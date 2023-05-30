@@ -5,16 +5,16 @@ import {
   readJson,
   runCommandAsync,
   tmpProjPath,
-} from '@nrwl/nx-plugin/testing';
+} from '@nx/plugin/testing';
 import { execSync } from 'child_process';
 import { dirname } from 'node:path';
-import { getPackageManagerCommand } from '@nrwl/devkit';
+import { getPackageManagerCommand } from '@nx/devkit';
 
 function runNxNewCommand() {
   const localTmpDir = dirname(tmpProjPath());
 
   return execSync(
-    `npx nx new proj --nx-workspace-root=${localTmpDir} --no-interactive --skip-install --collection=@nrwl/workspace --npmScope=proj --preset=empty`,
+    `npx nx new proj --nx-workspace-root=${localTmpDir} --no-interactive --skip-install --collection=@nx/workspace --npmScope=proj --preset=empty`,
     {
       cwd: localTmpDir,
     },

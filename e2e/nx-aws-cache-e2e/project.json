@@ -5,11 +5,12 @@
   "sourceRoot": "e2e/nx-aws-cache-e2e/src",
   "targets": {
     "e2e": {
-      "executor": "@nrwl/nx-plugin:e2e",
+      "executor": "@nx/jest:jest",
       "options": {
-        "target": "nx-aws-cache:build",
-        "jestConfig": "e2e/nx-aws-cache-e2e/jest.config.ts"
-      }
+        "jestConfig": "e2e/nx-aws-cache-e2e/jest.config.ts",
+        "runInBand": true
+      },
+      "dependsOn": ["nx-aws-cache:build"]
     }
   },
   "tags": [],
