@@ -20,6 +20,7 @@ updates:
       - dependency-name: 'eslint-config-prettier'
       - dependency-name: 'eslint-plugin-import'
       - dependency-name: 'jest'
+      - dependency-name: 'jest-environment-jsdom'
       - dependency-name: 'prettier'
       - dependency-name: 'ts-jest'
       - dependency-name: 'ts-node'
