@@ -8107,15 +8107,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonc-eslint-parser@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "jsonc-eslint-parser@npm:2.2.0"
+"jsonc-eslint-parser@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "jsonc-eslint-parser@npm:2.3.0"
   dependencies:
     acorn: ^8.5.0
     eslint-visitor-keys: ^3.0.0
     espree: ^9.0.0
     semver: ^7.3.5
-  checksum: aac6509850ba8a893956e00d862d488de9c7f32a352d612f361f43635b3a3426c2ed8b457bdef8188d4ea210b2d7ebcab225caef2d445a92c30cb9be7bb9b8ef
+  checksum: e9343fee870a16f04fdb811b58a9469134c54a03edd58aa5654a888ebae63952cbff3ea3dcad3973465009a275282c6c0dd513e8c3850f7f485a164180085a8b
   languageName: node
   linkType: hard
 
@@ -8669,7 +8669,7 @@ __metadata:
     eslint-plugin-import: 2.25.4
     jest: 28.1.3
     jest-environment-jsdom: 28.1.1
-    jsonc-eslint-parser: ^2.2.0
+    jsonc-eslint-parser: ^2.3.0
     nx: 15.6.3
     prettier: 2.8.3
     tar: 6.1.13
