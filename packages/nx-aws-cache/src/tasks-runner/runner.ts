@@ -11,12 +11,12 @@ import { MessageReporter } from './message-reporter';
 
 function getOptions(options: AwsNxCacheOptions) {
   return {
-    awsAccessKeyId: process.env.NX_AWS_ACCESS_KEY_ID,
-    awsBucket: options.awsBucket ?? process.env.NX_AWS_BUCKET,
-    awsRegion: options.awsRegion ?? process.env.NX_AWS_REGION,
-    awsSecretAccessKey: process.env.NX_AWS_SECRET_ACCESS_KEY,
-    awsProfile: options.awsProfile ?? process.env.NX_AWS_PROFILE,
-    awsEndpoint: options.awsEndpoint ?? process.env.NX_AWS_ENDPOINT,
+    awsAccessKeyId: process.env.NXCACHE_ACCESS_KEY_ID,
+    awsBucket: options.awsBucket ?? process.env.NXCACHE_BUCKET,
+    awsRegion: options.awsRegion ?? process.env.NXCACHE_REGION,
+    awsSecretAccessKey: process.env.NXCACHE_SECRET_ACCESS_KEY,
+    awsProfile: options.awsProfile ?? process.env.NXCACHE_PROFILE,
+    awsEndpoint: options.awsEndpoint ?? process.env.NXCACHE_ENDPOINT,
   };
 }
 
@@ -31,8 +31,8 @@ export const tasksRunner = (
   const logger = new Logger();
 
   try {
-    if (process.env.NX_AWS_DISABLE === 'true') {
-      logger.note('USING LOCAL CACHE (NX_AWS_DISABLE is set to true)');
+    if (process.env.NXCACHE_AWS_DISABLE === 'true') {
+      logger.note('USING LOCAL CACHE (NXCACHE_AWS_DISABLE is set to true)');
 
       return defaultTasksRunner(tasks, options, context);
     }

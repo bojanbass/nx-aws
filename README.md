@@ -49,10 +49,10 @@ There are two ways to set-up AWS options:
 ### Using environment variables
 
 ```bash
-NX_AWS_REGION=eu-central-1
-NX_AWS_BUCKET=bucket-name
-NX_AWS_PROFILE=profile-1
-NX_AWS_ENDPOINT=[URL] # default s3.[region].amazonaws.com
+NXCACHE_AWS_REGION=eu-central-1
+NXCACHE_AWS_BUCKET=bucket-name
+NXCACHE_AWS_PROFILE=profile-1
+NXCACHE_AWS_ENDPOINT=[URL] # default s3.[region].amazonaws.com
 ```
 
 > Environment variables can be set using `.env` file - check [dotenv documentation](https://www.npmjs.com/package/dotenv).
@@ -62,7 +62,7 @@ NX_AWS_ENDPOINT=[URL] # default s3.[region].amazonaws.com
 Remote cache can be disabled in favor of local cache only using an environment variable
 
 ```bash
-NX_AWS_DISABLE=true
+NXCACHE_AWS_DISABLE=true
 ```
 
 ## Authentication
@@ -84,8 +84,8 @@ AWS SDK v3 is used under the hood with a support for [SSO login](https://docs.aw
 Custom environment variables can be set for an alternate way of authentication
 
 ```bash
-NX_AWS_ACCESS_KEY_ID=[secret]
-NX_AWS_SECRET_ACCESS_KEY=[secret]
+NXCACHE_AWS_ACCESS_KEY_ID=[secret]
+NXCACHE_AWS_SECRET_ACCESS_KEY=[secret]
 ```
 
 ## Build
