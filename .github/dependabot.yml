@@ -8,8 +8,8 @@ updates:
   - package-ecosystem: 'npm' # See documentation for possible values
     directory: '/' # Location of package manifests
     ignore:
-      # @nrwl deps should always be updated by running `npx nx migrate @nrwl/workspace`
-      - dependency-name: '@nrwl/*'
+      # @nx deps should always be updated by running `npx nx migrate @nx/workspace`
+      - dependency-name: '@nx/*'
       - dependency-name: 'nx'
       # NX managed packages should not be updated manually
       - dependency-name: '@types/jest'
@@ -20,6 +20,7 @@ updates:
       - dependency-name: 'eslint-config-prettier'
       - dependency-name: 'eslint-plugin-import'
       - dependency-name: 'jest'
+      - dependency-name: 'jest-environment-jsdom'
       - dependency-name: 'prettier'
       - dependency-name: 'ts-jest'
       - dependency-name: 'ts-node'

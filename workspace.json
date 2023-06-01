@@ -1,8 +1,0 @@
-{
-  "version": 2,
-  "projects": {
-    "nx-aws-cache": "packages/nx-aws-cache",
-    "nx-aws-cache-e2e": "e2e/nx-aws-cache-e2e"
-  },
-  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
-}

@@ -1,6 +1,6 @@
 {
   "name": "@nx-aws-plugin/nx-aws-cache",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "AWS S3 Cache plugin for Nx",
   "keywords": [
     "AWS",
@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/bojanbass/nx-aws",
   "peerDependencies": {
-    "@nrwl/workspace": ">=14.0.0",
-    "@nrwl/devkit": ">=14.0.0",
-    "nx": ">=14.0.0"
+    "nx": ">=16.0.0",
+    "@nx/devkit": ">=16.0.0",
+    "@nx/workspace": ">=16.0.0"
   }
 }

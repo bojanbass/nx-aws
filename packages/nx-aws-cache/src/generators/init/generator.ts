@@ -1,4 +1,4 @@
-import { formatFiles, logger, Tree, updateJson } from '@nrwl/devkit';
+import { formatFiles, logger, Tree, updateJson } from '@nx/devkit';
 import { execSync } from 'node:child_process';
 import { readFileSync, statSync } from 'node:fs';
 
@@ -6,7 +6,7 @@ import { InitGeneratorSchema } from './schema';
 
 function isCompatibleVersion() {
   const json = JSON.parse(readFileSync('package.json').toString());
-  let version = json.dependencies?.['@nrwl/workspace'] ?? json.devDependencies?.['@nrwl/workspace'];
+  let version = json.dependencies?.['@nx/workspace'] ?? json.devDependencies?.['@nx/workspace'];
 
   if (!version) {
     throw new Error(`You must use Nx >= 8.0 to enable Storage Cache`);
@@ -46,19 +46,19 @@ function isYarn() {
 
 function updateWorkspacePackage() {
   logger.log(
-    `Updating @nrwl/workspace to 8.12.10 to make the workspace compatible with Storage Cache.`,
+    `Updating @nx/workspace to 8.12.10 to make the workspace compatible with Storage Cache.`,
   );
 
   if (isYarn()) {
-    logger.log(`yarn add --dev @nrwl/workspace@8.12.10`);
+    logger.log(`yarn add --dev @nx/workspace@8.12.10`);
 
-    execSync(`yarn add --dev @nrwl/workspace@8.12.10`, {
+    execSync(`yarn add --dev @nx/workspace@8.12.10`, {
       stdio: ['inherit', 'inherit', 'inherit'],
     });
   } else {
-    logger.log(`npm i --save-dev @nrwl/workspace@8.12.10`);
+    logger.log(`npm i --save-dev @nx/workspace@8.12.10`);
 
-    execSync(`npm i --save-dev @nrwl/workspace@8.12.10`, {
+    execSync(`npm i --save-dev @nx/workspace@8.12.10`, {
       stdio: ['inherit', 'inherit', 'inherit'],
     });
   }
