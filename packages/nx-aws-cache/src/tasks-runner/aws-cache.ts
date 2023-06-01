@@ -50,7 +50,7 @@ export class AwsCache implements RemoteCache {
     const missingOptions: Array<string> = [];
 
     if (!options.awsBucket) {
-      missingOptions.push('NX_AWS_BUCKET | awsBucket');
+      missingOptions.push('NXCACHE_AWS_BUCKET | awsBucket');
     }
 
     if (missingOptions.length > 0) {
