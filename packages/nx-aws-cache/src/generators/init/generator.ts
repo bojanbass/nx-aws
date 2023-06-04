@@ -1,78 +1,49 @@
-import { formatFiles, logger, Tree, updateJson } from '@nx/devkit';
-import { execSync } from 'node:child_process';
-import { readFileSync, statSync } from 'node:fs';
+import { formatFiles, logger, Tree, updateJson, readRootPackageJson } from '@nx/devkit';
 
 import { InitGeneratorSchema } from './schema';
 
 function isCompatibleVersion() {
-  const json = JSON.parse(readFileSync('package.json').toString());
-  let version = json.dependencies?.['@nx/workspace'] ?? json.devDependencies?.['@nx/workspace'];
+  const packageJson = readRootPackageJson();
+  let version =
+    packageJson.dependencies?.['@nx/workspace'] ??
+    packageJson.devDependencies?.['@nx/workspace'] ??
+    packageJson.dependencies?.['@nrwl/workspace'] ??
+    packageJson.devDependencies?.['@nrwl/workspace'];
 
   if (!version) {
-    throw new Error(`You must use Nx >= 8.0 to enable Storage Cache`);
+    throw new Error(`You must install Nx to enable Storage Cache`);
   }
 
   if (version.startsWith('^') || version.startsWith('~')) {
     version = version.substr(1);
   }
 
-  const [major, minor] = version.split('.');
+  const [major] = version.split('.');
   const majorNumber = Number.parseInt(major, 10);
 
   if (isNaN(majorNumber)) {
-    return true;
+    return false;
   }
 
   // eslint-disable-next-line no-magic-numbers
-  if (majorNumber >= 9) {
-    return true;
-  }
-
-  // eslint-disable-next-line no-magic-numbers
-  if (Number.parseInt(minor, 10) >= 12) {
+  if (majorNumber >= 16) {
     return true;
   }
 
   return false;
 }
 
-function isYarn() {
-  try {
-    return statSync('yarn.lock').isFile();
-  } catch (err) {
-    return false;
-  }
-}
-
-function updateWorkspacePackage() {
-  logger.log(
-    `Updating @nx/workspace to 8.12.10 to make the workspace compatible with Storage Cache.`,
-  );
-
-  if (isYarn()) {
-    logger.log(`yarn add --dev @nx/workspace@8.12.10`);
-
-    execSync(`yarn add --dev @nx/workspace@8.12.10`, {
-      stdio: ['inherit', 'inherit', 'inherit'],
-    });
-  } else {
-    logger.log(`npm i --save-dev @nx/workspace@8.12.10`);
-
-    execSync(`npm i --save-dev @nx/workspace@8.12.10`, {
-      stdio: ['inherit', 'inherit', 'inherit'],
-    });
-  }
-}
-
 function updateNxJson(tree: Tree, options: InitGeneratorSchema): void {
   updateJson(tree, 'nx.json', (jsonContent) => {
+    const currentOptions = jsonContent.tasksRunnerOptions?.default?.options;
+
     jsonContent.tasksRunnerOptions = {
       default: {
         runner: '@nx-aws-plugin/nx-aws-cache',
         options: {
+          ...currentOptions,
           ...(options.awsBucket ? { awsBucket: options.awsBucket } : {}),
           ...(options.awsRegion ? { awsRegion: options.awsRegion } : {}),
-          cacheableOperations: ['build', 'test', 'lint', 'e2e'],
         },
       },
     };
@@ -84,7 +55,7 @@ function updateNxJson(tree: Tree, options: InitGeneratorSchema): void {
 // eslint-disable-next-line func-names
 export default async function (tree: Tree, options: InitGeneratorSchema) {
   if (!isCompatibleVersion()) {
-    updateWorkspacePackage();
+    logger.warn('You must install Nx version 16 or later to enable the plugin.');
   }
 
   updateNxJson(tree, options);
