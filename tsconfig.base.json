@@ -21,7 +21,7 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "nx-aws/nx-aws-cache": ["packages/nx-aws-cache/src/index.ts"]
+      "@nx-aws-plugin/nx-aws-cache": ["packages/nx-aws-cache/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

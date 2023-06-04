@@ -1,9 +1,8 @@
 import { config as dotEnvConfig } from 'dotenv';
 dotEnvConfig();
 
-import defaultTaskRunner from '@nrwl/workspace/tasks-runners/default';
-import { AffectedEvent, TaskStatus } from '@nrwl/workspace/src/tasks-runner/tasks-runner';
-import { from, Subject } from 'rxjs';
+import { TaskStatus } from '@nx/workspace/src/tasks-runner/tasks-runner';
+import { defaultTasksRunner } from '@nx/devkit';
 
 import { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
 import { AwsCache } from './aws-cache';
@@ -12,66 +11,57 @@ import { MessageReporter } from './message-reporter';
 
 function getOptions(options: AwsNxCacheOptions) {
   return {
-    awsAccessKeyId: process.env.NX_AWS_ACCESS_KEY_ID,
-    awsBucket: process.env.NX_AWS_BUCKET ?? options.awsBucket,
-    awsRegion: process.env.NX_AWS_REGION ?? options.awsRegion,
-    awsSecretAccessKey: process.env.NX_AWS_SECRET_ACCESS_KEY,
-    awsProfile: process.env.NX_AWS_PROFILE ?? options.awsProfile,
-    awsEndpoint: process.env.NX_AWS_ENDPOINT ?? options.awsEndpoint,
+    awsAccessKeyId: process.env.NXCACHE_ACCESS_KEY_ID ?? options.awsAccessKeyId,
+    awsBucket: process.env.NXCACHE_BUCKET ?? options.awsBucket,
+    awsRegion: process.env.NXCACHE_REGION ?? options.awsRegion,
+    awsSecretAccessKey: process.env.NXCACHE_SECRET_ACCESS_KEY ?? options.awsSecretAccessKey,
+    awsProfile: process.env.NXCACHE_PROFILE ?? options.awsProfile,
+    awsEndpoint: process.env.NXCACHE_ENDPOINT ?? options.awsEndpoint,
   };
 }
 
 // eslint-disable-next-line max-lines-per-function
 export const tasksRunner = (
-  tasks: Parameters<typeof defaultTaskRunner>[0],
-  options: Parameters<typeof defaultTaskRunner>[1] & AwsNxCacheOptions,
+  tasks: Parameters<typeof defaultTasksRunner>[0],
+  options: Parameters<typeof defaultTasksRunner>[1] & AwsNxCacheOptions,
   // eslint-disable-next-line no-magic-numbers
-  context: Parameters<typeof defaultTaskRunner>[2],
+  context: Parameters<typeof defaultTasksRunner>[2],
 ) => {
   const awsOptions: AwsNxCacheOptions = getOptions(options);
   const logger = new Logger();
 
   try {
-    if (process.env.NX_AWS_DISABLE === 'true') {
-      logger.note('USING LOCAL CACHE (NX_AWS_DISABLE is set to true)');
+    if (process.env.NXCACHE_AWS_DISABLE === 'true') {
+      logger.note('USING LOCAL CACHE (NXCACHE_AWS_DISABLE is set to true)');
 
-      return defaultTaskRunner(tasks, options, context);
+      return defaultTasksRunner(tasks, options, context);
     }
 
     logger.note('USING REMOTE CACHE');
 
     const messages = new MessageReporter(logger);
     const remoteCache = new AwsCache(awsOptions, messages);
-    const runnerWrapper = new Subject<AffectedEvent | { [id: string]: TaskStatus }>(),
-      runner$ = defaultTaskRunner(
-        tasks,
-        {
-          ...options,
-          remoteCache,
-        },
-        context,
-      );
 
-    from(runner$).subscribe({
-      next: (value) => runnerWrapper.next(value),
-      error: (err) => runnerWrapper.error(err),
-      complete: async () => {
-        await remoteCache.waitForStoreRequestsToComplete();
-        messages.printMessages();
-        runnerWrapper.complete();
+    const runner: Promise<{ [id: string]: TaskStatus }> = defaultTasksRunner(
+      tasks,
+      {
+        ...options,
+        remoteCache,
       },
+      context,
+    ) as Promise<{ [id: string]: TaskStatus }>;
+
+    runner.finally(async () => {
+      await remoteCache.waitForStoreRequestsToComplete();
+      messages.printMessages();
     });
 
-    if (typeof (runner$ as Subject<AffectedEvent>)?.subscribe === 'function') {
-      return runnerWrapper;
-    }
-
-    return runnerWrapper.toPromise();
+    return runner;
   } catch (err) {
     logger.warn((err as Error).message);
     logger.note('USING LOCAL CACHE');
 
-    return defaultTaskRunner(tasks, options, context);
+    return defaultTasksRunner(tasks, options, context);
   }
 };
 

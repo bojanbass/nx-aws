@@ -1,0 +1,18 @@
+{
+  "name": "nx-aws-cache-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "e2e/nx-aws-cache-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "e2e/nx-aws-cache-e2e/jest.config.ts",
+        "runInBand": true
+      },
+      "dependsOn": ["nx-aws-cache:build"]
+    }
+  },
+  "tags": [],
+  "implicitDependencies": []
+}
