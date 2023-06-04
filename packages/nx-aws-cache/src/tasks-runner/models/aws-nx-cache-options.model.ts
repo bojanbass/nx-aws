@@ -1,9 +1,9 @@
 export interface AwsNxCacheOptions {
-  awsProfile?: string;
-  awsRegion?: string;
-  awsBucket?: string;
   awsAccessKeyId?: string;
   awsSecretAccessKey?: string;
+  awsProfile?: string;
   awsEndpoint?: string;
-  awsForcePathStyle?: string;
+  awsRegion?: string;
+  awsBucket?: string;
+  awsForcePathStyle?: boolean;
 }

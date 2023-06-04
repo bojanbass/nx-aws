@@ -47,7 +47,7 @@ export class AwsCache implements RemoteCache {
       );
     }
 
-    if (options.awsForcePathStyle === 'true') {
+    if (options.awsForcePathStyle) {
       clientConfig.forcePathStyle = true;
     }
 

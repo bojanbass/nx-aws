@@ -42,8 +42,13 @@ function updateNxJson(tree: Tree, options: InitGeneratorSchema): void {
         runner: '@nx-aws-plugin/nx-aws-cache',
         options: {
           ...currentOptions,
-          ...(options.awsBucket ? { awsBucket: options.awsBucket } : {}),
+          ...(options.awsAccessKeyId ? { awsAccessKeyId: options.awsAccessKeyId } : {}),
+          ...(options.awsSecretAccessKey ? { awsSecretAccessKey: options.awsSecretAccessKey } : {}),
+          ...(options.awsProfile ? { awsProfile: options.awsProfile } : {}),
+          ...(options.awsEndpoint ? { awsEndpoint: options.awsEndpoint } : {}),
           ...(options.awsRegion ? { awsRegion: options.awsRegion } : {}),
+          ...(options.awsBucket ? { awsBucket: options.awsBucket } : {}),
+          ...(options.awsForcePathStyle ? { awsForcePathStyle: options.awsForcePathStyle } : {}),
         },
       },
     };

@@ -31,11 +31,11 @@ There are two ways to set-up plugin options, using `nx.json` or `Environment var
 | Parameter         | Description                                                                                            | Environment variable / .env     | `nx.json`            | Example                        |
 | ----------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------- | -------------------- | ------------------------------ |
 | Access Key Id     | AWS Access Key Id.                                                                                     | `NXCACHE_AWS_ACCESS_KEY_ID`     | `awsAccessKeyId`     | my-id                          |
-| Secret Access Key | AWS Secret Access Key                                                                                  | `NXCACHE_AWS_SECRET_ACCESS_KEY` | `awsSecretAccessKey` | my-key                         |
-| Profile           | The configuration profile to use                                                                       | `NXCACHE_AWS_PROFILE`           | `awsProfile`         | profile-1                      |
-| Endpoint          | The fully qualified endpoint of the webservice if a custom endpoint is needed (e.g. when using MinIO). | `NXCACHE_AWS_ENDPOINT`          | `awsEndpoint`        | http://custom.de-eu.myhost.com |
-| Bucket            | The bucket name where cache files are stored or retrieved (can contain sub-paths as well).             | `NXCACHE_AWS_BUCKET`            | `awsBucket`          | bucket-name/sub-path           |
+| Secret Access Key | AWS Secret Access Key.                                                                                  | `NXCACHE_AWS_SECRET_ACCESS_KEY` | `awsSecretAccessKey` | my-key                         |
+| Profile           | The configuration profile to use.                                                                       | `NXCACHE_AWS_PROFILE`           | `awsProfile`         | profile-1                      |
+| Endpoint          | The fully qualified endpoint of the web service if a custom endpoint is needed (e.g. when using MinIO). | `NXCACHE_AWS_ENDPOINT`          | `awsEndpoint`        | http://custom.de-eu.myhost.com |
 | Region            | The AWS region to which this client will send requests.                                                | `NXCACHE_AWS_REGION`            | `awsRegion`          | eu-central-1                   |
+| Bucket            | The bucket name where cache files are stored or retrieved (can contain sub-paths as well).             | `NXCACHE_AWS_BUCKET`            | `awsBucket`          | bucket-name/sub-path           |
 | Force Path Style  | Whether to force path style URLs for S3 objects (e.g. when using MinIO).                               | `NXCACHE_AWS_FORCE_PATH_STYLE`  | `awsForcePathStyle`  | true                           |
 
 > **Important:** `Environment variables` take precedence over `nx.json` options (introduced in v3.0.0)!
