@@ -15,12 +15,16 @@ import { MessageReporter } from './message-reporter';
 
 export class AwsCache implements RemoteCache {
   private readonly bucket: string;
+  private readonly path: string;
   private readonly s3: clientS3.S3Client;
   private readonly logger = new Logger();
-  private uploadQueue: Array<Promise<boolean>> = [];
+  private readonly uploadQueue: Array<Promise<boolean>> = [];
 
   public constructor(options: AwsNxCacheOptions, private messages: MessageReporter) {
-    this.bucket = options.awsBucket as string;
+    const awsBucket = options.awsBucket ?? '';
+    const bucketTokens = awsBucket.split('/');
+    this.bucket = bucketTokens.shift() as string;
+    this.path = bucketTokens.join('/');
 
     const clientConfig: clientS3.S3ClientConfig = {};
 
@@ -164,7 +168,7 @@ export class AwsCache implements RemoteCache {
     const tgzFileName = this.getTgzFileName(hash);
     const params: clientS3.PutObjectCommand = new clientS3.PutObjectCommand({
       Bucket: this.bucket,
-      Key: tgzFileName,
+      Key: this.getS3Key(tgzFileName),
       Body: createReadStream(tgzFilePath),
     });
 
@@ -179,13 +183,17 @@ export class AwsCache implements RemoteCache {
     }
   }
 
+  private getS3Key(tgzFileName: string) {
+    return join(this.path, tgzFileName);
+  }
+
   private async downloadFile(hash: string, tgzFilePath: string): Promise<void> {
     const pipelinePromise = promisify(pipeline),
       tgzFileName = this.getTgzFileName(hash),
       writeFileToLocalDir = createWriteStream(tgzFilePath),
       params = new clientS3.GetObjectCommand({
         Bucket: this.bucket,
-        Key: tgzFileName,
+        Key: this.getS3Key(tgzFileName),
       });
 
     try {
@@ -202,7 +210,7 @@ export class AwsCache implements RemoteCache {
     const tgzFileName = this.getTgzFileName(hash),
       params: clientS3.HeadObjectCommand = new clientS3.HeadObjectCommand({
         Bucket: this.bucket,
-        Key: tgzFileName,
+        Key: this.getS3Key(tgzFileName),
       });
 
     try {

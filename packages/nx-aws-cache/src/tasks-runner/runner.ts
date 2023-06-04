@@ -11,12 +11,12 @@ import { MessageReporter } from './message-reporter';
 
 function getOptions(options: AwsNxCacheOptions) {
   return {
-    awsAccessKeyId: process.env.NXCACHE_ACCESS_KEY_ID,
-    awsBucket: options.awsBucket ?? process.env.NXCACHE_BUCKET,
-    awsRegion: options.awsRegion ?? process.env.NXCACHE_REGION,
-    awsSecretAccessKey: process.env.NXCACHE_SECRET_ACCESS_KEY,
-    awsProfile: options.awsProfile ?? process.env.NXCACHE_PROFILE,
-    awsEndpoint: options.awsEndpoint ?? process.env.NXCACHE_ENDPOINT,
+    awsAccessKeyId: process.env.NXCACHE_ACCESS_KEY_ID ?? options.awsAccessKeyId,
+    awsBucket: process.env.NXCACHE_BUCKET ?? options.awsBucket,
+    awsRegion: process.env.NXCACHE_REGION ?? options.awsRegion,
+    awsSecretAccessKey: process.env.NXCACHE_SECRET_ACCESS_KEY ?? options.awsSecretAccessKey,
+    awsProfile: process.env.NXCACHE_PROFILE ?? options.awsProfile,
+    awsEndpoint: process.env.NXCACHE_ENDPOINT ?? options.awsEndpoint,
   };
 }
 
