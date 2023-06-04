@@ -22,7 +22,7 @@ export class AwsCache implements RemoteCache {
 
   public constructor(options: AwsNxCacheOptions, private messages: MessageReporter) {
     const awsBucket = options.awsBucket ?? '';
-    const bucketTokens = awsBucket.split('/')
+    const bucketTokens = awsBucket.split('/');
     this.bucket = bucketTokens.shift() as string;
     this.path = bucketTokens.join('/');
 
@@ -183,7 +183,7 @@ export class AwsCache implements RemoteCache {
     }
   }
 
-  private getS3Key(tgzFileName: string){
+  private getS3Key(tgzFileName: string) {
     return join(this.path, tgzFileName);
   }
 
