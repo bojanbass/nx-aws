@@ -5,4 +5,5 @@ export interface AwsNxCacheOptions {
   awsAccessKeyId?: string;
   awsSecretAccessKey?: string;
   awsEndpoint?: string;
+  awsForcePathStyle?: string;
 }

@@ -47,6 +47,10 @@ export class AwsCache implements RemoteCache {
       );
     }
 
+    if (options.awsForcePathStyle === 'true') {
+      clientConfig.forcePathStyle = true;
+    }
+
     this.s3 = new clientS3.S3Client(clientConfig);
   }
 

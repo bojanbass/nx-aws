@@ -24,11 +24,23 @@ npm run nx generate @nx-aws-plugin/nx-aws-cache:init
 
 This will make the necessary changes to nx.json in your workspace to use nx-aws-cache runner.
 
-## AWS settings
+## Plugin settings
 
-There are two ways to set-up AWS options:
+There are two ways to set-up plugin options, using `nx.json` or `Environment variables`. Here is a list of all possible options:
 
-### Using nx.json
+| Parameter         | Description                                                                                            | Environment variable / .env     | `nx.json`            | Example                        |
+| ----------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------- | -------------------- | ------------------------------ |
+| Access Key Id     | AWS Access Key Id.                                                                                     | `NXCACHE_AWS_ACCESS_KEY_ID`     | `awsAccessKeyId`     | my-id                          |
+| Secret Access Key | AWS Secret Access Key                                                                                  | `NXCACHE_AWS_SECRET_ACCESS_KEY` | `awsSecretAccessKey` | my-key                         |
+| Profile           | The configuration profile to use                                                                       | `NXCACHE_AWS_PROFILE`           | `awsProfile`         | profile-1                      |
+| Endpoint          | The fully qualified endpoint of the webservice if a custom endpoint is needed (e.g. when using MinIO). | `NXCACHE_AWS_ENDPOINT`          | `awsEndpoint`        | http://custom.de-eu.myhost.com |
+| Bucket            | The bucket name where cache files are stored or retrieved (can contain sub-paths as well).             | `NXCACHE_AWS_BUCKET`            | `awsBucket`          | bucket-name/sub-path           |
+| Region            | The AWS region to which this client will send requests.                                                | `NXCACHE_AWS_REGION`            | `awsRegion`          | eu-central-1                   |
+| Force Path Style  | Whether to force path style URLs for S3 objects (e.g. when using MinIO).                               | `NXCACHE_AWS_FORCE_PATH_STYLE`  | `awsForcePathStyle`  | true                           |
+
+> **Important:** `Environment variables` take precedence over `nx.json` options (introduced in v3.0.0)!
+
+### `nx.json` example
 
 ```json
 {
@@ -37,29 +49,23 @@ There are two ways to set-up AWS options:
     "runner": "@nx-aws-plugin/nx-aws-cache",
     "options": {
       ...
-      "awsRegion": "eu-central-1",
-      "awsBucket": "bucket-name",
+      "awsAccessKeyId": "key",
+      "awsSecretAccessKey": "secret",
       "awsProfile": "profile-1",
       "awsEndpoint": "http://custom.de-eu.myhost.com",
+      "awsBucket": "bucket-name/sub-path",
+      "awsRegion": "eu-central-1",
+      "awsForcePathStyle": "true",
     }
   }
 }
-```
-
-### Using environment variables
-
-```bash
-NXCACHE_AWS_REGION=eu-central-1
-NXCACHE_AWS_BUCKET=bucket-name
-NXCACHE_AWS_PROFILE=profile-1
-NXCACHE_AWS_ENDPOINT=[URL] # default s3.[region].amazonaws.com
 ```
 
 > Environment variables can be set using `.env` file - check [dotenv documentation](https://www.npmjs.com/package/dotenv).
 
 ## Disabling S3 cache
 
-Remote cache can be disabled in favor of local cache only using an environment variable
+Remote cache can be disabled in favor of local cache using an environment variable
 
 ```bash
 NXCACHE_AWS_DISABLE=true
@@ -79,15 +85,6 @@ To authenticate with SSO via CLI run
 
 AWS SDK v3 is used under the hood with a support for [SSO login](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html).
 
-### Custom environment variables
-
-Custom environment variables can be set for an alternate way of authentication
-
-```bash
-NXCACHE_AWS_ACCESS_KEY_ID=[secret]
-NXCACHE_AWS_SECRET_ACCESS_KEY=[secret]
-```
-
 ## Build
 
 Run `yarn nx build nx-aws-cache` to build the plugin. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
@@ -100,7 +97,7 @@ Run `yarn nx affected:test` to execute the unit tests affected by a change.
 
 ## Running end-to-end tests
 
-Run `yarn nx e2e nx-aws-cache` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+Run `yarn nx e2e nx-aws-cache-e2e` to execute the end-to-end tests via [Jest](https://jestjs.io).
 
 Run `yarn nx affected:e2e` to execute the end-to-end tests affected by a change.
 
