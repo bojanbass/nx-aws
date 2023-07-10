@@ -35,12 +35,16 @@ export const tasksRunner = (
 
   try {
     if (process.env.NXCACHE_AWS_DISABLE === 'true') {
-      logger.note('USING LOCAL CACHE (NXCACHE_AWS_DISABLE is set to true)');
+      if (!options.skipNxCache) {
+        logger.note('USING LOCAL CACHE (NXCACHE_AWS_DISABLE is set to true)');
+      }
 
       return defaultTasksRunner(tasks, options, context);
     }
 
-    logger.note('USING REMOTE CACHE');
+    if (!options.skipNxCache) {
+      logger.note('USING REMOTE CACHE');
+    }
 
     const messages = new MessageReporter(logger);
     const remoteCache = new AwsCache(awsOptions, messages);
