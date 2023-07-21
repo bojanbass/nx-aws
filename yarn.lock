@@ -710,13 +710,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/property-provider@npm:^3.366.0":
-  version: 3.366.0
-  resolution: "@aws-sdk/property-provider@npm:3.366.0"
+"@aws-sdk/property-provider@npm:^3.374.0":
+  version: 3.374.0
+  resolution: "@aws-sdk/property-provider@npm:3.374.0"
   dependencies:
     "@smithy/property-provider": ^1.0.1
     tslib: ^2.5.0
-  checksum: 609df33d85b0d3514a6b849d8d03ca92f97c7c865ff2106babf4951fa41266fe984451a8c877d18dda3a69dc48dc60d5b3c8bf9887f8da5f90cc084c7d94e35c
+  checksum: cce113eb36153497ce4c0c91ed2dd830c09f5892b4fa718873bc5c1fcf6e544aa7bf5c378d3f24154bcce70c51b9978da941f9ea1b452b14936bbc08d4a2545e
   languageName: node
   linkType: hard
 
@@ -8162,7 +8162,7 @@ __metadata:
     "@actions/github": 5.1.1
     "@aws-sdk/client-s3": 3.369.0
     "@aws-sdk/credential-providers": 3.369.0
-    "@aws-sdk/property-provider": ^3.366.0
+    "@aws-sdk/property-provider": ^3.374.0
     "@nx/devkit": 16.2.2
     "@nx/eslint-plugin": 16.2.2
     "@nx/jest": 16.2.2
