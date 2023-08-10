@@ -1,4 +1,4 @@
-import { createReadStream, createWriteStream, writeFile } from 'fs';
+import { createReadStream, createWriteStream, writeFile, unlink } from 'fs';
 import { join } from 'path';
 import { pipeline, Readable } from 'stream';
 import { promisify } from 'util';
@@ -20,7 +20,7 @@ export class AwsCache implements RemoteCache {
   private readonly logger = new Logger();
   private readonly uploadQueue: Array<Promise<boolean>> = [];
 
-  public constructor(options: AwsNxCacheOptions, private messages: MessageReporter) {
+  public constructor(private options: AwsNxCacheOptions, private messages: MessageReporter) {
     const awsBucket = options.awsBucket ?? '';
     const bucketTokens = awsBucket.split('/');
     this.bucket = bucketTokens.shift() as string;
@@ -94,6 +94,10 @@ export class AwsCache implements RemoteCache {
       await this.downloadFile(hash, tgzFilePath);
       await this.extractTgzFile(tgzFilePath, cacheDirectory);
       await this.createCommitFile(hash, cacheDirectory);
+
+      if (this.options.trustForeignMachineCache === true) {
+        await this.removeMachineSignature(hash, cacheDirectory);
+      }
 
       this.logger.debug(`Storage Cache: Cache hit ${hash}`);
 
@@ -248,5 +252,12 @@ export class AwsCache implements RemoteCache {
 
   private getCommitFileName(hash: string): string {
     return `${hash}.commit`;
+  }
+
+  private async removeMachineSignature(hash: string, cacheDirectory: string): Promise<void> {
+    const machineSignatureFileName = 'source';
+    const unlinkFileAsync = promisify(unlink);
+
+    await unlinkFileAsync(join(cacheDirectory, hash, machineSignatureFileName));
   }
 }
