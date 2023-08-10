@@ -38,6 +38,12 @@
       "type": "boolean",
       "description": "Whether to force path style URLs for S3 objects (e.g. when using MinIO)",
       "x-prompt": "Whether to force path style URLs for S3 objects (e.g. when using MinIO)"
+    },
+    "trustForeignMachineCache": {
+      "type": "boolean",
+      "description": "Allow to reuse cache created on a different machine than current",
+      "x-prompt": "Allow to reuse cache created on a different machine than current",
+      "default": false
     }
   }
 }
