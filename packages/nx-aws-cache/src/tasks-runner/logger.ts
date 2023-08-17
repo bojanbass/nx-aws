@@ -3,7 +3,7 @@ import * as chalk from 'chalk';
 
 export class Logger {
   public debug(message: string): void {
-    if (!process.env['NX-CACHE_VERBOSE_LOGGING']) {
+    if (!process.env.NXCACHE_VERBOSE_LOGGING) {
       return;
     }
 
