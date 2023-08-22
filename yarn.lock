@@ -182,9 +182,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:3.395.0":
-  version: 3.395.0
-  resolution: "@aws-sdk/client-s3@npm:3.395.0"
+"@aws-sdk/client-s3@npm:3.397.0":
+  version: 3.397.0
+  resolution: "@aws-sdk/client-s3@npm:3.397.0"
   dependencies:
     "@aws-crypto/sha1-browser": 3.0.0
     "@aws-crypto/sha256-browser": 3.0.0
@@ -240,7 +240,7 @@ __metadata:
     "@smithy/util-waiter": ^2.0.3
     fast-xml-parser: 4.2.5
     tslib: ^2.5.0
-  checksum: 8969b8fec166774810dc55d5344340f85ee299c7ba3c8c6c6693d3d15ec1ebe8bd52d995a46891d99aa2b58a7899883ce6fa59b6a0ef7720942756270fa28b91
+  checksum: a0bad15e84c1e3fda73390f68bf7a55d050c73d8d51de543520fa8e84769ad93239c5b19ac04dbd65001be4be5252a812f4f5b3bad3396515c4b9dd57d5061cb
   languageName: node
   linkType: hard
 
@@ -8156,7 +8156,7 @@ __metadata:
   dependencies:
     "@actions/core": 1.10.0
     "@actions/github": 5.1.1
-    "@aws-sdk/client-s3": 3.395.0
+    "@aws-sdk/client-s3": 3.397.0
     "@aws-sdk/credential-providers": 3.397.0
     "@aws-sdk/property-provider": ^3.374.0
     "@nx/devkit": 16.2.2
