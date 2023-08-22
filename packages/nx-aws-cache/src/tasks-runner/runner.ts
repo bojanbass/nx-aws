@@ -1,5 +1,10 @@
 import { config as dotEnvConfig } from 'dotenv';
-dotEnvConfig();
+
+['.local.env', '.env.local', '.env'].forEach((file) => {
+  dotEnvConfig({
+    path: file,
+  });
+});
 
 import { TaskStatus } from '@nx/workspace/src/tasks-runner/tasks-runner';
 import { defaultTasksRunner } from '@nx/devkit';
