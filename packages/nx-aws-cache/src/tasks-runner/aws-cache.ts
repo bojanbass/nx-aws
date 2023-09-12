@@ -1,5 +1,5 @@
-import { createReadStream, createWriteStream, writeFile, unlink } from 'fs';
-import { join } from 'path';
+import { createReadStream, createWriteStream, writeFile } from 'fs';
+import { join, dirname } from 'path';
 import { pipeline, Readable } from 'stream';
 import { promisify } from 'util';
 
@@ -20,7 +20,7 @@ export class AwsCache implements RemoteCache {
   private readonly logger = new Logger();
   private readonly uploadQueue: Array<Promise<boolean>> = [];
 
-  public constructor(private options: AwsNxCacheOptions, private messages: MessageReporter) {
+  public constructor(options: AwsNxCacheOptions, private messages: MessageReporter) {
     const awsBucket = options.awsBucket ?? '';
     const bucketTokens = awsBucket.split('/');
     this.bucket = bucketTokens.shift() as string;
@@ -95,10 +95,6 @@ export class AwsCache implements RemoteCache {
       await this.extractTgzFile(tgzFilePath, cacheDirectory);
       await this.createCommitFile(hash, cacheDirectory);
 
-      if (this.options.trustForeignMachineCache === true) {
-        await this.removeMachineSignature(hash, cacheDirectory);
-      }
-
       this.logger.debug(`Storage Cache: Cache hit ${hash}`);
 
       return true;
@@ -153,6 +149,7 @@ export class AwsCache implements RemoteCache {
           gzip: true,
           file: tgzFilePath,
           cwd: cacheDirectory,
+          filter: (path: string) => this.filterTgzContent(path)
         },
         [hash],
       );
@@ -166,6 +163,7 @@ export class AwsCache implements RemoteCache {
       await extract({
         file: tgzFilePath,
         cwd: cacheDirectory,
+        filter: (path: string) => this.filterTgzContent(path)
       });
     } catch (err) {
       throw new Error(`Error extracting tar.gz file - ${err}`);
@@ -254,10 +252,13 @@ export class AwsCache implements RemoteCache {
     return `${hash}.commit`;
   }
 
-  private async removeMachineSignature(hash: string, cacheDirectory: string): Promise<void> {
-    const machineSignatureFileName = 'source';
-    const unlinkFileAsync = promisify(unlink);
+  private filterTgzContent(filePath: string): boolean {
+    const dir = dirname(filePath);
 
-    await unlinkFileAsync(join(cacheDirectory, hash, machineSignatureFileName));
+    const excludedPaths = [
+      join(dir, "source")
+    ];
+
+    return !excludedPaths.includes(filePath);
   }
 }

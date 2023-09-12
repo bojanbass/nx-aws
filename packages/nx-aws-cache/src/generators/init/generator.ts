@@ -49,7 +49,6 @@ function updateNxJson(tree: Tree, options: InitGeneratorSchema): void {
           ...(options.awsRegion ? { awsRegion: options.awsRegion } : {}),
           ...(options.awsBucket ? { awsBucket: options.awsBucket } : {}),
           ...(options.awsForcePathStyle ? { awsForcePathStyle: options.awsForcePathStyle } : {}),
-          ...(options.trustForeignMachineCache ? { trustForeignMachineCache: options.trustForeignMachineCache } : {}),
         },
       },
     };

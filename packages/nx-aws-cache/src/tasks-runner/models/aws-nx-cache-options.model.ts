@@ -6,5 +6,4 @@ export interface AwsNxCacheOptions {
   awsRegion?: string;
   awsBucket?: string;
   awsForcePathStyle?: boolean;
-  trustForeignMachineCache?: boolean;
 }

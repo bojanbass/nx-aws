@@ -20,9 +20,6 @@ function getOptions(options: AwsNxCacheOptions) {
     awsForcePathStyle: process.env.NXCACHE_AWS_FORCE_PATH_STYLE
       ? process.env.NXCACHE_AWS_FORCE_PATH_STYLE === 'true'
       : options.awsForcePathStyle,
-    trustForeignMachineCache: process.env.NXCACHE_TRUST_FOREIGN_MACHINE_CACHE
-      ? process.env.NXCACHE_TRUST_FOREIGN_MACHINE_CACHE === 'true'
-      : options.trustForeignMachineCache === true
   };
 }
 
