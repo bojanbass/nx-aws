@@ -53,7 +53,7 @@
     "@nx/workspace": ">=16.0.0"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.397.0",
+    "@aws-sdk/client-s3": "3.413.0",
     "@aws-sdk/credential-providers": "3.397.0",
     "@aws-sdk/property-provider": "^3.374.0",
     "@swc/helpers": "~0.5.1",
