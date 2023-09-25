@@ -149,7 +149,7 @@ export class AwsCache implements RemoteCache {
           gzip: true,
           file: tgzFilePath,
           cwd: cacheDirectory,
-          filter: (path: string) => this.filterTgzContent(path)
+          filter: (path: string) => this.filterTgzContent(path),
         },
         [hash],
       );
@@ -163,7 +163,7 @@ export class AwsCache implements RemoteCache {
       await extract({
         file: tgzFilePath,
         cwd: cacheDirectory,
-        filter: (path: string) => this.filterTgzContent(path)
+        filter: (path: string) => this.filterTgzContent(path),
       });
     } catch (err) {
       throw new Error(`Error extracting tar.gz file - ${err}`);
@@ -255,9 +255,7 @@ export class AwsCache implements RemoteCache {
   private filterTgzContent(filePath: string): boolean {
     const dir = dirname(filePath);
 
-    const excludedPaths = [
-      join(dir, "source")
-    ];
+    const excludedPaths = [join(dir, 'source')];
 
     return !excludedPaths.includes(filePath);
   }
