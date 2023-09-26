@@ -1,5 +1,5 @@
 import { createReadStream, createWriteStream, writeFile } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { pipeline, Readable } from 'stream';
 import { promisify } from 'util';
 
@@ -149,6 +149,7 @@ export class AwsCache implements RemoteCache {
           gzip: true,
           file: tgzFilePath,
           cwd: cacheDirectory,
+          filter: (path: string) => this.filterTgzContent(path),
         },
         [hash],
       );
@@ -162,6 +163,7 @@ export class AwsCache implements RemoteCache {
       await extract({
         file: tgzFilePath,
         cwd: cacheDirectory,
+        filter: (path: string) => this.filterTgzContent(path),
       });
     } catch (err) {
       throw new Error(`Error extracting tar.gz file - ${err}`);
@@ -248,5 +250,20 @@ export class AwsCache implements RemoteCache {
 
   private getCommitFileName(hash: string): string {
     return `${hash}.commit`;
+  }
+
+  private filterTgzContent(filePath: string): boolean {
+    const dir = dirname(filePath);
+
+    const excludedPaths = [
+      /**
+       * The 'source' file is used by NX for integrity check purposes, but isn't utilized by custom cache providers.
+       * Excluding it from the tarball saves space and avoids potential NX cache integrity issues.
+       * See: https://github.com/bojanbass/nx-aws/issues/368 and https://github.com/nrwl/nx/issues/19159 for more context.
+       */
+      join(dir, 'source'),
+    ];
+
+    return !excludedPaths.includes(filePath);
   }
 }
