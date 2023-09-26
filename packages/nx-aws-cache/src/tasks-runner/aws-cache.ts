@@ -255,7 +255,14 @@ export class AwsCache implements RemoteCache {
   private filterTgzContent(filePath: string): boolean {
     const dir = dirname(filePath);
 
-    const excludedPaths = [join(dir, 'source')];
+    const excludedPaths = [
+      /**
+       * The 'source' file is used by NX for integrity check purposes, but isn't utilized by custom cache providers.
+       * Excluding it from the tarball saves space and avoids potential NX cache integrity issues.
+       * See: https://github.com/bojanbass/nx-aws/issues/368 and https://github.com/nrwl/nx/issues/19159 for more context.
+       */
+      join(dir, 'source'),
+    ];
 
     return !excludedPaths.includes(filePath);
   }
