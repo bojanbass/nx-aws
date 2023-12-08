@@ -10,7 +10,7 @@ import {create, extract} from "tar";
 import {AwsNxCacheOptions} from "./models/aws-nx-cache-options.model";
 import {Logger} from "./logger";
 import {MessageReporter} from "./message-reporter";
-import {Encrypt} from "./encrypt";
+import {Encrypt, Decrypt, EncryptConfig} from "./encryptor";
 
 
 export class AwsCache implements RemoteCache {
@@ -20,7 +20,7 @@ export class AwsCache implements RemoteCache {
     private readonly s3: clientS3.S3Client;
     private readonly logger = new Logger();
     private readonly uploadQueue: Array<Promise<boolean>> = [];
-    private readonly encryptor: Encrypt | null = null;
+    private readonly encryptConfig: EncryptConfig | null = null;
 
     public constructor (options: AwsNxCacheOptions, private messages: MessageReporter) {
 
@@ -28,6 +28,7 @@ export class AwsCache implements RemoteCache {
         const bucketTokens = awsBucket.split("/");
         this.bucket = bucketTokens.shift() as string;
         this.path = bucketTokens.join("/");
+        this.encryptConfig = null;
 
         const clientConfig: clientS3.S3ClientConfig = {};
 
@@ -66,7 +67,7 @@ export class AwsCache implements RemoteCache {
 
         if (options?.encryptionFileKey) {
 
-            this.encryptor = new Encrypt(options.encryptionFileKey);
+            this.encryptConfig = new EncryptConfig(options.encryptionFileKey);
 
         }
 
@@ -173,17 +174,19 @@ export class AwsCache implements RemoteCache {
 
         try {
 
-            let sourceFile: string | Readable = this.getTgzFilePath(hash, cacheDirectory);
+            const sourceFile: string | Readable = this.getTgzFilePath(hash, cacheDirectory);
 
             await this.createTgzFile(sourceFile, hash, cacheDirectory);
 
-            if (this.encryptor) {
+            if (this.encryptConfig) {
 
-                sourceFile = await this.encryptor.encryptFile(sourceFile);
+                await this.uploadFile(hash, pipeline(sourceFile, new Encrypt(this.encryptConfig)));
+
+            } else {
+
+                await this.uploadFile(hash, createReadStream(sourceFile));
 
             }
-
-            await this.uploadFile(hash, sourceFile);
 
             return true;
 
@@ -242,15 +245,13 @@ export class AwsCache implements RemoteCache {
     }
 
 
-    private async uploadFile (hash: string, sourceFile: string | Readable): Promise<void> {
+    private async uploadFile (hash: string, sourceFile: Readable): Promise<void> {
 
         const tgzFileName = this.getTgzFileName(hash);
         const params: clientS3.PutObjectCommand = new clientS3.PutObjectCommand({
             "Bucket": this.bucket,
             "Key": this.getS3Key(tgzFileName),
-            "Body": typeof sourceFile === "string"
-                ? createReadStream(sourceFile)
-                : sourceFile
+            "Body": sourceFile
         });
 
         try {
@@ -289,10 +290,14 @@ export class AwsCache implements RemoteCache {
 
             const commandOutput = await this.s3.send(params);
             const fileStream = commandOutput.Body as Readable;
-            if (this.encryptor) {
+            if (this.encryptConfig) {
 
-                const decryptStream = this.encryptor.createDecryptStream();
-                await pipelinePromise(fileStream, decryptStream, writeFileToLocalDir);
+                const decryptStream = new Decrypt(this.encryptConfig);
+                await pipelinePromise(
+                    fileStream,
+                    decryptStream,
+                    writeFileToLocalDir
+                );
 
             } else {
 
