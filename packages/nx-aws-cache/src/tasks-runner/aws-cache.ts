@@ -1,269 +1,387 @@
-import { createReadStream, createWriteStream, writeFile } from 'fs';
-import { join, dirname } from 'path';
-import { pipeline, Readable } from 'stream';
-import { promisify } from 'util';
+import {createReadStream, createWriteStream, writeFile} from "fs";
+import {join, dirname} from "path";
+import {pipeline, Readable} from "stream";
+import {promisify} from "util";
+import * as clientS3 from "@aws-sdk/client-s3";
+import {fromNodeProviderChain} from "@aws-sdk/credential-providers";
+import {CredentialsProviderError} from "@aws-sdk/property-provider";
+import {RemoteCache} from "@nx/workspace/src/tasks-runner/default-tasks-runner";
+import {create, extract} from "tar";
+import {AwsNxCacheOptions} from "./models/aws-nx-cache-options.model";
+import {Logger} from "./logger";
+import {MessageReporter} from "./message-reporter";
+import {Encrypt} from "./encrypt";
 
-import * as clientS3 from '@aws-sdk/client-s3';
-import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
-import { CredentialsProviderError } from '@aws-sdk/property-provider';
-import { RemoteCache } from '@nx/workspace/src/tasks-runner/default-tasks-runner';
-import { create, extract } from 'tar';
-
-import { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
-import { Logger } from './logger';
-import { MessageReporter } from './message-reporter';
 
 export class AwsCache implements RemoteCache {
-  private readonly bucket: string;
-  private readonly path: string;
-  private readonly s3: clientS3.S3Client;
-  private readonly logger = new Logger();
-  private readonly uploadQueue: Array<Promise<boolean>> = [];
 
-  public constructor(options: AwsNxCacheOptions, private messages: MessageReporter) {
-    const awsBucket = options.awsBucket ?? '';
-    const bucketTokens = awsBucket.split('/');
-    this.bucket = bucketTokens.shift() as string;
-    this.path = bucketTokens.join('/');
+    private readonly bucket: string;
+    private readonly path: string;
+    private readonly s3: clientS3.S3Client;
+    private readonly logger = new Logger();
+    private readonly uploadQueue: Array<Promise<boolean>> = [];
+    private readonly encryptor: Encrypt | null = null;
 
-    const clientConfig: clientS3.S3ClientConfig = {};
+    public constructor (options: AwsNxCacheOptions, private messages: MessageReporter) {
 
-    if (options.awsRegion) {
-      clientConfig.region = options.awsRegion;
+        const awsBucket = options.awsBucket ?? "";
+        const bucketTokens = awsBucket.split("/");
+        this.bucket = bucketTokens.shift() as string;
+        this.path = bucketTokens.join("/");
+
+        const clientConfig: clientS3.S3ClientConfig = {};
+
+        if (options.awsRegion) {
+
+            clientConfig.region = options.awsRegion;
+
+        }
+
+        if (options.awsEndpoint) {
+
+            clientConfig.endpoint = options.awsEndpoint;
+
+        }
+
+        if (options.awsAccessKeyId && options.awsSecretAccessKey) {
+
+            clientConfig.credentials = {
+                "accessKeyId": options.awsAccessKeyId,
+                "secretAccessKey": options.awsSecretAccessKey
+            };
+
+        } else {
+
+            clientConfig.credentials = fromNodeProviderChain(options.awsProfile
+                ? {"profile": options.awsProfile}
+                : {});
+
+        }
+
+        if (options.awsForcePathStyle) {
+
+            clientConfig.forcePathStyle = true;
+
+        }
+
+        if (options?.encryptionFileKey) {
+
+            this.encryptor = new Encrypt(options.encryptionFileKey);
+
+        }
+
+        this.s3 = new clientS3.S3Client(clientConfig);
+
     }
 
-    if (options.awsEndpoint) {
-      clientConfig.endpoint = options.awsEndpoint;
+    public checkConfig (options: AwsNxCacheOptions): void {
+
+        const missingOptions: Array<string> = [];
+
+        if (!options.awsBucket) {
+
+            missingOptions.push("NXCACHE_AWS_BUCKET | awsBucket");
+
+        }
+
+        if (missingOptions.length > 0) {
+
+            throw new Error(`Missing AWS options: \n\n${missingOptions.join("\n")}`);
+
+        }
+
     }
 
-    if (options.awsAccessKeyId && options.awsSecretAccessKey) {
-      clientConfig.credentials = {
-        accessKeyId: options.awsAccessKeyId,
-        secretAccessKey: options.awsSecretAccessKey,
-      };
-    } else {
-      clientConfig.credentials = fromNodeProviderChain(
-        options.awsProfile ? { profile: options.awsProfile } : {},
-      );
+    // eslint-disable-next-line max-statements
+    public async retrieve (hash: string, cacheDirectory: string): Promise<boolean> {
+
+        try {
+
+            await this.s3.config.credentials();
+
+        } catch (err) {
+
+            this.messages.error = err as Error;
+
+            return false;
+
+        }
+
+        if (this.messages.error) {
+
+            return false;
+
+        }
+
+        try {
+
+            this.logger.debug(`Storage Cache: Downloading ${hash}`);
+
+            const tgzFilePath: string = this.getTgzFilePath(hash, cacheDirectory);
+
+            if (!await this.checkIfCacheExists(hash)) {
+
+                this.logger.debug(`Storage Cache: Cache miss ${hash}`);
+
+                return false;
+
+            }
+
+            await this.downloadFile(hash, tgzFilePath);
+            await this.extractTgzFile(tgzFilePath, cacheDirectory);
+            await this.createCommitFile(hash, cacheDirectory);
+
+            this.logger.debug(`Storage Cache: Cache hit ${hash}`);
+
+            return true;
+
+        } catch (err) {
+
+            this.messages.error = err as Error;
+
+            this.logger.debug(`Storage Cache: Cache error ${hash}`);
+
+            return false;
+
+        }
+
     }
 
-    if (options.awsForcePathStyle) {
-      clientConfig.forcePathStyle = true;
+    public store (hash: string, cacheDirectory: string): Promise<boolean> {
+
+        if (this.messages.error) {
+
+            return Promise.resolve(false);
+
+        }
+
+        const resultPromise = this.createAndUploadFile(hash, cacheDirectory);
+
+        this.uploadQueue.push(resultPromise);
+
+        return resultPromise;
+
     }
 
-    this.s3 = new clientS3.S3Client(clientConfig);
-  }
+    public async waitForStoreRequestsToComplete (): Promise<void> {
 
-  public checkConfig(options: AwsNxCacheOptions): void {
-    const missingOptions: Array<string> = [];
+        await Promise.all(this.uploadQueue);
 
-    if (!options.awsBucket) {
-      missingOptions.push('NXCACHE_AWS_BUCKET | awsBucket');
     }
 
-    if (missingOptions.length > 0) {
-      throw new Error(`Missing AWS options: \n\n${missingOptions.join('\n')}`);
-    }
-  }
+    private async createAndUploadFile (hash: string, cacheDirectory: string): Promise<boolean> {
 
-  // eslint-disable-next-line max-statements
-  public async retrieve(hash: string, cacheDirectory: string): Promise<boolean> {
-    try {
-      await this.s3.config.credentials();
-    } catch (err) {
-      this.messages.error = err as Error;
+        try {
 
-      return false;
-    }
+            let sourceFile: string | Readable = this.getTgzFilePath(hash, cacheDirectory);
 
-    if (this.messages.error) {
-      return false;
-    }
+            await this.createTgzFile(sourceFile, hash, cacheDirectory);
 
-    try {
-      this.logger.debug(`Storage Cache: Downloading ${hash}`);
+            if (this.encryptor) {
 
-      const tgzFilePath: string = this.getTgzFilePath(hash, cacheDirectory);
+                sourceFile = await this.encryptor.encryptFile(sourceFile);
 
-      if (!(await this.checkIfCacheExists(hash))) {
-        this.logger.debug(`Storage Cache: Cache miss ${hash}`);
+            }
 
-        return false;
-      }
+            await this.uploadFile(hash, sourceFile);
 
-      await this.downloadFile(hash, tgzFilePath);
-      await this.extractTgzFile(tgzFilePath, cacheDirectory);
-      await this.createCommitFile(hash, cacheDirectory);
+            return true;
 
-      this.logger.debug(`Storage Cache: Cache hit ${hash}`);
+        } catch (err) {
 
-      return true;
-    } catch (err) {
-      this.messages.error = err as Error;
+            this.messages.error = err as Error;
 
-      this.logger.debug(`Storage Cache: Cache error ${hash}`);
+            return false;
 
-      return false;
-    }
-  }
+        }
 
-  public store(hash: string, cacheDirectory: string): Promise<boolean> {
-    if (this.messages.error) {
-      return Promise.resolve(false);
     }
 
-    const resultPromise = this.createAndUploadFile(hash, cacheDirectory);
+    private async createTgzFile (
+        tgzFilePath: string,
+        hash: string,
+        cacheDirectory: string
+    ): Promise<void> {
 
-    this.uploadQueue.push(resultPromise);
+        try {
 
-    return resultPromise;
-  }
+            await create(
+                {
+                    "gzip": true,
+                    "file": tgzFilePath,
+                    "cwd": cacheDirectory,
+                    "filter": (path: string) => this.filterTgzContent(path)
+                },
+                [hash]
+            );
 
-  public async waitForStoreRequestsToComplete(): Promise<void> {
-    await Promise.all(this.uploadQueue);
-  }
+        } catch (err) {
 
-  private async createAndUploadFile(hash: string, cacheDirectory: string): Promise<boolean> {
-    try {
-      const tgzFilePath = this.getTgzFilePath(hash, cacheDirectory);
+            throw new Error(`Error creating tar.gz file - ${err}`);
 
-      await this.createTgzFile(tgzFilePath, hash, cacheDirectory);
-      await this.uploadFile(hash, tgzFilePath);
+        }
 
-      return true;
-    } catch (err) {
-      this.messages.error = err as Error;
-
-      return false;
     }
-  }
 
-  private async createTgzFile(
-    tgzFilePath: string,
-    hash: string,
-    cacheDirectory: string,
-  ): Promise<void> {
-    try {
-      await create(
-        {
-          gzip: true,
-          file: tgzFilePath,
-          cwd: cacheDirectory,
-          filter: (path: string) => this.filterTgzContent(path),
-        },
-        [hash],
-      );
-    } catch (err) {
-      throw new Error(`Error creating tar.gz file - ${err}`);
+    private async extractTgzFile (tgzFilePath: string, cacheDirectory: string): Promise<void> {
+
+        try {
+
+            await extract({
+                "file": tgzFilePath,
+                "cwd": cacheDirectory,
+                "filter": (path: string) => this.filterTgzContent(path)
+            });
+
+        } catch (err) {
+
+            throw new Error(`Error extracting tar.gz file - ${err}`);
+
+        }
+
     }
-  }
 
-  private async extractTgzFile(tgzFilePath: string, cacheDirectory: string): Promise<void> {
-    try {
-      await extract({
-        file: tgzFilePath,
-        cwd: cacheDirectory,
-        filter: (path: string) => this.filterTgzContent(path),
-      });
-    } catch (err) {
-      throw new Error(`Error extracting tar.gz file - ${err}`);
+
+    private async uploadFile (hash: string, sourceFile: string | Readable): Promise<void> {
+
+        const tgzFileName = this.getTgzFileName(hash);
+        const params: clientS3.PutObjectCommand = new clientS3.PutObjectCommand({
+            "Bucket": this.bucket,
+            "Key": this.getS3Key(tgzFileName),
+            "Body": typeof sourceFile === "string"
+                ? createReadStream(sourceFile)
+                : sourceFile
+        });
+
+        try {
+
+            this.logger.debug(`Storage Cache: Uploading ${hash}`);
+
+            await this.s3.send(params);
+
+            this.logger.debug(`Storage Cache: Stored ${hash}`);
+
+        } catch (err) {
+
+            throw new Error(`Storage Cache: Upload error - ${err}`);
+
+        }
+
     }
-  }
 
-  private async uploadFile(hash: string, tgzFilePath: string): Promise<void> {
-    const tgzFileName = this.getTgzFileName(hash);
-    const params: clientS3.PutObjectCommand = new clientS3.PutObjectCommand({
-      Bucket: this.bucket,
-      Key: this.getS3Key(tgzFileName),
-      Body: createReadStream(tgzFilePath),
-    });
+    private getS3Key (tgzFileName: string) {
 
-    try {
-      this.logger.debug(`Storage Cache: Uploading ${hash}`);
+        return join(this.path, tgzFileName);
 
-      await this.s3.send(params);
-
-      this.logger.debug(`Storage Cache: Stored ${hash}`);
-    } catch (err) {
-      throw new Error(`Storage Cache: Upload error - ${err}`);
     }
-  }
 
-  private getS3Key(tgzFileName: string) {
-    return join(this.path, tgzFileName);
-  }
+    private async downloadFile (hash: string, tgzFilePath: string): Promise<void> {
 
-  private async downloadFile(hash: string, tgzFilePath: string): Promise<void> {
-    const pipelinePromise = promisify(pipeline),
-      tgzFileName = this.getTgzFileName(hash),
-      writeFileToLocalDir = createWriteStream(tgzFilePath),
-      params = new clientS3.GetObjectCommand({
-        Bucket: this.bucket,
-        Key: this.getS3Key(tgzFileName),
-      });
+        const pipelinePromise = promisify(pipeline),
+            tgzFileName = this.getTgzFileName(hash),
+            writeFileToLocalDir = createWriteStream(tgzFilePath),
+            params = new clientS3.GetObjectCommand({
+                "Bucket": this.bucket,
+                "Key": this.getS3Key(tgzFileName)
+            });
 
-    try {
-      const commandOutput = await this.s3.send(params);
-      const fileStream = commandOutput.Body as Readable;
+        try {
 
-      await pipelinePromise(fileStream, writeFileToLocalDir);
-    } catch (err) {
-      throw new Error(`Storage Cache: Download error - ${err}`);
+            const commandOutput = await this.s3.send(params);
+            const fileStream = commandOutput.Body as Readable;
+            if (this.encryptor) {
+
+                const decryptStream = this.encryptor.createDecryptStream();
+                await pipelinePromise(fileStream, decryptStream, writeFileToLocalDir);
+
+            } else {
+
+                await pipelinePromise(fileStream, writeFileToLocalDir);
+
+            }
+
+        } catch (err) {
+
+            throw new Error(`Storage Cache: Download error - ${err}`);
+
+        }
+
     }
-  }
 
-  private async checkIfCacheExists(hash: string): Promise<boolean> {
-    const tgzFileName = this.getTgzFileName(hash),
-      params: clientS3.HeadObjectCommand = new clientS3.HeadObjectCommand({
-        Bucket: this.bucket,
-        Key: this.getS3Key(tgzFileName),
-      });
+    private async checkIfCacheExists (hash: string): Promise<boolean> {
 
-    try {
-      await this.s3.send(params);
+        const tgzFileName = this.getTgzFileName(hash),
+            params: clientS3.HeadObjectCommand = new clientS3.HeadObjectCommand({
+                "Bucket": this.bucket,
+                "Key": this.getS3Key(tgzFileName)
+            });
 
-      return true;
-    } catch (err) {
-      if ((err as Error).name === 'NotFound') {
-        return false;
-      } else if (err instanceof CredentialsProviderError) {
-        return false;
-      }
+        try {
 
-      throw new Error(`Error checking cache file existence - ${err}`);
+            await this.s3.send(params);
+
+            return true;
+
+        } catch (err) {
+
+            if (err as Error.name === "NotFound") {
+
+                return false;
+
+            } else if (err instanceof CredentialsProviderError) {
+
+                return false;
+
+            }
+
+            throw new Error(`Error checking cache file existence - ${err}`);
+
+        }
+
     }
-  }
 
-  private async createCommitFile(hash: string, cacheDirectory: string): Promise<void> {
-    const writeFileAsync = promisify(writeFile);
+    private async createCommitFile (hash: string, cacheDirectory: string): Promise<void> {
 
-    await writeFileAsync(join(cacheDirectory, this.getCommitFileName(hash)), 'true');
-  }
+        const writeFileAsync = promisify(writeFile);
 
-  private getTgzFileName(hash: string): string {
-    return `${hash}.tar.gz`;
-  }
+        await writeFileAsync(join(cacheDirectory, this.getCommitFileName(hash)), "true");
 
-  private getTgzFilePath(hash: string, cacheDirectory: string): string {
-    return join(cacheDirectory, this.getTgzFileName(hash));
-  }
+    }
 
-  private getCommitFileName(hash: string): string {
-    return `${hash}.commit`;
-  }
+    private getTgzFileName (hash: string): string {
 
-  private filterTgzContent(filePath: string): boolean {
-    const dir = dirname(filePath);
+        return `${hash}.tar.gz`;
 
-    const excludedPaths = [
-      /**
-       * The 'source' file is used by NX for integrity check purposes, but isn't utilized by custom cache providers.
-       * Excluding it from the tarball saves space and avoids potential NX cache integrity issues.
-       * See: https://github.com/bojanbass/nx-aws/issues/368 and https://github.com/nrwl/nx/issues/19159 for more context.
-       */
-      join(dir, 'source'),
-    ];
+    }
 
-    return !excludedPaths.includes(filePath);
-  }
+    private getTgzFilePath (hash: string, cacheDirectory: string): string {
+
+        return join(cacheDirectory, this.getTgzFileName(hash));
+
+    }
+
+    private getCommitFileName (hash: string): string {
+
+        return `${hash}.commit`;
+
+    }
+
+    private filterTgzContent (filePath: string): boolean {
+
+        const dir = dirname(filePath);
+
+        const excludedPaths = [
+
+            /**
+             * The 'source' file is used by NX for integrity check purposes, but isn't utilized by custom cache providers.
+             * Excluding it from the tarball saves space and avoids potential NX cache integrity issues.
+             * See: https://github.com/bojanbass/nx-aws/issues/368 and https://github.com/nrwl/nx/issues/19159 for more context.
+             */
+            join(dir, "source")
+        ];
+
+        return !excludedPaths.includes(filePath);
+
+    }
+
 }
