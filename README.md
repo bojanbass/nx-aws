@@ -70,7 +70,7 @@ There are two ways to set-up plugin options, using `nx.json` or `Environment var
 - `.env`
 
 ## Encryption
-If you want you can encrypt file before send to s3 server. Use ENV
+If you want you can encrypt file before send to s3 server (Client side). Use ENV
 NX_CLOUD_ENCRYPTION_KEY or NXCACHE_CLOUD_ENCRYPTION_KEY
 ```sh
 # Generate new key for encryption.
