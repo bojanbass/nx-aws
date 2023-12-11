@@ -1,7 +1,11 @@
+
 import {Transform} from "stream";
 import {createDecipheriv, Decipher} from "crypto";
 import {EncryptConfig} from "./EncryptConfig";
 
+/**
+ * Stream transform for decrypt file. Get IV for file from first 16 bytes
+ */
 export class Decrypt extends Transform {
 
     private decipher: Decipher | null = null;
@@ -28,7 +32,7 @@ export class Decrypt extends Transform {
     ) {
 
 
-        if (!this.readFirstChunk && chunk.length > 0) {
+        if (!this.readFirstChunk && chunk.length >= this.config.getIvBytes()) {
 
             this.readFirstChunk = true;
             // Get iv from first bytes

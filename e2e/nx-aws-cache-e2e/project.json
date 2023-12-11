@@ -10,7 +10,17 @@
         "jestConfig": "e2e/nx-aws-cache-e2e/jest.config.ts",
         "runInBand": true
       },
-      "dependsOn": ["nx-aws-cache:build"]
+      "dependsOn": ["nx-aws-cache:build", "docker-compose"]
+    },
+    "docker-compose": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "docker-compose down && docker-compose up -d && sleep 5"
+        ],
+        "cwd": "e2e/nx-aws-cache-e2e",
+        "parallel": false
+      }
     }
   },
   "tags": [],

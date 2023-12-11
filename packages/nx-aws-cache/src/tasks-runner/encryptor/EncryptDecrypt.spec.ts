@@ -12,6 +12,7 @@ const algo = "aes-256-cbc";
 
 class TestCipher {
 
+    // eslint-disable-next-line no-useless-constructor
     constructor (
       private algorithm: string,
       private key: Buffer,
@@ -42,8 +43,8 @@ class TestCipher {
 
 }
 
+// eslint-disable-next-line max-lines-per-function
 describe("Encryptor tests", () => {
-
 
     let testData: Buffer;
     let encrypt: Encrypt;
@@ -59,6 +60,7 @@ describe("Encryptor tests", () => {
             algo,
             ivLength
         );
+        // eslint-disable-next-line max-len
         testData = Buffer.from("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum");
         encrypt = new Encrypt(config);
         decrypt = new Decrypt(config);
@@ -84,7 +86,10 @@ describe("Encryptor tests", () => {
 
             const encryptedData = readFileSync("/tmp/enc.test");
             const ivFromFirstBytes = encryptedData.slice(0, ivLength);
-            const encryptedPayload = encryptedData.slice(ivLength, encryptedData.length);
+            const encryptedPayload = encryptedData.slice(
+                ivLength,
+                encryptedData.length
+            );
             expect(ivFromFirstBytes.equals(iv)).toBeTruthy();
             expect(testCipher.encrypt(testData).equals(encryptedData));
             expect(testCipher.decrypt(encryptedPayload).equals(testData));
@@ -103,7 +108,11 @@ describe("Encryptor tests", () => {
 
         const chunks: Array<Buffer> = [];
         const writable = new Writable({
-            write (chunk: any, encoding: BufferEncoding, callback: (error?: (Error | null)) => void) {
+            write (
+                chunk: any,
+                encoding: BufferEncoding,
+                callback: (error?: (Error | null)) => void
+            ) {
 
                 chunks.push(chunk);
                 callback();
@@ -126,11 +135,5 @@ describe("Encryptor tests", () => {
         });
 
     });
-
-    /*
-     * It('Should encrypt file', () => {
-     *   Const file =
-     * })
-     */
 
 });

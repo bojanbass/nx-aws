@@ -2,7 +2,9 @@ import {Transform, TransformCallback} from "stream";
 import {createCipheriv, Cipher, randomBytes} from "crypto";
 import {EncryptConfig} from "./EncryptConfig";
 
-
+/**
+ * Stream transform class for encrypt file, Save IV in first 16 bytes
+ */
 export class Encrypt extends Transform {
 
     private cipher: Cipher | null = null;
