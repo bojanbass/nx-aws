@@ -20,8 +20,6 @@ export class Encrypt extends Transform {
   }
 
   _transform(chunk: any, encoding: BufferEncoding, done: TransformCallback) {
-    this.readFirstChunk = false;
-
 
     if (!this.readFirstChunk && chunk.length > 0) {
       const iv = this.generateIv();
