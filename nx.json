@@ -7,7 +7,7 @@
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "test", "lint", "e2e"],
+        "cacheableOperations": ["build", "test", "lint", "e2e", "docker-compose"],
         "parallel": 1,
         "accessToken": "NGIxYzhjYjMtYTBjNC00MDk3LTg0NGMtZDZhNDliZTc3MTMzfHJlYWQtd3JpdGU="
       }

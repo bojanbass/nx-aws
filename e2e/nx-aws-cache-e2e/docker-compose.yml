@@ -1,6 +1,5 @@
 version: '3'
 services:
-
   minio:
     image: bitnami/minio
     ports:
