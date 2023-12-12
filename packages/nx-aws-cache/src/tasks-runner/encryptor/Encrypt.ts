@@ -22,8 +22,9 @@ export class Encrypt extends Transform {
   _transform(chunk: any, encoding: BufferEncoding, done: TransformCallback) {
     this.readFirstChunk = false;
 
-    const iv = this.generateIv();
+
     if (!this.readFirstChunk && chunk.length > 0) {
+      const iv = this.generateIv();
       this.readFirstChunk = true;
 
       this.cipher = createCipheriv(this.config.getAlgorithm(), this.config.getKeyBuffer(), iv);
