@@ -30,11 +30,9 @@ export class AwsCache implements RemoteCache {
 
     const clientConfig: clientS3.S3ClientConfig = {};
 
-    if (options.awsRegion)
-      clientConfig.region = options.awsRegion;
+    if (options.awsRegion) clientConfig.region = options.awsRegion;
 
-    if (options.awsEndpoint)
-      clientConfig.endpoint = options.awsEndpoint;
+    if (options.awsEndpoint) clientConfig.endpoint = options.awsEndpoint;
 
     if (options.awsAccessKeyId && options.awsSecretAccessKey) {
       clientConfig.credentials = {
@@ -47,8 +45,7 @@ export class AwsCache implements RemoteCache {
       );
     }
 
-    if (options.awsForcePathStyle)
-      clientConfig.forcePathStyle = true;
+    if (options.awsForcePathStyle) clientConfig.forcePathStyle = true;
 
     if (options?.encryptionFileKey)
       this.encryptConfig = new EncryptConfig(options.encryptionFileKey);
@@ -59,8 +56,7 @@ export class AwsCache implements RemoteCache {
   public checkConfig(options: AwsNxCacheOptions): void {
     const missingOptions: Array<string> = [];
 
-    if (!options.awsBucket)
-      missingOptions.push('NXCACHE_AWS_BUCKET | awsBucket');
+    if (!options.awsBucket) missingOptions.push('NXCACHE_AWS_BUCKET | awsBucket');
 
     if (missingOptions.length > 0)
       throw new Error(`Missing AWS options: \n\n${missingOptions.join('\n')}`);
