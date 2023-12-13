@@ -38,6 +38,11 @@
       "type": "boolean",
       "description": "Whether to force path style URLs for S3 objects (e.g. when using MinIO)",
       "x-prompt": "Whether to force path style URLs for S3 objects (e.g. when using MinIO)"
+    },
+    "encryptionFileKey": {
+      "type": "string",
+      "description": "Encrypt file in client before send to S3 server. 32 bytes in base64",
+      "x-prompt": "Encrypt file in client before send to S3 server. 32 bytes in base64"
     }
   }
 }
