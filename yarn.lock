@@ -499,9 +499,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/lib-storage@npm:^3.470.0":
-  version: 3.470.0
-  resolution: "@aws-sdk/lib-storage@npm:3.470.0"
+"@aws-sdk/lib-storage@npm:^3.474.0":
+  version: 3.474.0
+  resolution: "@aws-sdk/lib-storage@npm:3.474.0"
   dependencies:
     "@smithy/abort-controller": ^2.0.1
     "@smithy/middleware-endpoint": ^2.2.3
@@ -512,7 +512,7 @@ __metadata:
     tslib: ^2.5.0
   peerDependencies:
     "@aws-sdk/client-s3": ^3.0.0
-  checksum: 805632d4832bf82a5aa9bfb0cb7ec31764f438a7f177380cf59ee1fc3911c9c78988da4434d69ae698ce51d840b97e3c77b358db0b93ab6db0bffad4ede14bc6
+  checksum: 2d3c7c06c7d7ac482af69fd250ba4beeee8683ddfd7aec96ac4352890220cbf48913b8dd3bf45937ae4bfa7dc491f35dcfa77bb37fcb6c8786a4941edfee67ac
   languageName: node
   linkType: hard
 
@@ -8318,7 +8318,7 @@ __metadata:
     "@actions/github": 5.1.1
     "@aws-sdk/client-s3": 3.474.0
     "@aws-sdk/credential-providers": 3.474.0
-    "@aws-sdk/lib-storage": ^3.470.0
+    "@aws-sdk/lib-storage": ^3.474.0
     "@aws-sdk/property-provider": ^3.374.0
     "@nx/devkit": 16.2.2
     "@nx/eslint-plugin": 16.2.2
