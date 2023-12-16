@@ -30,9 +30,13 @@ export class AwsCache implements RemoteCache {
 
     const clientConfig: clientS3.S3ClientConfig = {};
 
-    if (options.awsRegion) clientConfig.region = options.awsRegion;
+    if (options.awsRegion) {
+      clientConfig.region = options.awsRegion;
+    }
 
-    if (options.awsEndpoint) clientConfig.endpoint = options.awsEndpoint;
+    if (options.awsEndpoint) {
+      clientConfig.endpoint = options.awsEndpoint;
+    }
 
     if (options.awsAccessKeyId && options.awsSecretAccessKey) {
       clientConfig.credentials = {
@@ -45,10 +49,13 @@ export class AwsCache implements RemoteCache {
       );
     }
 
-    if (options.awsForcePathStyle) clientConfig.forcePathStyle = true;
+    if (options.awsForcePathStyle) {
+      clientConfig.forcePathStyle = true;
+    }
 
-    if (options?.encryptionFileKey)
+    if (options?.encryptionFileKey) {
       this.encryptConfig = new EncryptConfig(options.encryptionFileKey);
+    }
 
     this.s3 = new clientS3.S3Client(clientConfig);
   }
@@ -173,17 +180,16 @@ export class AwsCache implements RemoteCache {
     return join(this.path, tgzFileName);
   }
 
-  private async uploadFile(hash: string, sourceFile: string | Readable): Promise<void> {
+  private async uploadFile(hash: string, sourceFile: Readable): Promise<void> {
     const tgzFileName = this.getTgzFileName(hash);
     const params: clientS3.PutObjectCommand = new clientS3.PutObjectCommand({
       Bucket: this.bucket,
       Key: this.getS3Key(tgzFileName),
-      Body: typeof sourceFile === 'string' ? createReadStream(sourceFile) : sourceFile,
+      Body: sourceFile,
     });
 
     try {
       this.logger.debug(`Storage Cache: Uploading ${hash}`);
-
       await this.s3.send(params);
 
       this.logger.debug(`Storage Cache: Stored ${hash}`);
@@ -248,7 +254,6 @@ export class AwsCache implements RemoteCache {
 
     try {
       await this.s3.send(params);
-
       return true;
     } catch (err) {
       if ((err as Error['name']) === 'NotFound') {
@@ -281,7 +286,6 @@ export class AwsCache implements RemoteCache {
 
   private filterTgzContent(filePath: string): boolean {
     const dir = dirname(filePath);
-
     const excludedPaths = [
       /**
        * The 'source' file is used by NX for integrity check purposes, but isn't utilized by custom cache providers.
