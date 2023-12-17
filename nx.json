@@ -5,6 +5,9 @@
   },
   "tasksRunnerOptions": {
     "default": {
+      "runner": "nx/tasks-runners/default"
+    },
+    "default2": {
       "runner": "nx-cloud",
       "options": {
         "cacheableOperations": ["build", "test", "lint", "e2e", "docker-compose"],
