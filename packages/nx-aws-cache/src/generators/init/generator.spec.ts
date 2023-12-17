@@ -4,7 +4,7 @@ import { Tree, readJson } from '@nx/devkit';
 import generator from './generator';
 import { InitGeneratorSchema } from './schema';
 
-const AFTER_ALL_TIMEOUT = 1000
+const AFTER_ALL_TIMEOUT = 1000;
 
 describe('init generator', () => {
   let appTree: Tree;
