@@ -71,7 +71,6 @@ describe('Encryptor tests', () => {
     const filePath = '/tmp/decr.test';
     const input = Readable.from(testData);
     const fileOutput = createWriteStream(filePath);
-    const fileInput = createReadStream(filePath);
 
     const chunks: Array<Buffer> = [];
     const writable = new Writable({
@@ -83,6 +82,7 @@ describe('Encryptor tests', () => {
 
     input.pipe(encrypt).pipe(fileOutput);
     fileOutput.on('finish', () => {
+      const fileInput = createReadStream(filePath);
       fileInput.pipe(decrypt).pipe(writable);
       writable.on('finish', () => {
         const decrypted = Buffer.concat(chunks);
