@@ -1,6 +1,6 @@
 import { Transform, TransformCallback } from 'stream';
 import { createCipheriv, Cipher, randomBytes } from 'crypto';
-import { EncryptConfig } from './EncryptConfig';
+import { EncryptConfig } from './encrypt-config';
 
 /**
  * Stream transform class for encrypt file, Save IV in first 16 bytes
@@ -20,7 +20,6 @@ export class Encrypt extends Transform {
   }
 
   _transform(chunk: any, encoding: BufferEncoding, done: TransformCallback) {
-
     if (!this.readFirstChunk && chunk.length > 0) {
       const iv = this.generateIv();
       this.readFirstChunk = true;

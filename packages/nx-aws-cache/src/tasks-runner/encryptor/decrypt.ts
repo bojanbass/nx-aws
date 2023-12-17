@@ -1,6 +1,6 @@
 import { Transform } from 'stream';
 import { createDecipheriv, Decipher } from 'crypto';
-import { EncryptConfig } from './EncryptConfig';
+import { EncryptConfig } from './encrypt-config';
 
 /**
  * Stream transform for decrypt file. Get IV for file from first 16 bytes

@@ -15,9 +15,7 @@
     "docker-compose": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "docker-compose down && docker-compose up -d && sleep 5"
-        ],
+        "commands": ["docker-compose down && docker-compose up -d && sleep 5"],
         "cwd": "e2e/nx-aws-cache-e2e",
         "parallel": false
       }

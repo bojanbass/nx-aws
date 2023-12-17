@@ -25,7 +25,10 @@ function getOptions(options: AwsNxCacheOptions) {
     awsForcePathStyle: process.env.NXCACHE_AWS_FORCE_PATH_STYLE
       ? process.env.NXCACHE_AWS_FORCE_PATH_STYLE === 'true'
       : options.awsForcePathStyle,
-    encryptionFileKey: process.env.NX_CLOUD_ENCRYPTION_KEY ?? process.env.NXCACHE_AWS_ENCRYPTION_KEY ?? options.encryptionFileKey
+    encryptionFileKey:
+      process.env.NX_CLOUD_ENCRYPTION_KEY ??
+      process.env.NXCACHE_AWS_ENCRYPTION_KEY ??
+      options.encryptionFileKey,
   };
 }
 

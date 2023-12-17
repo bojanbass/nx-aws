@@ -1,9 +1,9 @@
-import { Encrypt } from './Encrypt';
+import { Encrypt } from './encrypt';
 import { randomBytes, createDecipheriv, createCipheriv } from 'crypto';
 import { createReadStream, createWriteStream, readFileSync } from 'fs';
 import { Readable, Writable } from 'stream';
-import { Decrypt } from './Decrypt';
-import { EncryptConfig } from './EncryptConfig';
+import { Decrypt } from './decrypt';
+import { EncryptConfig } from './encrypt-config';
 
 const keyLength = 32;
 const ivLength = 16;
