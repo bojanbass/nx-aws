@@ -256,7 +256,7 @@ export class AwsCache implements RemoteCache {
       await this.s3.send(params);
       return true;
     } catch (err) {
-      if ((err as Error['name']) === 'NotFound') {
+      if ((err as Error).name === 'NotFound') {
         return false;
       } else if (err instanceof CredentialsProviderError) {
         return false;
