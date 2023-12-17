@@ -4,6 +4,8 @@ import { Tree, readJson } from '@nx/devkit';
 import generator from './generator';
 import { InitGeneratorSchema } from './schema';
 
+const AFTER_ALL_TIMEOUT = 1000
+
 describe('init generator', () => {
   let appTree: Tree;
   const options: InitGeneratorSchema = {
@@ -13,6 +15,11 @@ describe('init generator', () => {
 
   beforeEach(() => {
     appTree = createTreeWithEmptyWorkspace();
+  });
+
+  afterAll((done) => {
+    // Fix issue with load file after jest finished
+    setTimeout(done, AFTER_ALL_TIMEOUT);
   });
 
   it('should add @nx-aws-plugin/nx-aws-cache to nx.json', () => {
