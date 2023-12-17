@@ -15,6 +15,11 @@ describe('init generator', () => {
     appTree = createTreeWithEmptyWorkspace();
   });
 
+  afterAll((done) => {
+    // Fix issue with load file after jest finished
+    setTimeout(done, 1000)
+  })
+
   it('should add @nx-aws-plugin/nx-aws-cache to nx.json', () => {
     let nxJson = readJson(appTree, 'nx.json');
     expect(nxJson.tasksRunnerOptions.default.runner).toBe('nx/tasks-runners/default');
@@ -40,4 +45,5 @@ describe('init generator', () => {
     expect(nxJson.tasksRunnerOptions.default.options.awsRegion).toBeUndefined();
     expect(nxJson.tasksRunnerOptions.default.options.awsBucket).toBeUndefined();
   });
+
 });
