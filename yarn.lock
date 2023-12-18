@@ -791,6 +791,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/util-stream-node@npm:^3.374.0":
+  version: 3.374.0
+  resolution: "@aws-sdk/util-stream-node@npm:3.374.0"
+  dependencies:
+    "@smithy/util-stream-node": ^1.0.2
+    tslib: ^2.5.0
+  checksum: 464155ee2ca366ac56efe784c31806b550d4cb3d1eef9ff75a90e61e7bff956ff730484eb4dcdc9369094fa3a6583d22ff8796b6782fd841eaa9026c74d99cee
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/util-user-agent-browser@npm:3.468.0":
   version: 3.468.0
   resolution: "@aws-sdk/util-user-agent-browser@npm:3.468.0"
@@ -3558,6 +3568,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/abort-controller@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@smithy/abort-controller@npm:1.1.0"
+  dependencies:
+    "@smithy/types": ^1.2.0
+    tslib: ^2.5.0
+  checksum: 4299368f0b7dbeb8ffba00632b191ec39113fa9b9d29c3ff33c54d5a8663d42d769aa5d79ecd656fe8d09ccb23a7351095305524c27c5650ec7f96a312e5e522
+  languageName: node
+  linkType: hard
+
 "@smithy/abort-controller@npm:^2.0.1, @smithy/abort-controller@npm:^2.0.15":
   version: 2.0.15
   resolution: "@smithy/abort-controller@npm:2.0.15"
@@ -3766,6 +3786,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/is-array-buffer@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@smithy/is-array-buffer@npm:1.1.0"
+  dependencies:
+    tslib: ^2.5.0
+  checksum: 39b2a177b5d98f1adb2e44c363be2f4f335b698e9803f5ffb4c6d32e5d51543f29daf90b9ee99d8833446561dfe1b8dc3464852970b90bb6c00655a425fc3ac2
+  languageName: node
+  linkType: hard
+
 "@smithy/is-array-buffer@npm:^2.0.0":
   version: 2.0.0
   resolution: "@smithy/is-array-buffer@npm:2.0.0"
@@ -3873,6 +3902,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/node-http-handler@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@smithy/node-http-handler@npm:1.1.0"
+  dependencies:
+    "@smithy/abort-controller": ^1.1.0
+    "@smithy/protocol-http": ^1.2.0
+    "@smithy/querystring-builder": ^1.1.0
+    "@smithy/types": ^1.2.0
+    tslib: ^2.5.0
+  checksum: dd0e00e96a552891ffa50c696b2c71d650515e589ccbaabc9053a8f2e4ed18c122040feea27196267ebf55bffaa3f25e5801cefebdfe96c886d0555c141c98b4
+  languageName: node
+  linkType: hard
+
 "@smithy/node-http-handler@npm:^2.2.1":
   version: 2.2.1
   resolution: "@smithy/node-http-handler@npm:2.2.1"
@@ -3916,6 +3958,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/protocol-http@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@smithy/protocol-http@npm:1.2.0"
+  dependencies:
+    "@smithy/types": ^1.2.0
+    tslib: ^2.5.0
+  checksum: 39548762da6dbd301d36ef67709ef73ef6f9a4c9bdcc3fafa5d5625eec7dfa71db72898d3eb219a368a79ea5e368a08189519a7512d48e0cdc9db7089c8e9618
+  languageName: node
+  linkType: hard
+
 "@smithy/protocol-http@npm:^3.0.11":
   version: 3.0.11
   resolution: "@smithy/protocol-http@npm:3.0.11"
@@ -3923,6 +3975,17 @@ __metadata:
     "@smithy/types": ^2.7.0
     tslib: ^2.5.0
   checksum: 35215c2dd1ba928fcd043ec5e8f54ec29b44ab65774ef5a508be2d963a8dca5daf188448c896dba2e2c1167cbe5d5ac7ff221fd307119af47fb2ccba8bdcf994
+  languageName: node
+  linkType: hard
+
+"@smithy/querystring-builder@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@smithy/querystring-builder@npm:1.1.0"
+  dependencies:
+    "@smithy/types": ^1.2.0
+    "@smithy/util-uri-escape": ^1.1.0
+    tslib: ^2.5.0
+  checksum: 53aa5244a12056f31da12ed65ffb22877b69abd86246d534ba50ac9c0a9dbe134256e40dbc79dc1bc59e153a7d90f97496c7c9ed0d422dffebd03ebb8b389d20
   languageName: node
   linkType: hard
 
@@ -4033,6 +4096,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/types@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@smithy/types@npm:1.2.0"
+  dependencies:
+    tslib: ^2.5.0
+  checksum: 376a1402d356a8dddd804af66ff2d273e57e332a3e9537a98039b47572684aae044d5fcd879ac6eee5cc08640ea00fbef0725a6a16026db5fb8d189473d44fe6
+  languageName: node
+  linkType: hard
+
 "@smithy/types@npm:^2.0.2":
   version: 2.0.2
   resolution: "@smithy/types@npm:2.0.2"
@@ -4107,6 +4179,16 @@ __metadata:
   dependencies:
     tslib: ^2.5.0
   checksum: e4635251898f12e1825f2848e0b7cc9d01ec6635b3f1f71b790734bb702b88e795f6c539d42d95472dad00e50e9ff13fcf396791092b131e5834069cb8f52ed0
+  languageName: node
+  linkType: hard
+
+"@smithy/util-buffer-from@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@smithy/util-buffer-from@npm:1.1.0"
+  dependencies:
+    "@smithy/is-array-buffer": ^1.1.0
+    tslib: ^2.5.0
+  checksum: 73b145d6a11754cb95d9fc21264dd7623855cb768b42db4465232b878c148d8b6c968c8d77bd836f28d0ce4c855f30814848e8533764ee587c6c7c0176e7582b
   languageName: node
   linkType: hard
 
@@ -4207,6 +4289,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/util-stream-node@npm:^1.0.2":
+  version: 1.1.0
+  resolution: "@smithy/util-stream-node@npm:1.1.0"
+  dependencies:
+    "@smithy/node-http-handler": ^1.1.0
+    "@smithy/types": ^1.2.0
+    "@smithy/util-buffer-from": ^1.1.0
+    tslib: ^2.5.0
+  checksum: dcecf9f406e1affcd792f388ae29e0d3b56fb3417becb71d36bd3a6e4d71b9c80405b8694e201f9d5cca38f42d79f7c05d4cdd8929536482b8f0bbeea8faa85d
+  languageName: node
+  linkType: hard
+
 "@smithy/util-stream@npm:^2.0.23":
   version: 2.0.23
   resolution: "@smithy/util-stream@npm:2.0.23"
@@ -4220,6 +4314,15 @@ __metadata:
     "@smithy/util-utf8": ^2.0.2
     tslib: ^2.5.0
   checksum: 72dc4acde422a2e499a148b24e621105a2769f41497d9460a56e371c9be9a4cc751aa37a59373efb5bd81b81aa0bc379300658faebc699ad5f42be1638c8e0f9
+  languageName: node
+  linkType: hard
+
+"@smithy/util-uri-escape@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@smithy/util-uri-escape@npm:1.1.0"
+  dependencies:
+    tslib: ^2.5.0
+  checksum: 17f02106e1d9875d4ab3b56e1fd7fffceec94a4632f265d3f6cc1d812d0ee208d9db3c3e0fd14025ea5993b503e84c0e3fda291ec4fb87719473e5e5116fb899
   languageName: node
   linkType: hard
 
@@ -8523,6 +8626,7 @@ __metadata:
     "@aws-sdk/credential-providers": 3.474.0
     "@aws-sdk/lib-storage": ^3.474.0
     "@aws-sdk/property-provider": ^3.374.0
+    "@aws-sdk/util-stream-node": ^3.374.0
     "@nx/devkit": 16.2.2
     "@nx/eslint-plugin": 16.2.2
     "@nx/jest": 16.2.2

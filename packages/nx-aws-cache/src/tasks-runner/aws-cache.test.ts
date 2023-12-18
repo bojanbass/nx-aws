@@ -4,15 +4,18 @@ import { randomUUID } from 'crypto';
 import * as path from 'path';
 import { mockClient } from 'aws-sdk-client-mock';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { sdkStreamMixin } from '@aws-sdk/util-stream-node';
 import { Readable } from 'stream';
 import { AwsCache } from './aws-cache';
 import { Logger } from './logger';
 import { MessageReporter } from './message-reporter';
+import { Encrypt, EncryptConfig } from './encryptor';
 
 // eslint-disable-next-line max-lines-per-function
 describe('Test aws put and get unencrypted file', () => {
-  let awsCache: AwsCache;
   let uploadedData: Buffer | null;
+  let awsCache: AwsCache;
+  const s3Mock = mockClient(S3Client);
   const hash = randomUUID();
   const cacheDirectory = path.join(os.tmpdir(), 'aws-cache');
   const cacheDirectorySave = path.join(os.tmpdir(), 'aws-cache-decompress');
@@ -31,8 +34,6 @@ describe('Test aws put and get unencrypted file', () => {
 
   beforeEach(() => {
     uploadedData = null;
-    awsCache = new AwsCache(config, new MessageReporter(new Logger()));
-    const s3Mock = mockClient(S3Client);
     s3Mock.on(GetObjectCommand).callsFake(() => {
       if (!uploadedData) {
         throw new Error('No upload data');
@@ -42,35 +43,39 @@ describe('Test aws put and get unencrypted file', () => {
       };
     });
 
-    // Aws-sdk-client-mock not mock CreateMultipartUploadCommand and UploadPartCommand for @aws-sdk/lib-storage I dont know why. There is a issue with this: https://github.com/m-radzikowski/aws-sdk-client-mock/issues/118
-    s3Mock.onAnyCommand((input: { Body?: Buffer }) => {
-      if (input?.Body) {
-        uploadedData = input.Body;
-        return { ETag: '1' };
-      }
-      /* eslint consistent-return: "warn", no-useless-return: "warn" */
-      return;
-    });
-
     fs.mkdirSync(cacheDirectory, {
       recursive: true,
     });
     fs.mkdirSync(cacheDirectorySave, {
       recursive: true,
     });
+
     const fileDir = path.join(cacheDirectory, `${hash}/outputs`);
+
     fs.mkdirSync(fileDir, { recursive: true });
     filePath = path.join(fileDir, 'test.js');
     fs.writeFileSync(filePath, fileContent);
   });
 
-  it('Should be defined', () => {
-    expect(awsCache).toBeDefined();
+  afterEach(() => {
+    jest.resetAllMocks();
+    s3Mock.reset();
   });
 
   it('Should save encrypted data in s3 file, and read an unencrypted', async () => {
+    awsCache = new AwsCache(config, new MessageReporter(new Logger()));
+
     await awsCache.store(hash, cacheDirectory);
+
+    const tgzFilePath = path.join(cacheDirectory, `${hash}.tar.gz`);
+    const tgzFileStream = fs.createReadStream(tgzFilePath);
+    const sdkStream = sdkStreamMixin(
+      tgzFileStream.pipe(new Encrypt(new EncryptConfig(config.encryptionFileKey))),
+    );
+    s3Mock.on(GetObjectCommand).resolves({ Body: sdkStream });
+
     await awsCache.retrieve(hash, cacheDirectorySave);
+
     const extractedFilePath = path.join(cacheDirectorySave, `${hash}/outputs/test.js`);
     expect(fs.existsSync(extractedFilePath)).toBeTruthy();
     expect(fs.readFileSync(extractedFilePath).toString()).toBe(fileContent);
@@ -84,6 +89,13 @@ describe('Test aws put and get unencrypted file', () => {
     awsCache = new AwsCache(configWithoutEncryption, new MessageReporter(new Logger()));
 
     await awsCache.store(hash, cacheDirectory);
+
+    const tgzFilePath = path.join(cacheDirectory, `${hash}.tar.gz`);
+    const tgzFileStream = fs.createReadStream(tgzFilePath);
+    const sdkStream = sdkStreamMixin(tgzFileStream);
+
+    s3Mock.on(GetObjectCommand).resolves({ Body: sdkStream });
+
     await awsCache.retrieve(hash, cacheDirectorySave);
     const extractedFilePath = path.join(cacheDirectorySave, `${hash}/outputs/test.js`);
     expect(fs.existsSync(extractedFilePath)).toBeTruthy();
