@@ -9,6 +9,7 @@ import { AwsCache } from './aws-cache';
 import { Logger } from './logger';
 import { MessageReporter } from './message-reporter';
 
+// eslint-disable-next-line max-lines-per-function
 describe('Test aws put and get unencrypted file', () => {
   let awsCache: AwsCache;
   let uploadedData: Buffer | null;
