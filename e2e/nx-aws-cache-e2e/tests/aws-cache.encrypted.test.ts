@@ -10,7 +10,7 @@ import { Decrypt, EncryptConfig } from '../../../packages/nx-aws-cache/src/tasks
 import { pipeline, Readable } from 'stream';
 import { promisify } from 'util';
 
-describe('Test aws put and get encrypted file', () => {
+describe('Test aws put and get unencrypted file', () => {
   let awsCache: AwsCache;
   let hash = new Date().getTime().toString();
   let cacheDirectory = path.join(os.tmpdir(), `aws-cache`);
@@ -47,7 +47,7 @@ describe('Test aws put and get encrypted file', () => {
     expect(awsCache).toBeDefined();
   });
 
-  it('Should save in s3 file, and read an unencrypted', async () => {
+  it('Should save encrypted data in s3 file, and read an unencrypted', async () => {
     await awsCache.store(hash, cacheDirectory);
     await awsCache.retrieve(hash, cacheDirectorySave);
     const extractedFilePath = path.join(cacheDirectorySave, `${hash}/outputs/test.js`);

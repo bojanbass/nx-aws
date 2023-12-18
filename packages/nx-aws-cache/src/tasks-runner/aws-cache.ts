@@ -129,12 +129,12 @@ export class AwsCache implements RemoteCache {
       await this.createTgzFile(tgzFilePath, hash, cacheDirectory);
       const sourceFileStream = createReadStream(tgzFilePath);
 
-      if (this.encryptConfig) {
-        const encrypt = new Encrypt(this.encryptConfig);
-        await this.uploadFileMultipart(hash, sourceFileStream.pipe(encrypt));
-      } else {
-        await this.uploadFile(hash, sourceFileStream);
-      }
+      await this.uploadFile(
+        hash,
+        this.encryptConfig
+          ? sourceFileStream.pipe(new Encrypt(this.encryptConfig))
+          : sourceFileStream,
+      );
 
       return true;
     } catch (err) {
@@ -180,24 +180,6 @@ export class AwsCache implements RemoteCache {
     return join(this.path, tgzFileName);
   }
 
-  private async uploadFile(hash: string, sourceFile: Readable): Promise<void> {
-    const tgzFileName = this.getTgzFileName(hash);
-    const params: clientS3.PutObjectCommand = new clientS3.PutObjectCommand({
-      Bucket: this.bucket,
-      Key: this.getS3Key(tgzFileName),
-      Body: sourceFile,
-    });
-
-    try {
-      this.logger.debug(`Storage Cache: Uploading ${hash}`);
-      await this.s3.send(params);
-
-      this.logger.debug(`Storage Cache: Stored ${hash}`);
-    } catch (err) {
-      throw new Error(`Storage Cache: Upload error - ${err}`);
-    }
-  }
-
   /**
    * When upload file with transform stream you don't know what will be the final ContentLength,
    * so you have to upload that file as multipart upload
@@ -206,19 +188,29 @@ export class AwsCache implements RemoteCache {
    * @param file
    * @private
    */
-  private uploadFileMultipart(hash: string, file: Readable) {
-    const tgzFileName = this.getTgzFileName(hash);
+  private async uploadFile(hash: string, file: Readable) {
+    try {
+      this.logger.debug(`Storage Cache: Uploading ${hash}`);
 
-    const upload = new Upload({
-      client: this.s3,
-      params: {
-        Bucket: this.bucket,
-        Key: this.getS3Key(tgzFileName),
-        Body: file,
-      },
-    });
+      const tgzFileName = this.getTgzFileName(hash);
 
-    return upload.done();
+      const upload = new Upload({
+        client: this.s3,
+        params: {
+          Bucket: this.bucket,
+          Key: this.getS3Key(tgzFileName),
+          Body: file,
+        },
+      });
+
+      const response = await upload.done();
+
+      this.logger.debug(`Storage Cache: Stored ${hash}`);
+
+      return response;
+    } catch (err) {
+      throw new Error(`Storage Cache: Upload error - ${err}`);
+    }
   }
 
   private async downloadFile(hash: string, tgzFilePath: string): Promise<void> {
