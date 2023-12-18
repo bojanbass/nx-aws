@@ -19,8 +19,7 @@ export class AwsCache implements RemoteCache {
   private readonly s3: clientS3.S3Client;
   private readonly logger = new Logger();
   private readonly uploadQueue: Array<Promise<boolean>> = [];
-  private readonly encryptTransform: Encrypt | undefined;
-  private readonly decryptTransform: Decrypt | undefined;
+  private readonly encryptConfig: EncryptConfig | undefined;
 
   public constructor(options: AwsNxCacheOptions, private messages: MessageReporter) {
     const awsBucket = options.awsBucket ?? '';
@@ -54,9 +53,7 @@ export class AwsCache implements RemoteCache {
     }
 
     if (options?.encryptionFileKey) {
-      const encryptConfig = new EncryptConfig(options.encryptionFileKey);
-      this.encryptTransform = new Encrypt(encryptConfig);
-      this.decryptTransform = new Decrypt(encryptConfig);
+      this.encryptConfig = new EncryptConfig(options.encryptionFileKey);
     }
 
     this.s3 = new clientS3.S3Client(clientConfig);
@@ -136,7 +133,9 @@ export class AwsCache implements RemoteCache {
 
       await this.uploadFile(
         hash,
-        this.encryptTransform ? sourceFileStream.pipe(this.encryptTransform) : sourceFileStream,
+        this.encryptConfig
+          ? sourceFileStream.pipe(new Encrypt(this.encryptConfig))
+          : sourceFileStream,
       );
 
       return true;
@@ -226,8 +225,8 @@ export class AwsCache implements RemoteCache {
     try {
       const commandOutput = await this.s3.send(params);
       const fileStream = commandOutput.Body as Readable;
-      if (this.decryptTransform) {
-        await pipelinePromise(fileStream, this.decryptTransform, writeFileToLocalDir);
+      if (this.encryptConfig) {
+        await pipelinePromise(fileStream, new Decrypt(this.encryptConfig), writeFileToLocalDir);
       } else {
         await pipelinePromise(fileStream, writeFileToLocalDir);
       }
