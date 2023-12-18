@@ -4,8 +4,6 @@ import { Tree, readJson } from '@nx/devkit';
 import generator from './generator';
 import { InitGeneratorSchema } from './schema';
 
-const AFTER_ALL_TIMEOUT = 1000;
-
 describe('init generator', () => {
   let appTree: Tree;
   const options: InitGeneratorSchema = {
@@ -17,16 +15,11 @@ describe('init generator', () => {
     appTree = createTreeWithEmptyWorkspace();
   });
 
-  afterAll((done) => {
-    // Fix issue with load file after jest finished
-    setTimeout(done, AFTER_ALL_TIMEOUT);
-  });
-
-  it('should add @nx-aws-plugin/nx-aws-cache to nx.json', () => {
+  it('should add @nx-aws-plugin/nx-aws-cache to nx.json', async () => {
     let nxJson = readJson(appTree, 'nx.json');
     expect(nxJson.tasksRunnerOptions.default.runner).toBe('nx/tasks-runners/default');
 
-    generator(appTree, options);
+    await generator(appTree, options);
 
     nxJson = readJson(appTree, 'nx.json');
 
@@ -35,11 +28,11 @@ describe('init generator', () => {
     expect(nxJson.tasksRunnerOptions.default.options.awsBucket).toBe('bucket-name');
   });
 
-  it('should add @nx-aws-plugin/nx-aws-cache with no aws options to nx.json', () => {
+  it('should add @nx-aws-plugin/nx-aws-cache with no aws options to nx.json', async () => {
     let nxJson = readJson(appTree, 'nx.json');
     expect(nxJson.tasksRunnerOptions.default.runner).toBe('nx/tasks-runners/default');
 
-    generator(appTree, {});
+    await generator(appTree, {});
 
     nxJson = readJson(appTree, 'nx.json');
 

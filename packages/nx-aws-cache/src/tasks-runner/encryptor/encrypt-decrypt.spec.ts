@@ -25,6 +25,7 @@ class TestCipher {
     return Buffer.concat([decrypted, decipher.final()]);
   }
 }
+
 // eslint-disable-next-line max-lines-per-function
 describe('Encryptor tests', () => {
   let testData: Buffer;
