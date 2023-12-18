@@ -2,7 +2,7 @@ import { createReadStream, createWriteStream, writeFile } from 'fs';
 import { join, dirname } from 'path';
 import { pipeline, Readable } from 'stream';
 import { promisify } from 'util';
-import * as clientS3 from '@aws-sdk/client-s3';
+import { GetObjectCommand, HeadObjectCommand, S3Client, S3ClientConfig } from '@aws-sdk/client-s3';
 import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
 import { CredentialsProviderError } from '@aws-sdk/property-provider';
 import { RemoteCache } from '@nx/workspace/src/tasks-runner/default-tasks-runner';
@@ -16,7 +16,7 @@ import { Upload } from '@aws-sdk/lib-storage';
 export class AwsCache implements RemoteCache {
   private readonly bucket: string;
   private readonly path: string;
-  private readonly s3: clientS3.S3Client;
+  private readonly s3: S3Client;
   private readonly logger = new Logger();
   private readonly uploadQueue: Array<Promise<boolean>> = [];
   private readonly encryptConfig: EncryptConfig | null = null;
@@ -28,7 +28,7 @@ export class AwsCache implements RemoteCache {
     this.path = bucketTokens.join('/');
     this.encryptConfig = null;
 
-    const clientConfig: clientS3.S3ClientConfig = {};
+    const clientConfig: S3ClientConfig = {};
 
     if (options.awsRegion) {
       clientConfig.region = options.awsRegion;
@@ -56,17 +56,19 @@ export class AwsCache implements RemoteCache {
     if (options?.encryptionFileKey) {
       this.encryptConfig = new EncryptConfig(options.encryptionFileKey);
     }
-
-    this.s3 = new clientS3.S3Client(clientConfig);
+    this.s3 = new S3Client(clientConfig);
   }
 
   public checkConfig(options: AwsNxCacheOptions): void {
     const missingOptions: Array<string> = [];
 
-    if (!options.awsBucket) missingOptions.push('NXCACHE_AWS_BUCKET | awsBucket');
+    if (!options.awsBucket) {
+      missingOptions.push('NXCACHE_AWS_BUCKET | awsBucket');
+    }
 
-    if (missingOptions.length > 0)
+    if (missingOptions.length > 0) {
       throw new Error(`Missing AWS options: \n\n${missingOptions.join('\n')}`);
+    }
   }
 
   // eslint-disable-next-line max-statements
@@ -204,7 +206,6 @@ export class AwsCache implements RemoteCache {
       });
 
       const response = await upload.done();
-
       this.logger.debug(`Storage Cache: Stored ${hash}`);
 
       return response;
@@ -217,7 +218,7 @@ export class AwsCache implements RemoteCache {
     const pipelinePromise = promisify(pipeline),
       tgzFileName = this.getTgzFileName(hash),
       writeFileToLocalDir = createWriteStream(tgzFilePath),
-      params = new clientS3.GetObjectCommand({
+      params = new GetObjectCommand({
         Bucket: this.bucket,
         Key: this.getS3Key(tgzFileName),
       });
@@ -239,7 +240,7 @@ export class AwsCache implements RemoteCache {
 
   private async checkIfCacheExists(hash: string): Promise<boolean> {
     const tgzFileName = this.getTgzFileName(hash),
-      params: clientS3.HeadObjectCommand = new clientS3.HeadObjectCommand({
+      params: HeadObjectCommand = new HeadObjectCommand({
         Bucket: this.bucket,
         Key: this.getS3Key(tgzFileName),
       });
