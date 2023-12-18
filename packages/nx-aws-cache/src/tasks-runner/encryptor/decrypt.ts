@@ -24,10 +24,10 @@ export class Decrypt extends Transform {
       this.readFirstChunk = true;
       // Get iv from first bytes
       const iv = chunk.slice(0, this.config.getIvBytes());
-      const firstPaylaod = chunk.slice(this.config.getIvBytes(), chunk.length);
+      const firstPayload = chunk.slice(this.config.getIvBytes(), chunk.length);
       this.decipher = createDecipheriv(this.config.getAlgorithm(), this.config.getKeyBuffer(), iv);
 
-      const decryptedData = this.decipher.update(firstPaylaod);
+      const decryptedData = this.decipher.update(firstPayload);
       this.push(decryptedData, encoding);
       callback();
       return;
