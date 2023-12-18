@@ -59,9 +59,7 @@
     },
     "test-integration": {
       "executor": "nx:run-commands",
-      "dependsOn": [
-        "nx-aws-cache:build"
-      ],
+      "dependsOn": ["nx-aws-cache:build"],
       "options": {
         "commands": [
           "docker-compose down && docker-compose up -d",
