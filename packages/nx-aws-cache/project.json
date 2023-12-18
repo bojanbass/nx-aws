@@ -56,6 +56,22 @@
           "codeCoverage": true
         }
       }
+    },
+    "test-integration": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "nx-aws-cache:build"
+      ],
+      "options": {
+        "commands": [
+          "docker-compose down && docker-compose up -d",
+          "sleep 5",
+          "npx jest --config=jest.config.ts",
+          "docker-compose down"
+        ],
+        "cwd": "packages/nx-aws-cache",
+        "parallel": false
+      }
     }
   },
   "tags": []

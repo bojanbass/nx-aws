@@ -5,18 +5,12 @@
   "sourceRoot": "e2e/nx-aws-cache-e2e/src",
   "targets": {
     "e2e": {
-      "executor": "nx:run-commands",
-      "dependsOn": ["nx-aws-cache:build"],
+      "executor": "@nx/jest:jest",
       "options": {
-        "commands": [
-          "docker-compose down && docker-compose up -d",
-          "sleep 5",
-          "npx jest --config=jest.config.ts",
-          "docker-compose down"
-        ],
-        "cwd": "e2e/nx-aws-cache-e2e",
-        "parallel": false
-      }
+        "jestConfig": "e2e/nx-aws-cache-e2e/jest.config.ts",
+        "runInBand": true
+      },
+      "dependsOn": ["nx-aws-cache:build"]
     }
   },
   "tags": [],

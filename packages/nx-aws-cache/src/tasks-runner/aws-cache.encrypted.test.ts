@@ -1,6 +1,3 @@
-import { AwsCache } from '../../../packages/nx-aws-cache/src/tasks-runner/aws-cache';
-import { MessageReporter } from '../../../packages/nx-aws-cache/src/tasks-runner/message-reporter';
-import { Logger } from '../../../packages/nx-aws-cache/src/tasks-runner/logger';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
@@ -8,8 +5,12 @@ import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { createWriteStream } from 'fs';
 import { pipeline, Readable } from 'stream';
 import { promisify } from 'util';
+import { AwsCache } from './aws-cache';
+import { Logger } from './logger';
+import { Decrypt, EncryptConfig } from './encryptor';
+import { MessageReporter } from './message-reporter';
 
-describe('Test aws put and get encrypted file', () => {
+describe('Test aws put and get unencrypted file', () => {
   let awsCache: AwsCache;
   let hash = new Date().getTime().toString();
   let cacheDirectory = path.join(os.tmpdir(), `aws-cache`);
@@ -18,6 +19,7 @@ describe('Test aws put and get encrypted file', () => {
   let filePath = '';
 
   const config = {
+    encryptionFileKey: 'Pbfk58EpcK7IxTxWwSXNsTAKmzhJQE+99vkpGftyJg8=',
     awsAccessKeyId: 'minio',
     awsSecretAccessKey: 'minio123',
     awsBucket: 'test',
@@ -45,7 +47,7 @@ describe('Test aws put and get encrypted file', () => {
     expect(awsCache).toBeDefined();
   });
 
-  it('Should save in unencrypted s3 file, and read an unencrypted', async () => {
+  it('Should save encrypted data in s3 file, and read an unencrypted', async () => {
     await awsCache.store(hash, cacheDirectory);
     await awsCache.retrieve(hash, cacheDirectorySave);
     const extractedFilePath = path.join(cacheDirectorySave, `${hash}/outputs/test.js`);
@@ -53,7 +55,7 @@ describe('Test aws put and get encrypted file', () => {
     expect(fs.readFileSync(extractedFilePath).toString()).toBe(fileContent);
   });
 
-  it('Check that file is unecrypted in s3 at rest', async () => {
+  it('Check that file is encrypted in s3 at rest', async () => {
     await awsCache.store(hash, cacheDirectory);
 
     // Check that file is encrypted in s3
@@ -78,7 +80,11 @@ describe('Test aws put and get encrypted file', () => {
 
     const pipelinePromise = promisify(pipeline);
     try {
-      await pipelinePromise(response.Body as Readable, fileOutput);
+      await pipelinePromise(
+        response.Body as Readable,
+        new Decrypt(new EncryptConfig(config.encryptionFileKey)),
+        fileOutput,
+      );
     } catch (err) {
       if (err instanceof Error) throw new Error(`Cant decrypt file from s3, ${err?.message}`);
       else throw err;

@@ -104,7 +104,7 @@ AWS SDK v3 is used under the hood with a support for [SSO login](https://docs.aw
 
 Run `yarn nx build nx-aws-cache` to build the plugin. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
+## Running unit/integration tests
 
 Run `yarn nx test nx-aws-cache` to execute the unit tests via [Jest](https://jestjs.io).
 
