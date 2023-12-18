@@ -19,14 +19,13 @@ export class AwsCache implements RemoteCache {
   private readonly s3: clientS3.S3Client;
   private readonly logger = new Logger();
   private readonly uploadQueue: Array<Promise<boolean>> = [];
-  private readonly encryptConfig: EncryptConfig | null = null;
+  private readonly encryptConfig: EncryptConfig | undefined;
 
   public constructor(options: AwsNxCacheOptions, private messages: MessageReporter) {
     const awsBucket = options.awsBucket ?? '';
     const bucketTokens = awsBucket.split('/');
     this.bucket = bucketTokens.shift() as string;
     this.path = bucketTokens.join('/');
-    this.encryptConfig = null;
 
     const clientConfig: clientS3.S3ClientConfig = {};
 
@@ -56,6 +55,7 @@ export class AwsCache implements RemoteCache {
     if (options?.encryptionFileKey) {
       this.encryptConfig = new EncryptConfig(options.encryptionFileKey);
     }
+
     this.s3 = new clientS3.S3Client(clientConfig);
   }
 
@@ -183,8 +183,7 @@ export class AwsCache implements RemoteCache {
   }
 
   /**
-   * When upload file with transform stream you don't know what will be the final ContentLength,
-   * so you have to upload that file as multipart upload
+   * When uploading a file with a transform stream, the final ContentLength is unknown so it has to be uploaded as multipart.
    *
    * @param hash
    * @param file
@@ -223,13 +222,11 @@ export class AwsCache implements RemoteCache {
         Key: this.getS3Key(tgzFileName),
       });
 
-    // eslint-disable-next-line max-lines
     try {
       const commandOutput = await this.s3.send(params);
       const fileStream = commandOutput.Body as Readable;
       if (this.encryptConfig) {
-        const decryptStream = new Decrypt(this.encryptConfig);
-        await pipelinePromise(fileStream, decryptStream, writeFileToLocalDir);
+        await pipelinePromise(fileStream, new Decrypt(this.encryptConfig), writeFileToLocalDir);
       } else {
         await pipelinePromise(fileStream, writeFileToLocalDir);
       }
