@@ -53,6 +53,7 @@
         "one-var": "off",
         "function-call-argument-newline": "off",
         "init-declarations": "off",
+        "max-lines-per-function": ["error", 90],
         "import/no-internal-modules": [
           "error",
           {

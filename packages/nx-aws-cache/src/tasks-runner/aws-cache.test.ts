@@ -18,7 +18,7 @@ describe('Test aws put and get unencrypted file', () => {
   const fileContent = 'console.log(123)';
   let filePath = '';
 
-  let config = {
+  const config = {
     encryptionFileKey: 'Pbfk58EpcK7IxTxWwSXNsTAKmzhJQE+99vkpGftyJg8=',
     awsAccessKeyId: 'minio',
     awsSecretAccessKey: 'minio123',
@@ -41,13 +41,13 @@ describe('Test aws put and get unencrypted file', () => {
       };
     });
 
-    // aws-sdk-client-mock not mock CreateMultipartUploadCommand and UploadPartCommand for @aws-sdk/lib-storage I dont know why
-    // there is a issue with this: https://github.com/m-radzikowski/aws-sdk-client-mock/issues/118
+    // Aws-sdk-client-mock not mock CreateMultipartUploadCommand and UploadPartCommand for @aws-sdk/lib-storage I dont know why. There is a issue with this: https://github.com/m-radzikowski/aws-sdk-client-mock/issues/118
     s3Mock.onAnyCommand((input: { Body?: Buffer }) => {
       if (input?.Body) {
         uploadedData = input.Body;
         return { ETag: '1' };
       }
+      /* eslint consistent-return: "warn", no-useless-return: "warn" */
       return;
     });
 
