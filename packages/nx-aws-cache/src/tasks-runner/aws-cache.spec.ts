@@ -5,7 +5,6 @@ import * as path from 'path';
 import { mockClient } from 'aws-sdk-client-mock';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { sdkStreamMixin } from '@aws-sdk/util-stream-node';
-import { Readable } from 'stream';
 import { AwsCache } from './aws-cache';
 import { Logger } from './logger';
 import { MessageReporter } from './message-reporter';
@@ -13,7 +12,6 @@ import { Encrypt, EncryptConfig } from './encryptor';
 
 // eslint-disable-next-line max-lines-per-function
 describe('Test aws put and get unencrypted file', () => {
-  let uploadedData: Buffer | null;
   let awsCache: AwsCache;
   const s3Mock = mockClient(S3Client);
   const hash = randomUUID();
@@ -33,16 +31,6 @@ describe('Test aws put and get unencrypted file', () => {
   };
 
   beforeEach(() => {
-    uploadedData = null;
-    s3Mock.on(GetObjectCommand).callsFake(() => {
-      if (!uploadedData) {
-        throw new Error('No upload data');
-      }
-      return {
-        Body: Readable.from(uploadedData),
-      };
-    });
-
     fs.mkdirSync(cacheDirectory, {
       recursive: true,
     });
