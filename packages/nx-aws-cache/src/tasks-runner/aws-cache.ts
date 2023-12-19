@@ -2,16 +2,16 @@ import { createReadStream, createWriteStream, writeFile } from 'fs';
 import { join, dirname } from 'path';
 import { pipeline, Readable } from 'stream';
 import { promisify } from 'util';
-
 import * as clientS3 from '@aws-sdk/client-s3';
 import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
 import { CredentialsProviderError } from '@aws-sdk/property-provider';
 import { RemoteCache } from '@nx/workspace/src/tasks-runner/default-tasks-runner';
 import { create, extract } from 'tar';
-
 import { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
 import { Logger } from './logger';
 import { MessageReporter } from './message-reporter';
+import { Encrypt, Decrypt, EncryptConfig } from './encryptor';
+import { Upload } from '@aws-sdk/lib-storage';
 
 export class AwsCache implements RemoteCache {
   private readonly bucket: string;
@@ -19,6 +19,7 @@ export class AwsCache implements RemoteCache {
   private readonly s3: clientS3.S3Client;
   private readonly logger = new Logger();
   private readonly uploadQueue: Array<Promise<boolean>> = [];
+  private readonly encryptConfig: EncryptConfig | undefined;
 
   public constructor(options: AwsNxCacheOptions, private messages: MessageReporter) {
     const awsBucket = options.awsBucket ?? '';
@@ -51,6 +52,10 @@ export class AwsCache implements RemoteCache {
       clientConfig.forcePathStyle = true;
     }
 
+    if (options?.encryptionFileKey) {
+      this.encryptConfig = new EncryptConfig(options.encryptionFileKey);
+    }
+
     this.s3 = new clientS3.S3Client(clientConfig);
   }
 
@@ -72,10 +77,8 @@ export class AwsCache implements RemoteCache {
       await this.s3.config.credentials();
     } catch (err) {
       this.messages.error = err as Error;
-
       return false;
     }
-
     if (this.messages.error) {
       return false;
     }
@@ -113,7 +116,6 @@ export class AwsCache implements RemoteCache {
     }
 
     const resultPromise = this.createAndUploadFile(hash, cacheDirectory);
-
     this.uploadQueue.push(resultPromise);
 
     return resultPromise;
@@ -126,9 +128,15 @@ export class AwsCache implements RemoteCache {
   private async createAndUploadFile(hash: string, cacheDirectory: string): Promise<boolean> {
     try {
       const tgzFilePath = this.getTgzFilePath(hash, cacheDirectory);
-
       await this.createTgzFile(tgzFilePath, hash, cacheDirectory);
-      await this.uploadFile(hash, tgzFilePath);
+      const sourceFileStream = createReadStream(tgzFilePath);
+
+      await this.uploadFile(
+        hash,
+        this.encryptConfig
+          ? sourceFileStream.pipe(new Encrypt(this.encryptConfig))
+          : sourceFileStream,
+      );
 
       return true;
     } catch (err) {
@@ -170,27 +178,39 @@ export class AwsCache implements RemoteCache {
     }
   }
 
-  private async uploadFile(hash: string, tgzFilePath: string): Promise<void> {
-    const tgzFileName = this.getTgzFileName(hash);
-    const params: clientS3.PutObjectCommand = new clientS3.PutObjectCommand({
-      Bucket: this.bucket,
-      Key: this.getS3Key(tgzFileName),
-      Body: createReadStream(tgzFilePath),
-    });
+  private getS3Key(tgzFileName: string) {
+    return join(this.path, tgzFileName);
+  }
 
+  /**
+   * When uploading a file with a transform stream, the final ContentLength is unknown so it has to be uploaded as multipart.
+   *
+   * @param hash
+   * @param file
+   * @private
+   */
+  private async uploadFile(hash: string, file: Readable) {
     try {
       this.logger.debug(`Storage Cache: Uploading ${hash}`);
 
-      await this.s3.send(params);
+      const tgzFileName = this.getTgzFileName(hash);
 
+      const upload = new Upload({
+        client: this.s3,
+        params: {
+          Bucket: this.bucket,
+          Key: this.getS3Key(tgzFileName),
+          Body: file,
+        },
+      });
+
+      const response = await upload.done();
       this.logger.debug(`Storage Cache: Stored ${hash}`);
+
+      return response;
     } catch (err) {
       throw new Error(`Storage Cache: Upload error - ${err}`);
     }
-  }
-
-  private getS3Key(tgzFileName: string) {
-    return join(this.path, tgzFileName);
   }
 
   private async downloadFile(hash: string, tgzFilePath: string): Promise<void> {
@@ -205,8 +225,11 @@ export class AwsCache implements RemoteCache {
     try {
       const commandOutput = await this.s3.send(params);
       const fileStream = commandOutput.Body as Readable;
-
-      await pipelinePromise(fileStream, writeFileToLocalDir);
+      if (this.encryptConfig) {
+        await pipelinePromise(fileStream, new Decrypt(this.encryptConfig), writeFileToLocalDir);
+      } else {
+        await pipelinePromise(fileStream, writeFileToLocalDir);
+      }
     } catch (err) {
       throw new Error(`Storage Cache: Download error - ${err}`);
     }
@@ -221,7 +244,6 @@ export class AwsCache implements RemoteCache {
 
     try {
       await this.s3.send(params);
-
       return true;
     } catch (err) {
       if ((err as Error).name === 'NotFound') {
@@ -254,7 +276,6 @@ export class AwsCache implements RemoteCache {
 
   private filterTgzContent(filePath: string): boolean {
     const dir = dirname(filePath);
-
     const excludedPaths = [
       /**
        * The 'source' file is used by NX for integrity check purposes, but isn't utilized by custom cache providers.
