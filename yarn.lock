@@ -4597,13 +4597,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/tar@npm:6.1.6":
-  version: 6.1.6
-  resolution: "@types/tar@npm:6.1.6"
+"@types/tar@npm:6.1.10":
+  version: 6.1.10
+  resolution: "@types/tar@npm:6.1.10"
   dependencies:
     "@types/node": "*"
     minipass: ^4.0.0
-  checksum: d4bcb5a06d8e4b6eac564f22274d72f6a14c614eaf5f6c6c270f3a43c197da2797a7c707bc0377cd2e6d8c429f277e1ca446121546c86021e9782034a306eafb
+  checksum: 82d46f1246e830b98833ed94fbdfbcb3ffb8a5d7173609622d56c9326124523a3cc541607876c63a6ab9117eb59fb37ef8a6284b194164ab1d1d8c03a8ba59c6
   languageName: node
   linkType: hard
 
@@ -8637,7 +8637,7 @@ __metadata:
     "@types/fs-extra": ^11.0.4
     "@types/jest": 29.4.4
     "@types/node": 16.11.7
-    "@types/tar": 6.1.6
+    "@types/tar": 6.1.10
     "@typescript-eslint/eslint-plugin": 5.18.0
     "@typescript-eslint/parser": 5.18.0
     aws-sdk-client-mock: ^3.0.0
