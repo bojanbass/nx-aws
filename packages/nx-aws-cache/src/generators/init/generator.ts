@@ -1,9 +1,9 @@
-import { formatFiles, logger, Tree, updateJson, readRootPackageJson } from '@nx/devkit';
+import { formatFiles, logger, Tree, updateJson, readJsonFile } from '@nx/devkit';
 
 import { InitGeneratorSchema } from './schema';
 
 function isCompatibleVersion() {
-  const packageJson = readRootPackageJson();
+  const packageJson = readJsonFile('package.json');
   let version =
     packageJson.dependencies?.['@nx/workspace'] ??
     packageJson.devDependencies?.['@nx/workspace'] ??
