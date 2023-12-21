@@ -659,9 +659,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/lib-storage@npm:^3.476.0":
-  version: 3.476.0
-  resolution: "@aws-sdk/lib-storage@npm:3.476.0"
+"@aws-sdk/lib-storage@npm:^3.478.0":
+  version: 3.478.0
+  resolution: "@aws-sdk/lib-storage@npm:3.478.0"
   dependencies:
     "@smithy/abort-controller": ^2.0.1
     "@smithy/middleware-endpoint": ^2.2.3
@@ -672,7 +672,7 @@ __metadata:
     tslib: ^2.5.0
   peerDependencies:
     "@aws-sdk/client-s3": ^3.0.0
-  checksum: ebc335b73617e1c9fe409532e9b64273ab26662a4b6df060c2bf47a2673913f78cb7e21b0b2971913bd053a56850976eeadb759370bad205b12882bfbc0e4a86
+  checksum: 732263fee1ad4fe3767c8e604ca9b3b399efc4c7d102188b3889069c0f6b91d5dc0313da3aa4ae8a975142120f0427ba06e32346451f5cd839c6a161590897bb
   languageName: node
   linkType: hard
 
@@ -8800,7 +8800,7 @@ __metadata:
     "@actions/github": 5.1.1
     "@aws-sdk/client-s3": 3.477.0
     "@aws-sdk/credential-providers": 3.474.0
-    "@aws-sdk/lib-storage": ^3.476.0
+    "@aws-sdk/lib-storage": ^3.478.0
     "@aws-sdk/property-provider": ^3.374.0
     "@aws-sdk/util-stream-node": ^3.374.0
     "@nx/devkit": 16.2.2
