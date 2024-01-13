@@ -1,0 +1,6 @@
+{
+  "versionReporting": false,
+  "output": "../../dist/cdk",
+  "requireApproval": "never",
+  "context": {}
+}

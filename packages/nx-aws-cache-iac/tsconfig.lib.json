@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "es2022",
+    "outDir": "../../dist/out-tsc",
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "bin/*.ts"],
+  "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
+}

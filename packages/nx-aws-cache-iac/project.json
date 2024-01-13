@@ -1,0 +1,38 @@
+{
+  "name": "nx-aws-cache-iac",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "nx-aws-cache-iac/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "main": "packages/nx-aws-cache-iac/bin/cdk.ts",
+        "additionalEntryPoints": [
+          "packages/nx-aws-cache-iac/bin/config-to-env.ts",
+          "packages/nx-aws-cache-iac/bin/cdk-app.ts"
+        ],
+        "assets": ["README.md"],
+        "tsConfig": "packages/nx-aws-cache-iac/tsconfig.lib.json",
+        "outputPath": "dist/packages/nx-aws-cache-iac",
+        "platform": "node",
+        "format": ["cjs"],
+        "skipTypeCheck": true,
+        "thirdParty": true,
+        "bundle": true
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/nx-aws-cache-iac/**/*.ts",
+          "packages/nx-aws-cache-iac/*.json"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

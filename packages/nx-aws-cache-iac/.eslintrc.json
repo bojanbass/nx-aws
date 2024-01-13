@@ -1,0 +1,12 @@
+{
+  "extends": ["../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "no-new": "off",
+    "no-console": "off",
+    "import/no-internal-modules": "off",
+    "max-lines-per-function": "off"
+  }
+}

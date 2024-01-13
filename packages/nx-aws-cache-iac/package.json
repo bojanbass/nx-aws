@@ -1,0 +1,34 @@
+{
+  "name": "@nx-aws-plugin/nx-aws-cache-iac",
+  "version": "3.0.0",
+  "description": "Creates the infrastructure for the AWS S3 Cache plugin for Nx",
+  "keywords": [
+    "AWS",
+    "S3",
+    "Tasks",
+    "Runner",
+    "Cache",
+    "Workspace",
+    "Nrwl",
+    "Nx",
+    "Monorepo",
+    "CDK",
+    "IaC"
+  ],
+  "license": "MIT",
+  "author": "Bojan Bratuz",
+  "files": [
+    "./cdk.cjs",
+    "./cdk-app.cjs",
+    "./config-to-env.cjs"
+  ],
+  "bin": {
+    "cdk": "./cdk.cjs",
+    "config-to-env": "./config-to-env.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bojanbass/nx-aws"
+  },
+  "homepage": "https://github.com/bojanbass/nx-aws"
+}
