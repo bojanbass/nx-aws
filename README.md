@@ -22,7 +22,9 @@ yarn nx generate @nx-aws-plugin/nx-aws-cache:init
 npm run nx generate @nx-aws-plugin/nx-aws-cache:init
 ```
 
-This will make the necessary changes to nx.json in your workspace to use nx-aws-cache runner.
+## Setup Infrastructure and Secrets automatically
+
+Read the [README.md of @nx-aws-plugin/nx-aws-cache-iac](https://github.com/bojanbass/nx-aws/blob/master/apps/nx-aws-cache-iac/README.md)
 
 ## Plugin settings
 
@@ -90,19 +92,19 @@ AWS SDK v3 is used under the hood with a support for [SSO login](https://docs.aw
 
 ## Build
 
-Run `yarn nx build nx-aws-cache` to build the plugin. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `yarn run build` to build the plugin. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 ## Running unit tests
 
-Run `yarn nx test nx-aws-cache` to execute the unit tests via [Jest](https://jestjs.io).
+Run `yarn run test` to execute the unit tests via [Jest](https://jestjs.io).
 
-Run `yarn nx affected:test` to execute the unit tests affected by a change.
+Run `yarn run affected:test` to execute the unit tests affected by a change.
 
 ## Running end-to-end tests
 
-Run `yarn nx e2e nx-aws-cache-e2e` to execute the end-to-end tests via [Jest](https://jestjs.io).
+Run `yarn run e2e` to execute the end-to-end tests via [Jest](https://jestjs.io).
 
-Run `yarn nx affected:e2e` to execute the end-to-end tests affected by a change.
+Run `yarn run affected:e2e` to execute the end-to-end tests affected by a change.
 
 ## Credits
 
