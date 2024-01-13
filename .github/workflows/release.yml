@@ -32,7 +32,7 @@ jobs:
       - name: Setup NodeJS and NPM modules
         uses: ./.github/actions/npm-setup
       - name: Build packages
-        run: yarn run build
+        run: yarn run build:all
       - name: Publish @nx-aws-plugin/nx-aws-cache
         uses: ./.github/actions/npm-publish
         with:
