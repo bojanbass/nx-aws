@@ -1,9 +1,9 @@
-import { formatFiles, logger, Tree, updateJson, readRootPackageJson } from '@nx/devkit';
+import { formatFiles, logger, Tree, updateJson, readJsonFile } from '@nx/devkit';
 
 import { InitGeneratorSchema } from './schema';
 
 function isCompatibleVersion() {
-  const packageJson = readRootPackageJson();
+  const packageJson = readJsonFile('package.json');
   let version =
     packageJson.dependencies?.['@nx/workspace'] ??
     packageJson.devDependencies?.['@nx/workspace'] ??
@@ -49,6 +49,7 @@ function updateNxJson(tree: Tree, options: InitGeneratorSchema): void {
           ...(options.awsRegion ? { awsRegion: options.awsRegion } : {}),
           ...(options.awsBucket ? { awsBucket: options.awsBucket } : {}),
           ...(options.awsForcePathStyle ? { awsForcePathStyle: options.awsForcePathStyle } : {}),
+          ...(options.encryptionFileKey ? { encryptionFileKey: options.encryptionFileKey } : {}),
         },
       },
     };
