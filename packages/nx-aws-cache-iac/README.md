@@ -1,7 +1,10 @@
 # NX AWS Cache Infrastructure as Code
 
-Sets the infrastructure for the AWS Cache for NX. This is a cache that is shared between all the projects in the monorepo.
-It is meant to ease the infrastructure setup of [nx-aws](https://github.com/bojanbass/nx-aws).
+The plugin does not enforce any specific infrastructure. It does require you to have certain elements (e.g. an S3 bucket, a user with access to it, etc.). You can create such infrastructure manually or you can use the provided IaC (Infrastructure as Code) to create it automatically.
+
+In order to ease the process of creating the infrastructure, this package provides a CLI that will create the infrastructure for you. It contains the IaC for creating the infrastructure and you can run it by just calling a command. It uses AWS CDK (Cloud Development Kit) to create the infrastructure. The infrastructure is defined in the `lib/nx-aws-cache-iac-stack.ts` file.
+
+The CLI will create a new Stack in your AWS account. The Stack will create a new S3 bucket and an IAM user with access to it. The credentials for the user will be stored in the AWS Secrets Manager.
 
 ## How to deploy the infrastructure
 
