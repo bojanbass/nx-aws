@@ -1,5 +1,6 @@
 import { createReadStream, createWriteStream, writeFile } from 'fs';
 import { join, dirname } from 'path';
+import { join as posixJoin } from 'path/posix';
 import { pipeline, Readable } from 'stream';
 import { promisify } from 'util';
 import * as clientS3 from '@aws-sdk/client-s3';
@@ -179,7 +180,7 @@ export class AwsCache implements RemoteCache {
   }
 
   private getS3Key(tgzFileName: string) {
-    return join(this.path, tgzFileName);
+    return posixJoin(this.path, tgzFileName);
   }
 
   /**
