@@ -3340,12 +3340,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/nx-cloud@npm:16.2.0":
-  version: 16.2.0
-  resolution: "@nrwl/nx-cloud@npm:16.2.0"
+"@nrwl/nx-cloud@npm:18.0.0":
+  version: 18.0.0
+  resolution: "@nrwl/nx-cloud@npm:18.0.0"
   dependencies:
-    nx-cloud: 16.2.0
-  checksum: 37f42b629532b0e07ad785c77b0940045fde7a71afe1e78882b578aeff8b78e1573593b70481f1048db630fe1e3e1d3216486a46ae3d727848372ac25fb6d299
+    nx-cloud: 18.0.0
+  checksum: 445427dff43de8840605f176f5cfee6ce7a587ea58f7653cc4744f5d1a300c61ffbe7ad7a1f41e84b8d660e82282d74ed89fccb1d8b3415eb99280a0d3e77196
   languageName: node
   linkType: hard
 
@@ -8894,7 +8894,7 @@ __metadata:
     jest-environment-jsdom: 29.4.3
     jsonc-eslint-parser: ^2.4.0
     nx: 16.2.2
-    nx-cloud: 16.2.0
+    nx-cloud: 18.0.0
     prettier: 2.8.3
     tar: 6.2.0
     ts-jest: 29.1.0
@@ -8906,11 +8906,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"nx-cloud@npm:16.2.0":
-  version: 16.2.0
-  resolution: "nx-cloud@npm:16.2.0"
+"nx-cloud@npm:18.0.0":
+  version: 18.0.0
+  resolution: "nx-cloud@npm:18.0.0"
   dependencies:
-    "@nrwl/nx-cloud": 16.2.0
+    "@nrwl/nx-cloud": 18.0.0
     axios: 1.1.3
     chalk: ^4.1.0
     dotenv: ~10.0.0
@@ -8922,7 +8922,7 @@ __metadata:
     yargs-parser: ">=21.1.1"
   bin:
     nx-cloud: bin/nx-cloud.js
-  checksum: 820379f3e47db75e131326d9477ffb69c40f200914e440edec58efcaef8d2f90345b307bd1fa6f442c6f5bd0819a78cf996eda5f75ce98dfcf49205d882a8845
+  checksum: 79a72ea136d33d227a4612fc15355f9c8481eecf24c82a9e57430d1dfded6307344f9a5d054297caf9d5ae043d0e7c4621821a3718c667fc4370f97639dabd4a
   languageName: node
   linkType: hard
 
