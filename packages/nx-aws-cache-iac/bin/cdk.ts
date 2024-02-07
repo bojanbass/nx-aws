@@ -13,7 +13,7 @@ const main = async () => {
 
   const appPath = path.resolve(__dirname, 'cdk-app.cjs');
 
-  const spawnedProcess = spawn('npx', ['cdk@2', command, '--all', '--app', `node ${appPath}`], {
+  const spawnedProcess = spawn('npx', ['cdk@latest', command, '--all', '--app', `node ${appPath}`], {
     cwd: __dirname,
     stdio: 'inherit',
   });
