@@ -824,20 +824,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/lib-storage@npm:^3.515.0":
-  version: 3.515.0
-  resolution: "@aws-sdk/lib-storage@npm:3.515.0"
+"@aws-sdk/lib-storage@npm:^3.569.0":
+  version: 3.569.0
+  resolution: "@aws-sdk/lib-storage@npm:3.569.0"
   dependencies:
-    "@smithy/abort-controller": ^2.1.1
-    "@smithy/middleware-endpoint": ^2.4.1
-    "@smithy/smithy-client": ^2.3.1
+    "@smithy/abort-controller": ^2.2.0
+    "@smithy/middleware-endpoint": ^2.5.1
+    "@smithy/smithy-client": ^2.5.1
     buffer: 5.6.0
     events: 3.3.0
     stream-browserify: 3.0.0
-    tslib: ^2.5.0
+    tslib: ^2.6.2
   peerDependencies:
-    "@aws-sdk/client-s3": ^3.0.0
-  checksum: b4d7b3783508ce3ef93150b2a249490c5af803d02d91ce81aebf0ec055870aae3260d4d66e9bf1d4234fb61d11cfaa54f2916c9c2572cf4cb6ee1b15993c41b5
+    "@aws-sdk/client-s3": ^3.569.0
+  checksum: a293e190f4c5f35b739b54852601ced4b7fb25a60e727941394fd2f77c21b4e20a9e02d183d3f960c5e9ab0d93f4b2a5a38545767cc3f4c485b0642fc478c131
   languageName: node
   linkType: hard
 
@@ -9514,7 +9514,7 @@ __metadata:
     "@actions/github": 5.1.1
     "@aws-sdk/client-s3": 3.569.0
     "@aws-sdk/credential-providers": 3.515.0
-    "@aws-sdk/lib-storage": ^3.515.0
+    "@aws-sdk/lib-storage": ^3.569.0
     "@aws-sdk/property-provider": ^3.374.0
     "@aws-sdk/util-stream-node": ^3.374.0
     "@nx/devkit": 16.2.2
