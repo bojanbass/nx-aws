@@ -7,10 +7,15 @@ version: 2
 updates:
   - package-ecosystem: 'npm' # See documentation for possible values
     directory: '/' # Location of package manifests
+    groups:
+      aws-sdk:
+        patterns:
+          - '@aws-sdk*'
     ignore:
       # @nx deps should always be updated by running `npx nx migrate @nx/workspace`
       - dependency-name: '@nx/*'
       - dependency-name: 'nx'
+      - dependency-name: 'nx-cloud'
       # NX managed packages should not be updated manually
       - dependency-name: '@types/jest'
       - dependency-name: '@types/node'
