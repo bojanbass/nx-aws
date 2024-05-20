@@ -824,7 +824,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/lib-storage@npm:^3.515.0":
+"@aws-sdk/lib-storage@npm:3.515.0":
   version: 3.515.0
   resolution: "@aws-sdk/lib-storage@npm:3.515.0"
   dependencies:
@@ -1034,7 +1034,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/property-provider@npm:^3.374.0":
+"@aws-sdk/property-provider@npm:3.374.0":
   version: 3.374.0
   resolution: "@aws-sdk/property-provider@npm:3.374.0"
   dependencies:
@@ -1186,7 +1186,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/util-stream-node@npm:^3.374.0":
+"@aws-sdk/util-stream-node@npm:3.374.0":
   version: 3.374.0
   resolution: "@aws-sdk/util-stream-node@npm:3.374.0"
   dependencies:
@@ -9514,9 +9514,9 @@ __metadata:
     "@actions/github": 5.1.1
     "@aws-sdk/client-s3": 3.569.0
     "@aws-sdk/credential-providers": 3.515.0
-    "@aws-sdk/lib-storage": ^3.515.0
-    "@aws-sdk/property-provider": ^3.374.0
-    "@aws-sdk/util-stream-node": ^3.374.0
+    "@aws-sdk/lib-storage": 3.515.0
+    "@aws-sdk/property-provider": 3.374.0
+    "@aws-sdk/util-stream-node": 3.374.0
     "@nx/devkit": 16.2.2
     "@nx/eslint-plugin": 16.2.2
     "@nx/jest": 16.2.2

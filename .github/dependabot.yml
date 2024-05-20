@@ -11,6 +11,7 @@ updates:
       aws-sdk:
         patterns:
           - '@aws-sdk*'
+          - 'aws*'
     ignore:
       # @nx deps should always be updated by running `npx nx migrate @nx/workspace`
       - dependency-name: '@nx/*'
