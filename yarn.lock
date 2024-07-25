@@ -8714,7 +8714,7 @@ __metadata:
     nx: 16.2.2
     nx-cloud: 16.2.0
     prettier: 2.8.3
-    tar: 7.4.0
+    tar: 7.4.2
     ts-jest: 29.1.0
     ts-node: 10.9.1
     tslib: 2.3.1
@@ -9947,9 +9947,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:7.4.0":
-  version: 7.4.0
-  resolution: "tar@npm:7.4.0"
+"tar@npm:7.4.2":
+  version: 7.4.2
+  resolution: "tar@npm:7.4.2"
   dependencies:
     "@isaacs/fs-minipass": ^4.0.0
     chownr: ^3.0.0
@@ -9957,7 +9957,7 @@ __metadata:
     minizlib: ^3.0.1
     mkdirp: ^3.0.1
     yallist: ^5.0.0
-  checksum: cdb3ad0b3aa4b39548e4f8896a20dbe424dad07c675e258b938651c1ad93def58562fad411ee453f462c966386fa770e78ef23e3c81f44a1a8f5bb9f01ebf6d5
+  checksum: 024bc57a5673d330352b3ab5314fce1a51cfd1476b3500a35d394a590f1cc0bf3659a98f459c1525c499108562d62a050003d5dfd4d17a982b34583991f11183
   languageName: node
   linkType: hard
 
