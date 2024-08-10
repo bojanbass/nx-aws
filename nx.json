@@ -1,7 +1,4 @@
 {
-  "affected": {
-    "defaultBase": "master"
-  },
   "workspaceLayout": {
     "appsDir": "e2e",
     "libsDir": "packages"
@@ -47,5 +44,7 @@
   },
   "defaultProject": "nx-aws-cache",
   "nxCloudAccessToken": "NGIxYzhjYjMtYTBjNC00MDk3LTg0NGMtZDZhNDliZTc3MTMzfHJlYWQtd3JpdGU=",
-  "parallel": 1
+  "parallel": 1,
+  "useInferencePlugins": false,
+  "defaultBase": "master"
 }
