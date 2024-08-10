@@ -179,7 +179,8 @@ export class AwsCache implements RemoteCache {
   }
 
   private getS3Key(tgzFileName: string) {
-    return join(this.path, tgzFileName);
+    const fullPath = join(this.path, tgzFileName);
+    return fullPath.replace(/\\/gu, '/');
   }
 
   /**
