@@ -4342,12 +4342,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/helpers@npm:~0.5.11":
-  version: 0.5.11
-  resolution: "@swc/helpers@npm:0.5.11"
+"@swc/helpers@npm:~0.5.12":
+  version: 0.5.12
+  resolution: "@swc/helpers@npm:0.5.12"
   dependencies:
     tslib: ^2.4.0
-  checksum: 5d85e641d993264f38871bf53e7509da959cdff7646a40d876153291146b9d0aa701518546e5bfef18fa17c5944333bbeb66c2f0d7a570e8c5535d0937d76bd9
+  checksum: 293c0cb8f41804f94beb04a764bbcfaf316707ec43947713154ac66311590299446bf9b96ab253ce59ce9e435a0edc8cc2bf93f88dc3989f9241271507dd5fe9
   languageName: node
   linkType: hard
 
@@ -8696,7 +8696,7 @@ __metadata:
     "@nx/js": 16.2.2
     "@nx/plugin": 16.2.2
     "@nx/workspace": 16.2.2
-    "@swc/helpers": ~0.5.11
+    "@swc/helpers": ~0.5.12
     "@types/fs-extra": ^11.0.4
     "@types/jest": 29.4.4
     "@types/node": 16.11.7
