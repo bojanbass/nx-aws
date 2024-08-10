@@ -4,3 +4,4 @@
 /coverage
 *.js
 /.nx/cache
+/.nx/workspace-data
