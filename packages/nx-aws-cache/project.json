@@ -29,8 +29,7 @@
             "glob": "generators.json",
             "output": "."
           }
-        ],
-        "updateBuildableProjectDepsInPackageJson": true
+        ]
       }
     },
     "lint": {},
