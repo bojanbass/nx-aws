@@ -54,5 +54,4 @@ Thumbs.db
 !.yarn/sdks
 !.yarn/versions
 
-.nx/cache
-.nx/workspace-data
+
