@@ -43,6 +43,7 @@
       "ref": "9edc50ac58820b189f376728daa86325dd090ac6",
       "subject": "Cleanup"
     },
-    "targetVersion": "20"
+    "targetVersion": "20",
+    "confirmedPackageUpdates": true
   }
 }
