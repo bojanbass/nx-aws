@@ -62,7 +62,7 @@
     "tar": "7.5.2"
   },
   "devDependencies": {
-    "@actions/core": "1.11.1",
+    "@actions/core": "2.0.0",
     "@actions/github": "6.0.0",
     "@aws-sdk/util-stream-node": "3.374.0",
     "@nx/devkit": "16.2.2",
