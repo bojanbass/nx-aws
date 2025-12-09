@@ -11,6 +11,12 @@
       "cache": true
     },
     "lint": {
+      "executor": "@nx/eslint:lint",
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json", "{workspaceRoot}/tsconfig.base.json"],
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "reportUnusedDisableDirectives": "error"
+      },
       "cache": true
     },
     "@nx/jest:jest": {

@@ -9219,6 +9219,7 @@ __metadata:
     "@aws-sdk/property-provider": 3.374.0
     "@aws-sdk/util-stream-node": 3.374.0
     "@nx/devkit": 19.5.7
+    "@nx/eslint": 19.5.7
     "@nx/eslint-plugin": 19.5.7
     "@nx/jest": 19.5.7
     "@nx/js": 19.5.7

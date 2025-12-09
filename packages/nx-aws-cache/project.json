@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/nx-aws-cache/src",
   "projectType": "library",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -31,18 +32,7 @@
         ]
       }
     },
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": [
-          "packages/nx-aws-cache/**/*.ts",
-          "packages/nx-aws-cache/generators.json",
-          "packages/nx-aws-cache/executors.json",
-          "packages/nx-aws-cache/package.json"
-        ]
-      }
-    },
+    "lint": {},
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
@@ -50,6 +40,5 @@
         "jestConfig": "packages/nx-aws-cache/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }
