@@ -24,28 +24,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/github@npm:6.0.1":
-  version: 6.0.1
-  resolution: "@actions/github@npm:6.0.1"
+"@actions/github@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@actions/github@npm:7.0.0"
   dependencies:
-    "@actions/http-client": ^2.2.0
+    "@actions/http-client": ^3.0.1
     "@octokit/core": ^5.0.1
     "@octokit/plugin-paginate-rest": ^9.2.2
     "@octokit/plugin-rest-endpoint-methods": ^10.4.0
     "@octokit/request": ^8.4.1
     "@octokit/request-error": ^5.1.1
     undici: ^5.28.5
-  checksum: ba6a162a5727dea2f3f3fc450e02c5b336ceb65a0e26ba9ad9c62b20f4f5b2625ca347a9311a4905ef3c92378ca022caba841a283cb7f2e4175d79e3d1ecaf12
-  languageName: node
-  linkType: hard
-
-"@actions/http-client@npm:^2.2.0":
-  version: 2.2.1
-  resolution: "@actions/http-client@npm:2.2.1"
-  dependencies:
-    tunnel: ^0.0.6
-    undici: ^5.25.4
-  checksum: c51c003cd697289136c0e81c0f9b8e57a9bb1a038dc7c9a91a71c02f4ae5e27ef7d3e305aefa7c815604049209d114c06e9991a5c5eaa055508519329267f962
+  checksum: 829c6402f927839714692f4e1f48359d306be0fd21ef3843feaf3db6541e5e7f85447b0bf794beeebad0b8f4a2644f7f92143cb4a8311541b29f5ddfc585cec1
   languageName: node
   linkType: hard
 
@@ -56,6 +46,16 @@ __metadata:
     tunnel: ^0.0.6
     undici: ^5.28.5
   checksum: 840ec7a4c224a3945d1958b56b01fb870ae19c1d1502b8f0d1a7c291bbe061aff50b6c3bbf6c09b6afa3b56386ec09ecd16029c6fcb3016fb9e21cd1ab5f49fc
+  languageName: node
+  linkType: hard
+
+"@actions/http-client@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@actions/http-client@npm:3.0.1"
+  dependencies:
+    tunnel: ^0.0.6
+    undici: ^5.28.5
+  checksum: 421ecc5a7ed288854eb4f30b7b156a4ab43150ce4d5362be743ed142873af5f01581ac4840df68615155a6e49c5977e725bc239db32099b33814f3105b96f388
   languageName: node
   linkType: hard
 
@@ -8788,7 +8788,7 @@ __metadata:
   resolution: "nx-aws@workspace:."
   dependencies:
     "@actions/core": 2.0.0
-    "@actions/github": 6.0.1
+    "@actions/github": 7.0.0
     "@aws-sdk/client-s3": 3.947.0
     "@aws-sdk/credential-providers": 3.947.0
     "@aws-sdk/lib-storage": 3.947.0
@@ -10331,7 +10331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^5.25.4, undici@npm:^5.28.5":
+"undici@npm:^5.28.5":
   version: 5.29.0
   resolution: "undici@npm:5.29.0"
   dependencies:

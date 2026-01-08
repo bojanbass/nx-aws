@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@actions/core": "2.0.0",
-    "@actions/github": "6.0.1",
+    "@actions/github": "7.0.0",
     "@aws-sdk/util-stream-node": "3.374.0",
     "@nx/devkit": "16.2.2",
     "@nx/eslint-plugin": "16.2.2",
