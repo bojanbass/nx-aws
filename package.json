@@ -59,7 +59,7 @@
     "@aws-sdk/property-provider": "3.374.0",
     "@swc/helpers": "~0.5.17",
     "dotenv": "17.2.3",
-    "tar": "7.5.2"
+    "tar": "7.5.3"
   },
   "devDependencies": {
     "@actions/core": "2.0.0",
