@@ -25,7 +25,8 @@ jobs:
         run: bun nx build nx-aws-cache
 
       - name: Publish
-        run: bun nx release publish
+        run: |
+          npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
+          npm publish dist/packages/nx-aws-cache --access public
         env:
-          BUN_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
