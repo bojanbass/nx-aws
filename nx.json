@@ -4,31 +4,32 @@
     "libsDir": "packages"
   },
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "release": {
+    "projects": ["nx-aws-cache"],
+    "version": {
+      "manifestRootsToUpdate": ["{projectRoot}", "dist/packages/{projectName}"]
+    }
+  },
   "targetDefaults": {
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/packages/{projectName}"
+      }
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"],
       "cache": true
     },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json", "{workspaceRoot}/tsconfig.base.json"],
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "reportUnusedDisableDirectives": "error"
-      },
-      "cache": true
-    },
-    "@nx/jest:jest": {
+    "@nx/vitest:test": {
       "cache": true,
-      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
+      "inputs": ["default", "^production", "{workspaceRoot}/vitest.config.ts"],
       "options": {
         "passWithNoTests": true
       },
       "configurations": {
         "ci": {
-          "ci": true,
-          "codeCoverage": true
+          "coverage": true
         }
       }
     }
@@ -38,14 +39,14 @@
     "sharedGlobals": [
       "{workspaceRoot}/workspace.json",
       "{workspaceRoot}/tsconfig.base.json",
-      "{workspaceRoot}/nx.json"
+      "{workspaceRoot}/nx.json",
+      "{workspaceRoot}/.github/workflows/ci.yml"
     ],
     "production": [
       "default",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/jest.config.[jt]s",
-      "!{projectRoot}/src/test-setup.[jt]s"
+      "!{projectRoot}/vitest.config.[jt]s"
     ]
   },
   "defaultProject": "nx-aws-cache",

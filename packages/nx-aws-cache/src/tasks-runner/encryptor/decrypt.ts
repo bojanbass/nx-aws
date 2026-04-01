@@ -1,43 +1,36 @@
-import { Transform } from 'stream';
-import { createDecipheriv, Decipher } from 'crypto';
-import { EncryptConfig } from './encrypt-config';
+import { createDecipheriv, createSecretKey } from 'node:crypto';
+import { Readable } from 'node:stream';
+import type { EncryptConfig } from './encrypt-config';
 
-/**
- * Stream transform for decrypt file. Get IV for file from first 16 bytes
- */
-export class Decrypt extends Transform {
-  private decipher: Decipher | null = null;
-  private readFirstChunk = false;
+export function createDecryptStream(source: Readable, config: EncryptConfig): Readable {
+  return Readable.from(
+    (async function* () {
+      const key = createSecretKey(config.getKey(), 'base64');
+      let ivBuffer = Buffer.alloc(0);
+      let decipher: ReturnType<typeof createDecipheriv> | null = null;
 
-  constructor(private config: EncryptConfig) {
-    super();
-  }
+      for await (const chunk of source) {
+        const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk as Uint8Array);
 
-  _flush(callback: any) {
-    const finalChunk = this.decipher?.final();
-    this.push(finalChunk);
-    callback();
-  }
+        if (decipher === null) {
+          ivBuffer = Buffer.concat([ivBuffer, buf]);
 
-  _transform(chunk: any, encoding: BufferEncoding, callback: (error?: Error | null) => void) {
-    if (!this.readFirstChunk && chunk.length >= this.config.getIvBytes()) {
-      this.readFirstChunk = true;
-      // Get iv from first bytes
-      const iv = chunk.slice(0, this.config.getIvBytes());
-      const firstPayload = chunk.slice(this.config.getIvBytes(), chunk.length);
-      this.decipher = createDecipheriv(this.config.getAlgorithm(), this.config.getKeyBuffer(), iv);
+          if (ivBuffer.length >= config.getIvBytes()) {
+            const iv = Uint8Array.from(ivBuffer.subarray(0, config.getIvBytes()));
+            decipher = createDecipheriv(config.getAlgorithm(), key, iv);
+            const rest = ivBuffer.subarray(config.getIvBytes());
+            if (rest.length > 0) {
+              yield decipher.update(Uint8Array.from(rest));
+            }
+          }
+        } else {
+          yield decipher.update(Uint8Array.from(buf));
+        }
+      }
 
-      const decryptedData = this.decipher.update(firstPayload);
-      this.push(decryptedData, encoding);
-      callback();
-      return;
-    } else if (this.decipher) {
-      // Next chunk decrypt as normal
-      this.push(this.decipher.update(chunk, encoding));
-      callback();
-      return;
-    }
-
-    callback(new Error('No set Decipher'));
-  }
+      if (decipher !== null) {
+        yield decipher.final();
+      }
+    })(),
+  );
 }

@@ -1,41 +1,37 @@
-name: NPM Release
+name: Release
 on:
   push:
     tags:
-      - v*
+      - 'v*'
 
 jobs:
-  repoMeta:
-    name: Prepare workflow
+  release:
+    permissions:
+      contents: read
+      id-token: write
     runs-on: ubuntu-latest
-    outputs:
-      release-type: ${{ steps.repo-meta.outputs.release-type }}
-      tag-name: ${{ steps.repo-meta.outputs.tag-name }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup NodeJS and NPM modules
-        uses: ./.github/actions/npm-setup
-      - name: Populate metadata
-        id: repo-meta
-        uses: ./.github/actions/get-metadata
-
-  publish:
-    if: ${{ needs.repoMeta.outputs.release-type }}
-    needs: [repoMeta]
-    name: Build and release package
-    runs-on: ubuntu-latest
-    environment: ${{ needs.repoMeta.outputs.release-type }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup NodeJS and NPM modules
-        uses: ./.github/actions/npm-setup
-      - name: Build package
-        run: yarn build nx-aws-cache
-      - uses: ./.github/actions/npm-publish
+      - uses: actions/checkout@v4
         with:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          RELEASE_VERSION: ${{ needs.repoMeta.outputs.tag-name }}
-          RELEASE_TYPE: ${{ needs.repoMeta.outputs.release-type }}
-          SRC_FOLDER: dist/packages/nx-aws-cache
+          fetch-depth: 0
+          filter: tree:0
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org/'
+
+      - run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun nx build nx-aws-cache
+
+      - name: Publish
+        run: bun nx release publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true

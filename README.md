@@ -6,11 +6,38 @@ nx-aws is a set of plugins for NRWL NX (a set of Extensible Dev Tools for Monore
 
 A tool for using AWS S3 as a distributed computational cache for Nx.
 
+## Getting Started
+
+### Prerequisites
+
+- [mise](https://mise.jdx.dev/) - manages Node.js and bun versions
+
+### Setup
+
+1. Install tools and trust the mise config:
+
+```bash
+mise install # installs Node.js and bun
+```
+
+> **Tip:** To install tools globally (available outside this project), use:
+> ```bash
+> mise use --global node@24
+> mise use --global bun@latest
+> ```
+
+2. Install dependencies:
+
+```bash
+bun install
+```
+
 ## Setup
 
 Install the package by running:
 
 ```bash
+bun add @nx-aws-plugin/nx-aws-cache
 yarn add @nx-aws-plugin/nx-aws-cache
 npm i @nx-aws-plugin/nx-aws-cache
 ```
@@ -18,6 +45,7 @@ npm i @nx-aws-plugin/nx-aws-cache
 Then run the init schematic by running:
 
 ```bash
+bun nx generate @nx-aws-plugin/nx-aws-cache:init
 yarn nx generate @nx-aws-plugin/nx-aws-cache:init
 npm run nx generate @nx-aws-plugin/nx-aws-cache:init
 ```
@@ -102,19 +130,19 @@ AWS SDK v3 is used under the hood with a support for [SSO login](https://docs.aw
 
 ## Build
 
-Run `yarn nx build nx-aws-cache` to build the plugin. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `bun nx build nx-aws-cache` to build the plugin. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit/integration tests
+## Running unit tests
 
-Run `yarn nx test nx-aws-cache` to execute the unit tests via [Jest](https://jestjs.io).
+Run `bun nx test nx-aws-cache` to execute the unit tests via [Vitest](https://vitest.dev).
 
-Run `yarn nx affected:test` to execute the unit tests affected by a change.
+Run `bun nx affected:test` to execute the unit tests affected by a change.
 
 ## Running end-to-end tests
 
-Run `yarn nx e2e nx-aws-cache-e2e` to execute the end-to-end tests via [Jest](https://jestjs.io).
+Run `bun nx e2e nx-aws-cache-e2e` to execute the end-to-end tests via [Vitest](https://vitest.dev).
 
-Run `yarn nx affected:e2e` to execute the end-to-end tests affected by a change.
+Run `bun nx affected:e2e` to execute the end-to-end tests affected by a change.
 
 ## Credits
 

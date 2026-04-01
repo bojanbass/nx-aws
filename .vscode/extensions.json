@@ -1,9 +1,8 @@
 {
   "recommendations": [
-    "dbaeumer.vscode-eslint",
+    "biomejs.biome",
     "editorconfig.editorconfig",
-    "esbenp.prettier-vscode",
-    "firsttris.vscode-jest-runner",
+    "vitest.explorer",
     "nrwl.angular-console"
   ]
 }
