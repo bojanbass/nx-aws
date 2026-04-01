@@ -21,12 +21,16 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
+      - name: Set version from tag
+        run: npm --prefix packages/nx-aws-cache version "${GITHUB_REF_NAME#v}" --no-git-tag-version --allow-same-version
+
       - name: Build
         run: bun nx build nx-aws-cache
 
       - name: Publish
         run: |
           npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
-          npm publish dist/packages/nx-aws-cache --access public
+          npm publish dist/packages/nx-aws-cache --access public --tag $DIST_TAG
         env:
+          DIST_TAG: ${{ contains(github.ref_name, '-') && 'next' || 'latest' }}
           NPM_CONFIG_PROVENANCE: true

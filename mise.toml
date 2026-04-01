@@ -1,5 +1,6 @@
 [tools]
 bun = "1.3.11"
+gh = "2.89.0"
 node = "24.11.0"
 "npm:nx" = "latest"
 
