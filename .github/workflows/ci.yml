@@ -19,11 +19,10 @@ jobs:
           filter: tree:0
           fetch-depth: 0
 
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.3.11
+      - name: Setup toolchains with mise
+        uses: jdx/mise-action@v3
 
-      - run: bun install --no-cache
+      - run: bun install --frozen-lockfile
       - uses: nrwl/nx-set-shas@v5
 
 
