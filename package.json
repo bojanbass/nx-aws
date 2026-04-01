@@ -35,7 +35,7 @@
     "@aws-sdk/lib-storage": "3.947.0",
     "@aws-sdk/property-provider": "3.374.0",
     "dotenv": "17.2.3",
-    "tar": "7.5.2"
+    "tar": "7.5.13"
   },
   "devDependencies": {
     "@aws-sdk/util-stream-node": "3.374.0",
@@ -45,7 +45,7 @@
     "@nx/vitest": "22.2.0",
     "@nx/workspace": "22.2.0",
     "@types/node": "^22.0.0",
-    "@types/tar": "6.1.13",
+    "@types/tar": "7.0.87",
     "@vitest/ui": "^2.0.0",
     "aws-sdk-client-mock": "^4.1.0",
     "chalk": "^4.1.2",
