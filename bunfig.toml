@@ -3,3 +3,6 @@
 minimumReleaseAge = 259200 # seconds (3 days)
 
 linker = "isolated"
+
+[publish]
+registry = "https://registry.npmjs.org/"
