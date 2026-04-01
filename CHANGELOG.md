@@ -1,3 +1,13 @@
+## 3.4.0-0 (2026-04-01)
+
+### 🩹 Fixes
+
+- bun.lock ([c71df2e](https://github.com/bojanbass/nx-aws/commit/c71df2e))
+
+### ❤️ Thank You
+
+- Bojan Bratuz
+
 ## 3.3.0-alpha.4 (2026-04-01)
 
 ### 🚀 Features
