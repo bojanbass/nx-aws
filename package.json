@@ -40,6 +40,8 @@
   "devDependencies": {
     "@aws-sdk/util-stream-node": "3.374.0",
     "@biomejs/biome": "^1.9.4",
+    "@swc-node/register": "^1.10.0",
+    "@swc/core": "^1.10.0",
     "@nx/devkit": "22.2.0",
     "@nx/js": "22.2.0",
     "@nx/vitest": "22.2.0",
