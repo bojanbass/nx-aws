@@ -14,9 +14,7 @@
   },
   "scripts": {
     "nx": "nx",
-    "start": "nx serve",
     "build": "nx build",
-    "build:actions": "tsc --project ./.github/actions/tsconfig.json",
     "test": "nx test",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
@@ -32,13 +30,12 @@
     "@nx/workspace": ">=16.0.0"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.600.0",
-    "@aws-sdk/credential-providers": "3.600.0",
-    "@aws-sdk/lib-storage": "3.600.0",
+    "@aws-sdk/client-s3": "3.947.0",
+    "@aws-sdk/credential-providers": "3.947.0",
+    "@aws-sdk/lib-storage": "3.947.0",
     "@aws-sdk/property-provider": "3.374.0",
-    "@swc/helpers": "0.5.12",
-    "dotenv": "16.4.5",
-    "tar": "7.4.3"
+    "dotenv": "17.2.3",
+    "tar": "7.5.2"
   },
   "devDependencies": {
     "@aws-sdk/util-stream-node": "3.374.0",
@@ -50,10 +47,9 @@
     "@types/node": "^22.0.0",
     "@types/tar": "6.1.13",
     "@vitest/ui": "^2.0.0",
-    "aws-sdk-client-mock": "^4.0.1",
+    "aws-sdk-client-mock": "^4.1.0",
     "chalk": "^4.1.2",
     "nx": "22.2.0",
-    "ts-node": "10.9.1",
     "tslib": "2.3.1",
     "typescript": "5.9.3",
     "vitest": "^2.0.0"
