@@ -1,30 +1,37 @@
 {
-  "npmScope": "nx-aws",
-  "affected": {
-    "defaultBase": "master"
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx-cloud",
-      "options": {
-        "cacheableOperations": ["build", "test", "lint", "e2e"],
-        "parallel": 1,
-        "accessToken": "NGIxYzhjYjMtYTBjNC00MDk3LTg0NGMtZDZhNDliZTc3MTMzfHJlYWQtd3JpdGU="
-      }
-    }
-  },
   "workspaceLayout": {
     "appsDir": "e2e",
     "libsDir": "packages"
   },
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "release": {
+    "projects": ["nx-aws-cache"],
+    "version": {
+      "manifestRootsToUpdate": ["{projectRoot}", "dist/packages/{projectName}"]
+    }
+  },
   "targetDefaults": {
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/packages/{projectName}"
+      }
+    },
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "inputs": ["production", "^production"],
+      "cache": true
     },
-    "test": {
-      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
+    "@nx/vitest:test": {
+      "cache": true,
+      "inputs": ["default", "^production", "{workspaceRoot}/vitest.config.ts"],
+      "options": {
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "coverage": true
+        }
+      }
     }
   },
   "namedInputs": {
@@ -32,14 +39,19 @@
     "sharedGlobals": [
       "{workspaceRoot}/workspace.json",
       "{workspaceRoot}/tsconfig.base.json",
-      "{workspaceRoot}/nx.json"
+      "{workspaceRoot}/nx.json",
+      "{workspaceRoot}/.github/workflows/ci.yml"
     ],
     "production": [
       "default",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/jest.config.[jt]s"
+      "!{projectRoot}/vitest.config.[jt]s"
     ]
   },
-  "defaultProject": "nx-aws-cache"
+  "defaultProject": "nx-aws-cache",
+  "nxCloudAccessToken": "NGIxYzhjYjMtYTBjNC00MDk3LTg0NGMtZDZhNDliZTc3MTMzfHJlYWQtd3JpdGU=",
+  "parallel": 1,
+  "useInferencePlugins": false,
+  "defaultBase": "master"
 }

@@ -1,17 +1,14 @@
 export const IVBYTES = 16;
 
 export class EncryptConfig {
-  private keyBuffer: Buffer;
-  constructor(private key = '', private algorithm = 'aes-256-cbc', private ivBytes = IVBYTES) {
-    this.keyBuffer = Buffer.from(key, 'base64');
-  }
+  constructor(
+    private key = '',
+    private algorithm = 'aes-256-cbc',
+    private ivBytes = IVBYTES,
+  ) {}
 
   getKey() {
     return this.key;
-  }
-
-  getKeyBuffer() {
-    return this.keyBuffer;
   }
 
   getAlgorithm() {

@@ -1,6 +1,6 @@
-import { formatFiles, logger, Tree, updateJson, readJsonFile } from '@nx/devkit';
+import { type Tree, formatFiles, logger, readJsonFile, updateJson } from '@nx/devkit';
 
-import { InitGeneratorSchema } from './schema';
+import type { InitGeneratorSchema } from './schema';
 
 function isCompatibleVersion() {
   const packageJson = readJsonFile('package.json');
@@ -11,7 +11,7 @@ function isCompatibleVersion() {
     packageJson.devDependencies?.['@nrwl/workspace'];
 
   if (!version) {
-    throw new Error(`You must install Nx to enable Storage Cache`);
+    throw new Error('You must install Nx to enable Storage Cache');
   }
 
   if (version.startsWith('^') || version.startsWith('~')) {
@@ -21,7 +21,7 @@ function isCompatibleVersion() {
   const [major] = version.split('.');
   const majorNumber = Number.parseInt(major, 10);
 
-  if (isNaN(majorNumber)) {
+  if (Number.isNaN(majorNumber)) {
     return false;
   }
 

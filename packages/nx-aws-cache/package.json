@@ -2,17 +2,7 @@
   "name": "@nx-aws-plugin/nx-aws-cache",
   "version": "3.0.0",
   "description": "AWS S3 Cache plugin for Nx",
-  "keywords": [
-    "AWS",
-    "S3",
-    "Tasks",
-    "Runner",
-    "Cache",
-    "Workspace",
-    "Nrwl",
-    "Nx",
-    "Monorepo"
-  ],
+  "keywords": ["AWS", "S3", "Tasks", "Runner", "Cache", "Workspace", "Nrwl", "Nx", "Monorepo"],
   "license": "MIT",
   "author": "Bojan Bratuz",
   "main": "src/index.js",

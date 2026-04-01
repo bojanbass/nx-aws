@@ -1,18 +1,16 @@
 import { config as dotEnvConfig } from 'dotenv';
 
-['.local.env', '.env.local', '.env'].forEach((file) => {
-  dotEnvConfig({
-    path: file,
-  });
-});
+for (const file of ['.local.env', '.env.local', '.env']) {
+  dotEnvConfig({ path: file });
+}
 
-import { TaskStatus } from '@nx/workspace/src/tasks-runner/tasks-runner';
 import { defaultTasksRunner } from '@nx/devkit';
+import type { TaskStatus } from '@nx/workspace/src/tasks-runner/tasks-runner';
 
-import { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
 import { AwsCache } from './aws-cache';
 import { Logger } from './logger';
 import { MessageReporter } from './message-reporter';
+import type { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
 
 function getOptions(options: AwsNxCacheOptions) {
   return {
@@ -32,7 +30,6 @@ function getOptions(options: AwsNxCacheOptions) {
   };
 }
 
-// eslint-disable-next-line max-lines-per-function
 export const tasksRunner = (
   tasks: Parameters<typeof defaultTasksRunner>[0],
   options: Parameters<typeof defaultTasksRunner>[1] & AwsNxCacheOptions,

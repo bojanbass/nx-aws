@@ -1,14 +1,15 @@
-import * as fs from 'fs';
-import * as os from 'os';
-import { randomUUID } from 'crypto';
-import * as path from 'path';
-import { mockClient } from 'aws-sdk-client-mock';
+import { randomUUID } from 'node:crypto';
+import * as fs from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { sdkStreamMixin } from '@aws-sdk/util-stream-node';
+import { mockClient } from 'aws-sdk-client-mock';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AwsCache } from './aws-cache';
+import { EncryptConfig, createEncryptStream } from './encryptor';
 import { Logger } from './logger';
 import { MessageReporter } from './message-reporter';
-import { Encrypt, EncryptConfig } from './encryptor';
 
 // eslint-disable-next-line max-lines-per-function
 describe('Test aws put and get unencrypted file', () => {
@@ -46,7 +47,7 @@ describe('Test aws put and get unencrypted file', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.clearAllMocks();
     s3Mock.reset();
   });
 
@@ -58,7 +59,7 @@ describe('Test aws put and get unencrypted file', () => {
     const tgzFilePath = path.join(cacheDirectory, `${hash}.tar.gz`);
     const tgzFileStream = fs.createReadStream(tgzFilePath);
     const sdkStream = sdkStreamMixin(
-      tgzFileStream.pipe(new Encrypt(new EncryptConfig(config.encryptionFileKey))),
+      createEncryptStream(tgzFileStream, new EncryptConfig(config.encryptionFileKey)),
     );
     s3Mock.on(GetObjectCommand).resolves({ Body: sdkStream });
 

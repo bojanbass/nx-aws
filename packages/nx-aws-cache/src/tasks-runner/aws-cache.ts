@@ -1,17 +1,17 @@
-import { createReadStream, createWriteStream, writeFile } from 'fs';
-import { join, dirname } from 'path';
-import { pipeline, Readable } from 'stream';
-import { promisify } from 'util';
+import { createReadStream, createWriteStream, writeFile } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { type Readable, pipeline } from 'node:stream';
+import { promisify } from 'node:util';
 import * as clientS3 from '@aws-sdk/client-s3';
 import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
-import { CredentialsProviderError } from '@aws-sdk/property-provider';
-import { RemoteCache } from '@nx/workspace/src/tasks-runner/default-tasks-runner';
-import { create, extract } from 'tar';
-import { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
-import { Logger } from './logger';
-import { MessageReporter } from './message-reporter';
-import { Encrypt, Decrypt, EncryptConfig } from './encryptor';
 import { Upload } from '@aws-sdk/lib-storage';
+import { CredentialsProviderError } from '@aws-sdk/property-provider';
+import type { RemoteCache } from '@nx/workspace/src/tasks-runner/default-tasks-runner';
+import { create, extract } from 'tar';
+import { EncryptConfig, createDecryptStream, createEncryptStream } from './encryptor';
+import { Logger } from './logger';
+import type { MessageReporter } from './message-reporter';
+import type { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
 
 export class AwsCache implements RemoteCache {
   private readonly bucket: string;
@@ -21,7 +21,10 @@ export class AwsCache implements RemoteCache {
   private readonly uploadQueue: Array<Promise<boolean>> = [];
   private readonly encryptConfig: EncryptConfig | undefined;
 
-  public constructor(options: AwsNxCacheOptions, private messages: MessageReporter) {
+  public constructor(
+    options: AwsNxCacheOptions,
+    private messages: MessageReporter,
+  ) {
     const awsBucket = options.awsBucket ?? '';
     const bucketTokens = awsBucket.split('/');
     this.bucket = bucketTokens.shift() as string;
@@ -71,7 +74,6 @@ export class AwsCache implements RemoteCache {
     }
   }
 
-  // eslint-disable-next-line max-statements
   public async retrieve(hash: string, cacheDirectory: string): Promise<boolean> {
     try {
       await this.s3.config.credentials();
@@ -134,7 +136,7 @@ export class AwsCache implements RemoteCache {
       await this.uploadFile(
         hash,
         this.encryptConfig
-          ? sourceFileStream.pipe(new Encrypt(this.encryptConfig))
+          ? createEncryptStream(sourceFileStream, this.encryptConfig)
           : sourceFileStream,
       );
 
@@ -215,19 +217,22 @@ export class AwsCache implements RemoteCache {
   }
 
   private async downloadFile(hash: string, tgzFilePath: string): Promise<void> {
-    const pipelinePromise = promisify(pipeline),
-      tgzFileName = this.getTgzFileName(hash),
-      writeFileToLocalDir = createWriteStream(tgzFilePath),
-      params = new clientS3.GetObjectCommand({
-        Bucket: this.bucket,
-        Key: this.getS3Key(tgzFileName),
-      });
+    const pipelinePromise = promisify(pipeline);
+    const tgzFileName = this.getTgzFileName(hash);
+    const writeFileToLocalDir = createWriteStream(tgzFilePath);
+    const params = new clientS3.GetObjectCommand({
+      Bucket: this.bucket,
+      Key: this.getS3Key(tgzFileName),
+    });
 
     try {
       const commandOutput = await this.s3.send(params);
       const fileStream = commandOutput.Body as Readable;
       if (this.encryptConfig) {
-        await pipelinePromise(fileStream, new Decrypt(this.encryptConfig), writeFileToLocalDir);
+        await pipelinePromise(
+          createDecryptStream(fileStream, this.encryptConfig),
+          writeFileToLocalDir,
+        );
       } else {
         await pipelinePromise(fileStream, writeFileToLocalDir);
       }
@@ -237,11 +242,11 @@ export class AwsCache implements RemoteCache {
   }
 
   private async checkIfCacheExists(hash: string): Promise<boolean> {
-    const tgzFileName = this.getTgzFileName(hash),
-      params: clientS3.HeadObjectCommand = new clientS3.HeadObjectCommand({
-        Bucket: this.bucket,
-        Key: this.getS3Key(tgzFileName),
-      });
+    const tgzFileName = this.getTgzFileName(hash);
+    const params: clientS3.HeadObjectCommand = new clientS3.HeadObjectCommand({
+      Bucket: this.bucket,
+      Key: this.getS3Key(tgzFileName),
+    });
 
     try {
       await this.s3.send(params);
@@ -249,7 +254,8 @@ export class AwsCache implements RemoteCache {
     } catch (err) {
       if ((err as Error).name === 'NotFound') {
         return false;
-      } else if (err instanceof CredentialsProviderError) {
+      }
+      if (err instanceof CredentialsProviderError) {
         return false;
       }
 
