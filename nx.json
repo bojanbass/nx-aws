@@ -8,6 +8,11 @@
     "projects": ["nx-aws-cache"],
     "version": {
       "manifestRootsToUpdate": ["{projectRoot}", "dist/packages/{projectName}"]
+    },
+    "changelog": {
+      "workspaceChangelog": {
+        "createRelease": "github"
+      }
     }
   },
   "targetDefaults": {
