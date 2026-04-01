@@ -44,8 +44,6 @@ Thumbs.db
 /.nx/cache
 /.nx/workspace-data
 
-# Bun
-bun.lock
 
 .nx/polygraph
 .claude/worktrees
