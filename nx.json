@@ -7,17 +7,11 @@
   "release": {
     "projects": ["nx-aws-cache"],
     "version": {
-      "manifestRootsToUpdate": ["{projectRoot}", "dist/packages/{projectName}"],
-      "git": {
-        "commitMessage": "chore: updated version [no ci]"
-      }
+      "manifestRootsToUpdate": ["{projectRoot}", "dist/packages/{projectName}"]
     },
     "changelog": {
       "workspaceChangelog": {
         "createRelease": "github"
-      },
-      "git": {
-        "commitMessage": "chore: updated version [no ci]"
       }
     }
   },
