@@ -34,7 +34,7 @@
     "@aws-sdk/credential-providers": "3.947.0",
     "@aws-sdk/lib-storage": "3.947.0",
     "@aws-sdk/property-provider": "3.374.0",
-    "dotenv": "17.2.3",
+    "dotenv": "17.4.0",
     "tar": "7.5.13"
   },
   "devDependencies": {
