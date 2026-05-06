@@ -35,7 +35,7 @@
     "@aws-sdk/lib-storage": "3.947.0",
     "@aws-sdk/property-provider": "3.374.0",
     "dotenv": "17.2.3",
-    "tar": "7.5.13"
+    "tar": "7.5.14"
   },
   "devDependencies": {
     "@aws-sdk/util-stream-node": "3.374.0",
