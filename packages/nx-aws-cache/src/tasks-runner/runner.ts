@@ -1,33 +1,31 @@
-import { config as dotEnvConfig } from 'dotenv';
-
-for (const file of ['.local.env', '.env.local', '.env']) {
-  dotEnvConfig({ path: file });
-}
+import '../load-env';
 
 import { defaultTasksRunner } from '@nx/devkit';
-import type { TaskStatus } from '@nx/workspace/src/tasks-runner/tasks-runner';
 
+import { resolveAwsOptions } from '../s3';
 import { AwsCache } from './aws-cache';
 import { Logger } from './logger';
 import { MessageReporter } from './message-reporter';
 import type { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
 
-function getOptions(options: AwsNxCacheOptions) {
-  return {
-    awsAccessKeyId: process.env.NXCACHE_AWS_ACCESS_KEY_ID ?? options.awsAccessKeyId,
-    awsSecretAccessKey: process.env.NXCACHE_AWS_SECRET_ACCESS_KEY ?? options.awsSecretAccessKey,
-    awsProfile: process.env.NXCACHE_AWS_PROFILE ?? options.awsProfile,
-    awsEndpoint: process.env.NXCACHE_AWS_ENDPOINT ?? options.awsEndpoint,
-    awsRegion: process.env.NXCACHE_AWS_REGION ?? options.awsRegion,
-    awsBucket: process.env.NXCACHE_AWS_BUCKET ?? options.awsBucket,
-    awsForcePathStyle: process.env.NXCACHE_AWS_FORCE_PATH_STYLE
-      ? process.env.NXCACHE_AWS_FORCE_PATH_STYLE === 'true'
-      : options.awsForcePathStyle,
-    encryptionFileKey:
-      process.env.NX_CLOUD_ENCRYPTION_KEY ??
-      process.env.NXCACHE_AWS_ENCRYPTION_KEY ??
-      options.encryptionFileKey,
-  };
+const FIRST_NX_VERSION_WITH_DB_CACHE = 20;
+
+/**
+ * Starting with Nx 20 the database cache ignores custom remote caches, unless the legacy cache is enabled.
+ */
+function isRemoteCacheIgnored(context: Parameters<typeof defaultTasksRunner>[2]): boolean {
+  if (process.env.NX_DISABLE_DB === 'true' || process.env.NX_DB_CACHE === 'false') {
+    return false;
+  }
+
+  try {
+    const nxMajorVersion = Number.parseInt(require('nx/package.json').version, 10);
+    const { useLegacyCache } = (context?.nxJson ?? {}) as { useLegacyCache?: boolean };
+
+    return nxMajorVersion >= FIRST_NX_VERSION_WITH_DB_CACHE && !useLegacyCache;
+  } catch {
+    return false;
+  }
 }
 
 export const tasksRunner = (
@@ -36,7 +34,7 @@ export const tasksRunner = (
   // eslint-disable-next-line no-magic-numbers
   context: Parameters<typeof defaultTasksRunner>[2],
 ) => {
-  const awsOptions: AwsNxCacheOptions = getOptions(options);
+  const awsOptions: AwsNxCacheOptions = resolveAwsOptions(options);
   const logger = new Logger();
 
   try {
@@ -48,21 +46,25 @@ export const tasksRunner = (
       return defaultTasksRunner(tasks, options, context);
     }
 
-    if (!options.skipNxCache) {
+    if (isRemoteCacheIgnored(context)) {
+      logger.warn(
+        'REMOTE CACHE IS IGNORED BY NX: set "useLegacyCache": true in nx.json, or use nx-aws-cache-server (Nx >= 20.8)',
+      );
+    } else if (!options.skipNxCache) {
       logger.note('USING REMOTE CACHE');
     }
 
     const messages = new MessageReporter(logger);
     const remoteCache = new AwsCache(awsOptions, messages);
 
-    const runner: Promise<{ [id: string]: TaskStatus }> = defaultTasksRunner(
+    const runner = defaultTasksRunner(
       tasks,
       {
         ...options,
         remoteCache,
       },
       context,
-    ) as Promise<{ [id: string]: TaskStatus }>;
+    ) as Promise<Record<string, unknown>>;
 
     runner.finally(async () => {
       await remoteCache.waitForStoreRequestsToComplete();

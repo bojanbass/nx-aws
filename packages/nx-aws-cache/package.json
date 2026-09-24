@@ -1,11 +1,26 @@
 {
   "name": "@nx-aws-plugin/nx-aws-cache",
   "version": "3.4.5-0",
-  "description": "AWS S3 Cache plugin for Nx",
-  "keywords": ["AWS", "S3", "Tasks", "Runner", "Cache", "Workspace", "Nrwl", "Nx", "Monorepo"],
+  "description": "AWS S3 remote cache for Nx: task runner (Nx 16-20) and self-hosted remote cache server (Nx 20.8+)",
+  "keywords": [
+    "AWS",
+    "S3",
+    "Tasks",
+    "Runner",
+    "Cache",
+    "Remote Cache",
+    "Self-hosted",
+    "Workspace",
+    "Nx",
+    "Monorepo"
+  ],
   "license": "MIT",
   "author": "Bojan Bratuz",
   "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "bin": {
+    "nx-aws-cache-server": "src/server/cli.js"
+  },
   "generators": "./generators.json",
   "repository": {
     "type": "git",
@@ -14,7 +29,25 @@
   "homepage": "https://github.com/bojanbass/nx-aws",
   "peerDependencies": {
     "nx": ">=16.0.0",
-    "@nx/devkit": ">=16.0.0",
-    "@nx/workspace": ">=16.0.0"
+    "@nx/devkit": ">=16.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1136.0",
+    "@aws-sdk/credential-providers": "^3.1136.0",
+    "@aws-sdk/lib-storage": "^3.1136.0",
+    "chalk": "^4.1.2",
+    "dotenv": "^17.4.2",
+    "tar": "^7.5.22"
+  },
+  "peerDependenciesMeta": {
+    "nx": {
+      "optional": true
+    },
+    "@nx/devkit": {
+      "optional": true
+    }
   }
 }

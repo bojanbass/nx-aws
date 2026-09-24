@@ -1,40 +1,37 @@
-import { type Tree, formatFiles, logger, readJsonFile, updateJson } from '@nx/devkit';
+import { formatFiles, logger, readJson, type Tree, updateJson } from '@nx/devkit';
 
 import type { InitGeneratorSchema } from './schema';
 
-function isCompatibleVersion() {
-  const packageJson = readJsonFile('package.json');
-  let version =
-    packageJson.dependencies?.['@nx/workspace'] ??
-    packageJson.devDependencies?.['@nx/workspace'] ??
-    packageJson.dependencies?.['@nrwl/workspace'] ??
-    packageJson.devDependencies?.['@nrwl/workspace'];
+/** Nx 21 removed support for custom task runners. */
+const FIRST_NX_VERSION_WITHOUT_TASKS_RUNNERS = 21;
+const FIRST_NX_VERSION_WITH_DB_CACHE = 20;
+const MIN_NX_VERSION = 16;
 
-  if (!version) {
-    throw new Error('You must install Nx to enable Storage Cache');
+export function getNxMajorVersion(tree: Tree): number | undefined {
+  if (!tree.exists('package.json')) {
+    return undefined;
   }
 
-  if (version.startsWith('^') || version.startsWith('~')) {
-    version = version.substr(1);
-  }
+  const { dependencies = {}, devDependencies = {} } = readJson(tree, 'package.json');
+  const version =
+    devDependencies.nx ??
+    dependencies.nx ??
+    devDependencies['@nx/workspace'] ??
+    dependencies['@nx/workspace'] ??
+    devDependencies['@nrwl/workspace'] ??
+    dependencies['@nrwl/workspace'];
+  const major = /\d+/u.exec(version ?? '')?.[0];
 
-  const [major] = version.split('.');
-  const majorNumber = Number.parseInt(major, 10);
-
-  if (Number.isNaN(majorNumber)) {
-    return false;
-  }
-
-  // eslint-disable-next-line no-magic-numbers
-  if (majorNumber >= 16) {
-    return true;
-  }
-
-  return false;
+  return major ? Number.parseInt(major, 10) : undefined;
 }
 
-function updateNxJson(tree: Tree, options: InitGeneratorSchema): void {
+function updateNxJson(tree: Tree, options: InitGeneratorSchema, nxMajorVersion?: number): void {
   updateJson(tree, 'nx.json', (jsonContent) => {
+    if (nxMajorVersion === FIRST_NX_VERSION_WITH_DB_CACHE) {
+      // The Nx 20 database cache ignores custom remote caches.
+      jsonContent.useLegacyCache = true;
+    }
+
     const currentOptions = jsonContent.tasksRunnerOptions?.default?.options;
 
     jsonContent.tasksRunnerOptions = {
@@ -58,13 +55,36 @@ function updateNxJson(tree: Tree, options: InitGeneratorSchema): void {
   });
 }
 
-// eslint-disable-next-line func-names
-export default async function (tree: Tree, options: InitGeneratorSchema) {
-  if (!isCompatibleVersion()) {
+function logServerSetup(nxMajorVersion: number): void {
+  logger.info(
+    [
+      `Nx ${nxMajorVersion} does not support custom task runners, so nx.json was not modified.`,
+      'Use the bundled remote cache server instead (implements the Nx self-hosted remote cache API):',
+      '',
+      '  1. Start the server with the NXCACHE_AWS_* variables and an access token:',
+      '     NXCACHE_AWS_BUCKET=my-bucket NXCACHE_SERVER_ACCESS_TOKEN=<token> npx nx-aws-cache-server',
+      '  2. Point Nx at it:',
+      '     NX_SELF_HOSTED_REMOTE_CACHE_SERVER=http://127.0.0.1:3000',
+      '     NX_SELF_HOSTED_REMOTE_CACHE_ACCESS_TOKEN=<token>',
+      '',
+      'See https://github.com/bojanbass/nx-aws#nx-21-and-later for details.',
+    ].join('\n'),
+  );
+}
+
+export default async function initGenerator(tree: Tree, options: InitGeneratorSchema) {
+  const nxMajorVersion = getNxMajorVersion(tree);
+
+  if (nxMajorVersion !== undefined && nxMajorVersion >= FIRST_NX_VERSION_WITHOUT_TASKS_RUNNERS) {
+    logServerSetup(nxMajorVersion);
+    return;
+  }
+
+  if (nxMajorVersion === undefined || nxMajorVersion < MIN_NX_VERSION) {
     logger.warn('You must install Nx version 16 or later to enable the plugin.');
   }
 
-  updateNxJson(tree, options);
+  updateNxJson(tree, options, nxMajorVersion);
 
   await formatFiles(tree);
 }

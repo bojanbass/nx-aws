@@ -1,5 +1,5 @@
 import { output } from '@nx/devkit';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 
 export class Logger {
   public debug(message: string): void {

@@ -3,11 +3,11 @@ import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { sdkStreamMixin } from '@aws-sdk/util-stream-node';
+import { sdkStreamMixin } from '@smithy/util-stream';
 import { mockClient } from 'aws-sdk-client-mock';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AwsCache } from './aws-cache';
-import { EncryptConfig, createEncryptStream } from './encryptor';
+import { createEncryptStream, EncryptConfig } from './encryptor';
 import { Logger } from './logger';
 import { MessageReporter } from './message-reporter';
 

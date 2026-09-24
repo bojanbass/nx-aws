@@ -1,3 +1,22 @@
+## Unreleased (4.0.0)
+
+### ⚠️ Breaking Changes
+
+- Requires Node.js 20 or later (required by the AWS SDK).
+- `@nx/workspace` is no longer a peer dependency. `nx` and `@nx/devkit` are optional peers, only needed by the task runner.
+
+### 🚀 Features
+
+- `nx-aws-cache-server`: S3 backed implementation of the Nx self-hosted remote cache API for Nx 20.8+ (including Nx 21, 22 and 23, which no longer support custom task runners). Supports read-write and read-only tokens and encryption at rest.
+- `init` generator detects the Nx version: it prints the server setup on Nx 21+ and enables `useLegacyCache` on Nx 20.
+- The task runner warns when Nx 20 ignores the remote cache because the legacy cache is disabled.
+
+### 🩹 Fixes
+
+- The published package declares its runtime dependencies again (3.4.x prereleases were published without them).
+- dotenv no longer prints a log line on every Nx command.
+- Upgraded dependencies (AWS SDK, tar, dotenv) and resolved all known advisories.
+
 ## 3.4.4-0 (2026-04-01)
 
 ### 🩹 Fixes

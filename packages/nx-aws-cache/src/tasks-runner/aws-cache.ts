@@ -1,14 +1,13 @@
 import { createReadStream, createWriteStream, writeFile } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { type Readable, pipeline } from 'node:stream';
+import { pipeline, type Readable } from 'node:stream';
 import { promisify } from 'node:util';
 import * as clientS3 from '@aws-sdk/client-s3';
-import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
 import { Upload } from '@aws-sdk/lib-storage';
-import { CredentialsProviderError } from '@aws-sdk/property-provider';
-import type { RemoteCache } from '@nx/workspace/src/tasks-runner/default-tasks-runner';
+import type { RemoteCache } from '@nx/devkit';
 import { create, extract } from 'tar';
-import { EncryptConfig, createDecryptStream, createEncryptStream } from './encryptor';
+import { createS3Client, splitBucket } from '../s3';
+import { createDecryptStream, createEncryptStream, EncryptConfig } from './encryptor';
 import { Logger } from './logger';
 import type { MessageReporter } from './message-reporter';
 import type { AwsNxCacheOptions } from './models/aws-nx-cache-options.model';
@@ -25,41 +24,15 @@ export class AwsCache implements RemoteCache {
     options: AwsNxCacheOptions,
     private messages: MessageReporter,
   ) {
-    const awsBucket = options.awsBucket ?? '';
-    const bucketTokens = awsBucket.split('/');
-    this.bucket = bucketTokens.shift() as string;
-    this.path = bucketTokens.join('/');
+    const { bucket, path } = splitBucket(options.awsBucket);
+    this.bucket = bucket;
+    this.path = path;
 
-    const clientConfig: clientS3.S3ClientConfig = {};
-
-    if (options.awsRegion) {
-      clientConfig.region = options.awsRegion;
-    }
-
-    if (options.awsEndpoint) {
-      clientConfig.endpoint = options.awsEndpoint;
-    }
-
-    if (options.awsAccessKeyId && options.awsSecretAccessKey) {
-      clientConfig.credentials = {
-        accessKeyId: options.awsAccessKeyId,
-        secretAccessKey: options.awsSecretAccessKey,
-      };
-    } else {
-      clientConfig.credentials = fromNodeProviderChain(
-        options.awsProfile ? { profile: options.awsProfile } : {},
-      );
-    }
-
-    if (options.awsForcePathStyle) {
-      clientConfig.forcePathStyle = true;
-    }
-
-    if (options?.encryptionFileKey) {
+    if (options.encryptionFileKey) {
       this.encryptConfig = new EncryptConfig(options.encryptionFileKey);
     }
 
-    this.s3 = new clientS3.S3Client(clientConfig);
+    this.s3 = createS3Client(options);
   }
 
   public checkConfig(options: AwsNxCacheOptions): void {
@@ -255,7 +228,7 @@ export class AwsCache implements RemoteCache {
       if ((err as Error).name === 'NotFound') {
         return false;
       }
-      if (err instanceof CredentialsProviderError) {
+      if ((err as Error).name === 'CredentialsProviderError') {
         return false;
       }
 
