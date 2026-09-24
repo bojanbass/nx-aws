@@ -1,149 +1,167 @@
 {
   "migrations": [
     {
-      "version": "20.0.0-beta.7",
-      "description": "Migration for v20.0.0-beta.7",
-      "implementation": "./src/migrations/update-20-0-0/move-use-daemon-process",
+      "cli": "nx",
+      "version": "22.6.0-beta.10",
+      "description": "Adds .claude/worktrees to .gitignore",
+      "implementation": "./dist/src/migrations/update-22-6-0/add-claude-worktrees-to-git-ignore",
       "package": "nx",
-      "name": "move-use-daemon-process"
-    },
-    {
-      "version": "20.0.1",
-      "description": "Set `useLegacyCache` to true for migrating workspaces",
-      "implementation": "./src/migrations/update-20-0-1/use-legacy-cache",
-      "x-repair-skip": true,
-      "package": "nx",
-      "name": "use-legacy-cache"
-    },
-    {
-      "version": "21.0.0-beta.8",
-      "description": "Removes the legacy cache configuration from nx.json",
-      "implementation": "./src/migrations/update-21-0-0/remove-legacy-cache",
-      "package": "nx",
-      "name": "remove-legacy-cache"
-    },
-    {
-      "version": "21.0.0-beta.8",
-      "description": "Removes the legacy cache configuration from nx.json",
-      "implementation": "./src/migrations/update-21-0-0/remove-custom-tasks-runner",
-      "package": "nx",
-      "name": "remove-custom-tasks-runner"
-    },
-    {
-      "version": "21.0.0-beta.11",
-      "description": "Updates release version config based on the breaking changes in Nx v21",
-      "implementation": "./src/migrations/update-21-0-0/release-version-config-changes",
-      "package": "nx",
-      "name": "release-version-config-changes"
-    },
-    {
-      "version": "21.0.0-beta.11",
-      "description": "Updates release changelog config based on the breaking changes in Nx v21",
-      "implementation": "./src/migrations/update-21-0-0/release-changelog-config-changes",
-      "package": "nx",
-      "name": "release-changelog-config-changes"
-    },
-    {
-      "version": "22.0.0-beta.1",
-      "description": "Updates release version config based on the breaking changes in Nx v22",
-      "implementation": "./src/migrations/update-22-0-0/release-version-config-changes",
-      "package": "nx",
-      "name": "22-0-0-release-version-config-changes"
-    },
-    {
-      "version": "22.0.0-beta.2",
-      "description": "Consolidates releaseTag* options into nested releaseTag object structure",
-      "implementation": "./src/migrations/update-22-0-0/consolidate-release-tag-config",
-      "package": "nx",
-      "name": "22-0-0-consolidate-release-tag-config"
+      "name": "22-6-1-add-claude-worktrees-to-git-ignore"
     },
     {
       "cli": "nx",
-      "version": "22.1.0-beta.5",
-      "description": "Updates the nx wrapper.",
-      "implementation": "./src/migrations/update-22-1-0/update-nx-wrapper",
+      "version": "22.7.0-beta.0",
+      "description": "Adds .nx/polygraph to .gitignore",
+      "implementation": "./dist/src/migrations/update-22-7-0/add-polygraph-to-git-ignore",
       "package": "nx",
-      "name": "22-1-0-update-nx-wrapper"
-    },
-    {
-      "version": "20.2.0-beta.5",
-      "description": "Update TypeScript ESLint packages to v8.13.0 if they are already on v8",
-      "implementation": "./src/migrations/update-20-2-0/update-typescript-eslint-v8-13-0",
-      "package": "@nx/eslint",
-      "name": "update-typescript-eslint-v8.13.0"
-    },
-    {
-      "version": "20.3.0-beta.1",
-      "description": "Update ESLint flat config to include .cjs, .mjs, .cts, and .mts files in overrides (if needed)",
-      "implementation": "./src/migrations/update-20-3-0/add-file-extensions-to-overrides",
-      "package": "@nx/eslint",
-      "name": "add-file-extensions-to-overrides"
+      "name": "22-7-0-add-polygraph-to-git-ignore"
     },
     {
       "cli": "nx",
-      "version": "20.0.0-beta.5",
-      "description": "Replace usage of `getJestProjects` with `getJestProjectsAsync`.",
-      "implementation": "./src/migrations/update-20-0-0/replace-getJestProjects-with-getJestProjectsAsync",
-      "package": "@nx/jest",
-      "name": "replace-getJestProjects-with-getJestProjectsAsync"
+      "version": "22.6.0-rc.0",
+      "description": "Adds .claude/settings.local.json to .gitignore",
+      "implementation": "./dist/src/migrations/update-22-6-0/add-claude-settings-local-to-git-ignore",
+      "package": "nx",
+      "name": "22-6-0-add-claude-settings-local-to-git-ignore"
     },
     {
       "cli": "nx",
-      "version": "21.0.0-beta.9",
-      "description": "Replace usage of `getJestProjects` with `getJestProjectsAsync`.",
-      "implementation": "./src/migrations/update-21-0-0/replace-getJestProjects-with-getJestProjectsAsync",
-      "package": "@nx/jest",
-      "name": "replace-getJestProjects-with-getJestProjectsAsync-v21"
+      "version": "22.6.0-beta.11",
+      "description": "Prompts to enable usage analytics",
+      "implementation": "./dist/src/migrations/update-22-6-0/enable-analytics-prompt",
+      "package": "nx",
+      "name": "22-6-0-enable-analytics-prompt"
     },
     {
-      "version": "21.0.0-beta.10",
-      "description": "Remove the previously deprecated and unused `tsConfig` option from the `@nx/jest:jest` executor.",
-      "implementation": "./src/migrations/update-21-0-0/remove-tsconfig-option-from-jest-executor",
-      "package": "@nx/jest",
-      "name": "remove-tsconfig-option-from-jest-executor"
+      "cli": "nx",
+      "version": "22.7.0-beta.0",
+      "description": "Adds .nx/self-healing to .gitignore",
+      "implementation": "./dist/src/migrations/update-22-2-0/add-self-healing-to-gitignore",
+      "documentation": "./dist/src/migrations/update-22-2-0/add-self-healing-to-gitignore.md",
+      "package": "nx",
+      "name": "22-7-0-add-self-healing-to-gitignore"
     },
     {
-      "version": "21.3.0-beta.3",
-      "description": "Rename the CLI option `testPathPattern` to `testPathPatterns`.",
-      "implementation": "./src/migrations/update-21-3-0/rename-test-path-pattern",
-      "package": "@nx/jest",
-      "name": "rename-test-path-pattern"
+      "version": "23.0.0-beta.16",
+      "description": "Consolidates any remaining legacy releaseTag* flat properties into the nested releaseTag object. The flat properties were removed in Nx 23.",
+      "implementation": "./dist/src/migrations/update-23-0-0/consolidate-release-tag-config",
+      "package": "nx",
+      "name": "23-0-0-consolidate-release-tag-config"
     },
     {
-      "version": "21.3.0-beta.3",
-      "requires": { "jest": ">=30.0.0" },
-      "description": "Replace removed matcher aliases in Jest v30 with their corresponding matcher",
-      "implementation": "./src/migrations/update-21-3-0/replace-removed-matcher-aliases",
-      "package": "@nx/jest",
-      "name": "replace-removed-matcher-aliases"
+      "version": "23.0.0-beta.18",
+      "description": "Adds .nx/migrate-runs to .gitignore",
+      "implementation": "./dist/src/migrations/update-23-0-0/add-migrate-runs-to-git-ignore",
+      "package": "nx",
+      "name": "23-0-0-add-migrate-runs-to-git-ignore"
     },
     {
-      "version": "22.2.0-beta.2",
-      "description": "Convert jest.config.ts files from ESM to CJS syntax (export default -> module.exports, import -> require) for projects using CommonJS resolution to ensure correct loading under Node.js type-stripping.",
-      "implementation": "./src/migrations/update-22-2-0/convert-jest-config-to-cjs",
-      "package": "@nx/jest",
-      "name": "convert-jest-config-to-cjs"
+      "version": "23.2.0-beta.8",
+      "description": "Sets \"cache\" on some executor-based target defaults whose caching was previously enabled by a target name default, maintaining compatibility with how cacheability resolved before Nx 23. Keys the migration cannot decide are left alone and keep working through a deprecated runtime fallback.",
+      "implementation": "./dist/src/migrations/update-23-2-0/set-cache-on-executor-target-defaults",
+      "documentation": "./dist/src/migrations/update-23-2-0/set-cache-on-executor-target-defaults.md",
+      "package": "nx",
+      "name": "23-2-0-set-cache-on-executor-target-defaults"
     },
     {
-      "version": "21.5.0-beta.2",
-      "description": "Migrate the legacy 'development' custom condition to a workspace-unique custom condition name.",
-      "factory": "./src/migrations/update-21-5-0/migrate-development-custom-condition",
+      "version": "22.6.0-beta.11",
+      "description": "Prefix reportsDirectory with {projectRoot} to maintain correct resolution after workspace-root-relative behavior change.",
+      "implementation": "./dist/src/migrations/update-22-6-0/prefix-reports-directory-with-project-root",
+      "documentation": "./dist/src/migrations/update-22-6-0/prefix-reports-directory-with-project-root.md",
+      "package": "@nx/vitest",
+      "name": "update-22-6-0-prefix-reports-directory"
+    },
+    {
+      "version": "23.0.0-beta.24",
+      "description": "Rename imports of `createNodesV2` from `@nx/vitest` to the canonical `createNodes` export.",
+      "implementation": "./dist/src/migrations/update-23-0-0/migrate-create-nodes-v2-to-create-nodes",
+      "documentation": "./dist/src/migrations/update-23-0-0/migrate-create-nodes-v2-to-create-nodes.md",
+      "package": "@nx/vitest",
+      "name": "update-23-0-0-migrate-create-nodes-v2-import"
+    },
+    {
+      "version": "23.2.0-beta.6",
+      "description": "Replace `__dirname` with `import.meta.dirname` in `vite.config.mts`/`vitest.config.mts` files so they work with Vite's `configLoader: 'native'`.",
+      "implementation": "./dist/src/migrations/update-23-2-0/use-import-meta-dirname",
+      "documentation": "./dist/src/migrations/update-23-2-0/use-import-meta-dirname.md",
+      "package": "@nx/vitest",
+      "name": "update-23-2-0-use-import-meta-dirname"
+    },
+    {
+      "version": "23.0.0-beta.6",
+      "description": "Rewrite imports from `@nx/devkit/src/...` to `@nx/devkit` (for public symbols) or `@nx/devkit/internal` (for the rest), since deep imports are no longer reachable through the package's `exports` map.",
+      "implementation": "./dist/src/migrations/update-23-0-0/update-deep-imports",
+      "documentation": "./dist/src/migrations/update-23-0-0/update-deep-imports.md",
+      "package": "@nx/devkit",
+      "name": "update-devkit-deep-imports"
+    },
+    {
+      "version": "23.0.0-beta.24",
+      "description": "Rename deprecated CreateNodes `V2` type imports (CreateNodesV2, CreateNodesContextV2, CreateNodesResultV2, CreateNodesFunctionV2, NxPluginV2) from `@nx/devkit` to their canonical names.",
+      "implementation": "./dist/src/migrations/update-23-0-0/rename-create-nodes-v2-types",
+      "documentation": "./dist/src/migrations/update-23-0-0/rename-create-nodes-v2-types.md",
+      "package": "@nx/devkit",
+      "name": "update-23-0-0-rename-create-nodes-v2-types"
+    },
+    {
+      "version": "23.0.0-beta.10",
+      "description": "Rewrites imports of `@nx/workspace/src/utilities/typescript/compilation` to `@nx/js/internal`, where the module now lives.",
+      "implementation": "./dist/src/migrations/update-23-0-0/move-typescript-compilation-import",
+      "package": "@nx/workspace",
+      "name": "23-0-0-move-typescript-compilation-import"
+    },
+    {
+      "version": "23.0.0-beta.14",
+      "description": "Rewrites `@nx/js/src/*` subpath imports to the new `@nx/js/internal` entry. The `./src/*` wildcard has been removed from `@nx/js`'s exports map; `@nx/js/src/release/version-actions` is preserved as a non-wildcard entry for back-compat with existing nx.json release configs. If a rewritten import resolves to a symbol that lives on the public `@nx/js` entry (e.g. `libraryGenerator`, `extractTsConfigBase`, `resolvePathsBaseUrl`), change the specifier to `@nx/js`.",
+      "factory": "./dist/src/migrations/update-23-0-0/rewrite-internal-subpath-imports",
       "package": "@nx/js",
-      "name": "migrate-development-custom-condition"
+      "name": "23-0-0-rewrite-internal-subpath-imports"
     },
     {
-      "version": "22.0.0-beta.0",
-      "description": "Remove the deprecated `external` and `externalBuildTargets` options from the `@nx/js:swc` and `@nx/js:tsc` executors.",
-      "factory": "./src/migrations/update-22-0-0/remove-external-options-from-js-executors",
+      "version": "23.0.0-beta.24",
+      "description": "Rename imports of `createNodesV2` from `@nx/js/typescript` to the canonical `createNodes` export.",
+      "implementation": "./dist/src/migrations/update-23-0-0/migrate-create-nodes-v2-to-create-nodes",
+      "documentation": "./dist/src/migrations/update-23-0-0/migrate-create-nodes-v2-to-create-nodes.md",
       "package": "@nx/js",
-      "name": "remove-external-options-from-js-executors"
+      "name": "update-23-0-0-migrate-create-nodes-v2-import"
     },
     {
-      "version": "22.1.0-rc.1",
-      "description": "Removes redundant TypeScript project references from project's tsconfig.json files when runtime tsconfig files (e.g., tsconfig.lib.json, tsconfig.app.json) exist.",
-      "factory": "./src/migrations/update-22-1-0/remove-redundant-ts-project-references",
+      "version": "23.1.0-beta.8",
+      "description": "Adds `\"ignoreDeprecations\": \"6.0\"` to tsconfig files whose compilerOptions (or ts-node.compilerOptions) carry a TypeScript 6 deprecated option value, set directly or inherited through `extends` including from a base this migration does not edit (e.g. moduleResolution node/node10/classic, baseUrl, target es5, esModuleInterop false, outFile, module amd/umd/system/none, alwaysStrict false, allowSyntheticDefaultImports false, downlevelIteration set). Also pins `\"strict\": false`, `\"noUncheckedSideEffectImports\": false`, `\"types\": [\"*\"]`, and `\"esModuleInterop\": false` in chain-root tsconfigs (no \"extends\") that lack each key, preserving pre-TS6 behavior where these defaults changed; `esModuleInterop` false is itself deprecated (removed in TS7) so it also receives `ignoreDeprecations`, deferring the interop change to the TS7 migration. Also adds `ignoreDeprecations` to every `tsconfig.json` (the exact name jest/ts-node auto-resolve when compiling a config file; ts-node injects a deprecated default `target: es5` there, so the load can hit a TS6 error even on a clean config), even one with no deprecated value of its own; a stale local `ignoreDeprecations` (e.g. `5.0`) that would otherwise override the inherited flag is upgraded.",
+      "requires": {
+        "typescript": ">=6.0.0"
+      },
+      "factory": "./dist/src/migrations/update-23-1-0/add-ignore-deprecations-for-ts6",
+      "documentation": "./dist/src/migrations/update-23-1-0/add-ignore-deprecations-for-ts6.md",
       "package": "@nx/js",
-      "name": "remove-redundant-ts-project-references"
+      "name": "23-1-0-add-ignore-deprecations-for-ts6"
+    },
+    {
+      "version": "23.1.0-rc.2",
+      "description": "Sets an explicit `rootDir` on project `tsconfig*.json` files that lack one, pinned to the source directory TypeScript 5 inferred implicitly, so programs keep compiling and emitting the same layout under TypeScript 6, which otherwise hard-fails with TS5011 or TS6059 (for example a spec tsconfig importing another project's source through a `paths` alias). The pin is written even when the inferred directory already equals the tsconfig directory, because tools like ts-jest with `isolatedModules` compile a program per file and re-infer a deeper directory from that subset. The value is computed by the compiler, so emit layout is unchanged. Each config is written on its own; the migration never writes to a shared `extends` base, so a config never inherits a value computed for a sibling. Composite projects are pinned to their own directory: `rootDir` already defaults there under `tsc` so it is a no-op for a real composite build, but ts-jest strips `composite` for its per-file transpile and the explicit value is needed to avoid TS5011 there.",
+      "requires": {
+        "typescript": ">=6.0.0"
+      },
+      "factory": "./dist/src/migrations/update-23-1-0/set-tsconfig-root-dir-for-ts6",
+      "documentation": "./dist/src/migrations/update-23-1-0/set-tsconfig-root-dir-for-ts6.md",
+      "package": "@nx/js",
+      "name": "23-1-0-set-tsconfig-root-dir-for-ts6"
+    },
+    {
+      "version": "23.2.0-beta.11",
+      "description": "Add the pnpm-workspace.yaml, patches, and local_path_modules paths to the outputs of @nx/js:prune-lockfile targets in pnpm workspaces, and the workspace root pnpm-workspace.yaml, package.json, and a pnpm-major runtime probe to their inputs, so a cache replay restores the pnpm install settings, patch files, and vendored local-path dependencies the executor now emits, and a change to the root pnpm install settings or a pnpm major switch does not replay a stale one.",
+      "implementation": "./dist/src/migrations/update-23-2-0/add-pnpm-prune-lockfile-cache-config",
+      "documentation": "./dist/src/migrations/update-23-2-0/add-pnpm-prune-lockfile-cache-config.md",
+      "package": "@nx/js",
+      "name": "update-23-2-0-add-pnpm-prune-lockfile-cache-config"
+    },
+    {
+      "version": "23.2.0-beta.11",
+      "description": "Add the workspace root pnpm-workspace.yaml, the pnpm settings fields of the root package.json, and a pnpm-major runtime probe to the inputs of build targets that emit the pruned pnpm deploy output (webpack, rspack, vite, esbuild with generatePackageJson; next, remix, tsc, swc with generateLockfile), so revoking a build-script approval, changing another pnpm install setting, or crossing the pnpm 10/11 boundary does not replay a cached output that still carries the old one.",
+      "implementation": "./dist/src/migrations/update-23-2-0/add-pnpm-deploy-output-cache-inputs",
+      "documentation": "./dist/src/migrations/update-23-2-0/add-pnpm-deploy-output-cache-inputs.md",
+      "package": "@nx/js",
+      "name": "update-23-2-0-add-pnpm-deploy-output-cache-inputs"
     }
   ]
 }

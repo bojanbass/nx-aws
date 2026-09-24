@@ -1,12 +1,10 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
+  "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "preset": "recommended"
     }
   },
   "formatter": {
@@ -23,6 +21,15 @@
     }
   },
   "files": {
-    "ignore": ["dist", "coverage", "node_modules", ".nx/cache", ".nx/workspace-data", "tmp", "*.js"]
+    "includes": [
+      "**",
+      "!**/dist",
+      "!**/coverage",
+      "!**/node_modules",
+      "!**/.nx/cache",
+      "!**/.nx/workspace-data",
+      "!**/tmp",
+      "!**/*.js"
+    ]
   }
 }

@@ -4,14 +4,12 @@
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2017", "dom"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "importHelpers": false,
+    "target": "es2022",
+    "lib": ["es2022"],
+    "types": ["node"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "noImplicitReturns": true,
@@ -19,9 +17,8 @@
     "noUnusedParameters": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "baseUrl": ".",
     "paths": {
-      "@nx-aws-plugin/nx-aws-cache": ["packages/nx-aws-cache/src/index.ts"]
+      "@nx-aws-plugin/nx-aws-cache": ["./packages/nx-aws-cache/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

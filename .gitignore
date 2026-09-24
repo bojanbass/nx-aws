@@ -48,3 +48,8 @@ Thumbs.db
 .nx/polygraph
 .claude/worktrees
 .claude/settings.local.json
+
+# nested deps, vitest results, nx state
+**/node_modules
+.nx/self-healing
+.nx/migrate-runs
