@@ -1,34 +1,38 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+# https://docs.github.com/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 
 version: 2
 updates:
-  - package-ecosystem: 'npm' # See documentation for possible values
-    directory: '/' # Location of package manifests
+  - package-ecosystem: 'bun'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    # Matches minimumReleaseAge in bunfig.toml, newer versions would be rejected by `bun install`.
+    cooldown:
+      default-days: 3
     groups:
       aws-sdk:
         patterns:
-          - '@aws-sdk*'
-          - 'aws*'
+          - '@aws-sdk/*'
+          - '@smithy/*'
+          - 'aws-sdk-client-mock'
+      dev-dependencies:
+        dependency-type: 'development'
     ignore:
-      # @nx deps should always be updated by running `npx nx migrate @nx/workspace`
+      # Nx and the tooling it manages should be updated by running `bun nx migrate latest`
       - dependency-name: '@nx/*'
       - dependency-name: 'nx'
-      - dependency-name: 'nx-cloud'
-      # NX managed packages should not be updated manually
-      - dependency-name: '@types/node'
-      - dependency-name: '@typescript-eslint/eslint-plugin'
-      - dependency-name: '@typescript-eslint/parser'
-      - dependency-name: 'eslint'
-      - dependency-name: 'eslint-config-prettier'
-      - dependency-name: 'eslint-plugin-import'
+      - dependency-name: '@swc/*'
+      - dependency-name: '@swc-node/*'
+      - dependency-name: 'typescript'
       - dependency-name: 'vitest'
       - dependency-name: '@vitest/*'
-      - dependency-name: 'prettier'
-      - dependency-name: 'ts-node'
-      - dependency-name: 'tslib'
-      - dependency-name: 'typescript'
+      # chalk 5+ is ESM only, the plugin is published as CommonJS
+      - dependency-name: 'chalk'
+        versions: ['>=5']
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
+    cooldown:
+      default-days: 3

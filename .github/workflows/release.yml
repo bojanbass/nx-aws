@@ -25,12 +25,14 @@ jobs:
         run: npm --prefix packages/nx-aws-cache version "${GITHUB_REF_NAME#v}" --no-git-tag-version --allow-same-version
 
       - name: Build
-        run: bun nx build nx-aws-cache
+        # Never publish artifacts restored from a (remote) cache.
+        run: bun nx build nx-aws-cache --skip-nx-cache
 
       - name: Publish
         run: |
-          npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
-          npm publish dist/packages/nx-aws-cache --access public --tag $DIST_TAG
+          npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
+          npm publish dist/packages/nx-aws-cache --access public --tag "$DIST_TAG"
         env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           DIST_TAG: ${{ contains(github.ref_name, '-') && 'next' || 'latest' }}
           NPM_CONFIG_PROVENANCE: true
